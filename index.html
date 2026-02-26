@@ -101,12 +101,19 @@
       }
 
       .disco {
-        width: clamp(72px, 11vw, 108px);
+        width: clamp(110px, 16vw, 170px);
         aspect-ratio: 1 / 1;
         margin: 4px auto 20px;
         border-radius: 50%;
         border: 2px solid rgba(255, 255, 255, 0.6);
         background:
+          conic-gradient(
+            from 20deg,
+            rgba(255, 255, 255, 0.85) 0deg 28deg,
+            rgba(255, 255, 255, 0.15) 28deg 88deg,
+            rgba(255, 255, 255, 0.75) 88deg 108deg,
+            rgba(255, 255, 255, 0.12) 108deg 360deg
+          ),
           linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) center / 16px 16px,
           linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px) center / 16px 16px,
           radial-gradient(circle at 30% 30%, #fffef9 0%, #d9d6cc 45%, #8d8a83 78%, #66635f 100%);
@@ -114,7 +121,7 @@
           0 10px 26px rgba(0, 0, 0, 0.28),
           0 0 30px rgba(255, 248, 230, 0.2);
         position: relative;
-        animation: disco-spin 10s linear infinite;
+        animation: disco-spin 5s linear infinite;
       }
 
       .disco::before {
@@ -152,6 +159,27 @@
         height: 12px;
         background: radial-gradient(circle at 7px 6px, transparent 7px, var(--cream) 7px, var(--cream) 9px, transparent 9px) repeat-x;
         background-size: 24px 12px;
+      }
+
+      .hero-rsvp {
+        display: inline-block;
+        margin: 0 auto 14px;
+        padding: 16px 34px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: clamp(1rem, 2.4vw, 1.28rem);
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--orange-deep);
+        background: var(--cream);
+        border: 2px solid rgba(255, 255, 255, 0.7);
+        box-shadow: 0 10px 30px rgba(45, 13, 1, 0.35);
+      }
+
+      .hero-rsvp:hover {
+        transform: translateY(-1px);
+        background: #fff8ef;
       }
 
       .event-block {
@@ -245,11 +273,6 @@
         }
       }
 
-      @media (prefers-reduced-motion: reduce) {
-        .disco {
-          animation: none;
-        }
-      }
     </style>
   </head>
   <body>
@@ -257,6 +280,7 @@
       <p class="eyebrow">Ryan & Carly</p>
       <h1>Come boogie with us as we get hitched!</h1>
       <div class="disco" aria-hidden="true"></div>
+      <a class="hero-rsvp" href="rsvp.html">RSVP Here!</a>
       <div class="wave"></div>
       <div class="event-block">
         <p class="event-title">The Time</p>
@@ -284,7 +308,6 @@
       </section>
 
       <section class="actions">
-        <a class="button light" href="#" id="rsvp">RSVP</a>
         <a class="button dark" href="#">View Registry</a>
         <a class="button dark" href="#">Travel Info</a>
       </section>
