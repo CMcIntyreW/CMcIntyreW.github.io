@@ -1,38 +1,269 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ryan & Carly | Wedding</title>
-  <style>
-    :root { --bg:#faf7f2; --text:#2f2a26; --accent:#9c7a5b; }
-    * { box-sizing:border-box; }
-    body { margin:0; font-family: Georgia, serif; background:var(--bg); color:var(--text); }
-    .wrap { max-width:800px; margin:0 auto; padding:48px 24px; text-align:center; }
-    h1 { font-size:48px; margin:0 0 8px; }
-    h2 { font-size:24px; font-weight:normal; margin:0 0 32px; color:var(--accent); }
-    .card { background:white; border-radius:16px; padding:24px; margin:16px 0; box-shadow:0 6px 24px rgba(0,0,0,.06); }
-    a.btn { display:inline-block; margin-top:12px; padding:12px 18px; border-radius:999px; text-decoration:none; background:var(--accent); color:white; }
-    .small { opacity:.75; font-size:14px; margin-top:28px; }
-  </style>
-</head>
-<body>
-  <main class="wrap">
-    <h1>Ryan & Carly</h1>
-    <h2>We're getting hitched!</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ryan & Carly Get Hitched</title>
+    <meta
+      name="description"
+      content="Come boogie with us as we get hitched. August 21-23, 2026 at Northridge Inn & Resort, Sundridge, ON."
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --orange: #d35f1d;
+        --orange-deep: #b24816;
+        --cream: #fff4e8;
+        --white: #ffffff;
+        --ink: #fff8f2;
+        --ink-dark: #2f1a10;
+        --max-width: 1040px;
+      }
 
-    <section class="card">
-      <p><strong>Date:</strong> Add your date</p>
-      <p><strong>Location:</strong> Add your venue</p>
-      <p><strong>Time:</strong> Add your time</p>
-      <a class="btn" href="#">RSVP</a>
-    </section>
+      * {
+        box-sizing: border-box;
+      }
 
-    <section class="card">
-      <p>More details on schedule, travel, registry, and FAQs coming soon.</p>
-    </section>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
 
-    <p class="small">Made with love • ryanandcarlygethitched.com</p>
-  </main>
-</body>
+      body {
+        font-family: "Montserrat", Arial, sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at top right, #e47834 0%, var(--orange) 45%, var(--orange-deep) 100%);
+      }
+
+      .container {
+        width: min(var(--max-width), 92%);
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding: 54px 0 30px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0;
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        opacity: 0.9;
+      }
+
+      h1 {
+        margin: 18px auto 14px;
+        font-family: "Abril Fatface", Georgia, serif;
+        font-size: clamp(2.2rem, 6vw, 5rem);
+        line-height: 0.98;
+        max-width: 13ch;
+      }
+
+      .disco {
+        margin: 0 auto 18px;
+        font-size: clamp(2rem, 5vw, 3rem);
+      }
+
+      .wave {
+        margin: 8px auto 20px;
+        max-width: 680px;
+        height: 12px;
+        background: radial-gradient(circle at 7px 6px, transparent 7px, var(--cream) 7px, var(--cream) 9px, transparent 9px) repeat-x;
+        background-size: 24px 12px;
+      }
+
+      .event-block {
+        border: 2px solid rgba(255, 244, 232, 0.5);
+        border-radius: 18px;
+        padding: 20px;
+        background: rgba(59, 19, 0, 0.14);
+        max-width: 760px;
+        margin: 0 auto 24px;
+      }
+
+      .event-title {
+        font-size: 0.83rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin: 0 0 8px;
+      }
+
+      .event-value {
+        font-size: clamp(1.05rem, 2.4vw, 1.4rem);
+        font-weight: 700;
+        margin: 0 0 10px;
+      }
+
+      .details {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin: 0 auto 22px;
+        max-width: 980px;
+      }
+
+      .card {
+        background: var(--cream);
+        color: var(--ink-dark);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 10px 26px rgba(42, 11, 0, 0.22);
+      }
+
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 1.15rem;
+      }
+
+      .card p {
+        margin: 7px 0;
+      }
+
+      .photo-card {
+        background: rgba(59, 19, 0, 0.18);
+        border: 2px dashed rgba(255, 244, 232, 0.45);
+        border-radius: 18px;
+        padding: 12px;
+      }
+
+      .photo-card img {
+        width: 100%;
+        height: 100%;
+        max-height: 540px;
+        object-fit: cover;
+        border-radius: 12px;
+        display: block;
+      }
+
+      .photo-note {
+        margin-top: 10px;
+        font-size: 0.83rem;
+        text-align: center;
+        opacity: 0.9;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 8px;
+        margin-bottom: 34px;
+      }
+
+      .button {
+        display: inline-block;
+        text-decoration: none;
+        border-radius: 999px;
+        padding: 11px 18px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+      }
+
+      .button.light {
+        background: var(--cream);
+        color: var(--orange-deep);
+      }
+
+      .button.dark {
+        background: rgba(59, 19, 0, 0.26);
+        color: var(--cream);
+        border: 1px solid rgba(255, 244, 232, 0.5);
+      }
+
+      footer {
+        text-align: center;
+        font-size: 0.86rem;
+        padding: 2px 0 40px;
+        opacity: 0.9;
+      }
+
+      @media (min-width: 900px) {
+        .details {
+          grid-template-columns: 1.15fr 1fr;
+          align-items: stretch;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero container">
+      <p class="eyebrow">Ryan & Carly</p>
+      <h1>Come boogie with us as we get hitched!</h1>
+      <p class="disco">🪩</p>
+      <div class="wave"></div>
+      <div class="event-block">
+        <p class="event-title">The Time</p>
+        <p class="event-value">August 21st - August 23rd, 2026</p>
+        <p class="event-title">The Place</p>
+        <p class="event-value">Northridge Inn & Resort<br />Sundridge, ON</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="details">
+        <article class="photo-card">
+          <img
+            src="assets/couple-photo.png"
+            alt="Ryan and Carly together"
+          />
+          <p class="photo-note">Drop your couple photo at `assets/couple-photo.png`.</p>
+        </article>
+        <article class="card">
+          <h2>Weekend Schedule</h2>
+          <p><strong>Friday:</strong> Welcome drinks + check in</p>
+          <p><strong>Saturday:</strong> Ceremony, dinner, and dance party</p>
+          <p><strong>Sunday:</strong> Farewell brunch</p>
+          <div class="wave"></div>
+          <h2>Travel</h2>
+          <p>Nearest airport: Toronto Pearson (YYZ), then a drive north to Sundridge.</p>
+          <p>More hotel and shuttle details coming soon.</p>
+          <div class="wave"></div>
+          <h2>Dress Code</h2>
+          <p>Dress to impress and bring your dancing shoes.</p>
+        </article>
+      </section>
+
+      <section class="details">
+        <article class="card">
+          <h2>Save The Date</h2>
+          <p>Your retro invite style inspired this whole site.</p>
+          <p>Formal invitation details and RSVP updates will be posted here.</p>
+        </article>
+        <article class="photo-card">
+          <img
+            src="assets/invite-card.png"
+            alt="Save the date card"
+          />
+          <p class="photo-note">Drop your card image at `assets/invite-card.png`.</p>
+        </article>
+      </section>
+
+      <section class="actions">
+        <a class="button light" href="#" id="rsvp">RSVP</a>
+        <a class="button dark" href="#">View Registry</a>
+        <a class="button dark" href="#">Travel Info</a>
+      </section>
+    </main>
+
+    <footer>
+      Formal invitation to follow · Questions: hello@ryanandcarlygethitched.com
+    </footer>
+  </body>
 </html>
