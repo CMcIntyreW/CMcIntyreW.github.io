@@ -87,9 +87,15 @@
       .eyebrow {
         margin: 0;
         font-size: 0.8rem;
+        font-weight: 700;
         letter-spacing: 0.18em;
         text-transform: uppercase;
         opacity: 0.9;
+        text-decoration-line: underline;
+        text-decoration-style: wavy;
+        text-decoration-color: rgba(255, 244, 232, 0.9);
+        text-underline-offset: 4px;
+        padding-bottom: 2px;
       }
 
       h1 {
@@ -105,8 +111,8 @@
         width: min(100%, 420px);
         height: auto;
         margin: 12px auto 20px;
-        opacity: 0.92;
-        mix-blend-mode: lighten;
+        filter: brightness(0) invert(1);
+        opacity: 0.95;
       }
 
       .disco-wrap {
@@ -124,11 +130,7 @@
       }
 
       .wave {
-        margin: 8px auto 20px;
-        max-width: 680px;
-        height: 12px;
-        background: radial-gradient(circle at 7px 6px, transparent 7px, var(--cream) 7px, var(--cream) 9px, transparent 9px) repeat-x;
-        background-size: 24px 12px;
+        display: none;
       }
 
       .hero-rsvp {
@@ -278,12 +280,11 @@
     <header class="hero container">
       <p class="eyebrow">Ryan & Carly</p>
       <h1>You made it! Welcome to our wedding HQ! </h1>
-      <img src="assets/wave-line.png" alt="" class="welcome-line" aria-hidden="true" onerror="this.style.display='none'" />
       <div class="disco-wrap" aria-hidden="true">
         <img src="assets/disco-ball.gif" alt="" class="disco" />
       </div>
+      <img src="assets/wave-line.png" alt="" class="welcome-line" aria-hidden="true" onerror="this.style.display='none'" />
       <a class="hero-rsvp" href="/rsvp.html">RSVP Here!</a>
-      <div class="wave"></div>
       <div class="event-block">
         <p class="event-title">The Time</p>
         <p class="event-value">August 21st - August 23rd, 2026</p>
