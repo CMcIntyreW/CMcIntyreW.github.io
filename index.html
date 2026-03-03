@@ -100,6 +100,15 @@
         max-width: 13ch;
       }
 
+      .welcome-line {
+        display: block;
+        width: min(100%, 420px);
+        height: auto;
+        margin: 12px auto 20px;
+        opacity: 0.92;
+        mix-blend-mode: lighten;
+      }
+
       .disco-wrap {
         width: clamp(110px, 16vw, 170px);
         margin: 4px auto 20px;
@@ -112,9 +121,6 @@
         aspect-ratio: 1 / 1;
         border-radius: 50%;
         object-fit: cover;
-        box-shadow:
-          0 10px 26px rgba(0, 0, 0, 0.28),
-          0 0 30px rgba(255, 248, 230, 0.15);
       }
 
       .wave {
@@ -246,6 +252,7 @@
     <header class="hero container">
       <p class="eyebrow">Ryan & Carly</p>
       <h1>You made it! Welcome to our wedding HQ! </h1>
+      <img src="assets/wave-line.png" alt="" class="welcome-line" aria-hidden="true" />
       <div class="disco-wrap" aria-hidden="true">
         <img src="assets/disco-ball.gif" alt="" class="disco" />
       </div>
