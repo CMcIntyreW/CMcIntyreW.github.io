@@ -55,7 +55,7 @@
         position: fixed;
         inset: 0;
         background-image: url("assets/couple-photo.png");
-        background-size: contain;
+        background-size: 120%;
         background-repeat: no-repeat;
         background-position: center 18%;
         z-index: -2;
@@ -104,7 +104,6 @@
         width: clamp(110px, 16vw, 170px);
         margin: 4px auto 20px;
         position: relative;
-        animation: disco-spin 5s linear infinite;
       }
 
       .disco-wrap::before {
@@ -129,15 +128,6 @@
         box-shadow:
           0 10px 26px rgba(0, 0, 0, 0.28),
           0 0 30px rgba(255, 248, 230, 0.15);
-      }
-
-      @keyframes disco-spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
       }
 
       .wave {
