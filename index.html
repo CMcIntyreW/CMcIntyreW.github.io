@@ -369,7 +369,7 @@
       Questions: ryan.a.lee88@gmail.com or carlyyw@live.com
     </footer>
 
-    <audio id="wedding-music" loop preload="auto">
+    <audio id="wedding-music" loop preload="auto" autoplay>
       <source src="assets/song.mp3" type="audio/mpeg" />
     </audio>
     <button type="button" class="music-toggle" id="music-toggle" aria-label="Play background music" title="Play music">
@@ -380,6 +380,12 @@
         var audio = document.getElementById("wedding-music");
         var btn = document.getElementById("music-toggle");
         if (!audio || !btn) return;
+        audio.play().then(function () {
+          btn.classList.add("playing");
+          btn.setAttribute("aria-label", "Pause background music");
+          btn.setAttribute("title", "Pause music");
+          btn.textContent = "♫";
+        }).catch(function () {});
         btn.addEventListener("click", function () {
           if (audio.paused) {
             var p = audio.play();
