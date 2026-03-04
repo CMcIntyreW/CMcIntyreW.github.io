@@ -19,11 +19,13 @@
         --navy: #2C4A70;
         --muted-blue: #5F7A9C;
         --wavy-blue: #8FB2DB;
-        --slate: #778899;
-        --pink-highlight: rgba(255, 182, 193, 0.45);
-        --stripe-pink: #fce4ec;
-        --sheet-bg: #faf8f5;
+        --baby-blue: #a8d8ea;
+        --baby-blue-light: #d4eef7;
+        --checker-blue: #b8d4e8;
+        --checker-offwhite: #f5f8fa;
+        --sheet-bg: #fafcfe;
         --white: #ffffff;
+        --label-highlight: rgba(184, 212, 232, 0.5);
       }
 
       * {
@@ -35,13 +37,14 @@
         font-family: "Dancing Script", cursive;
         font-weight: 500;
         font-size: 1.35rem;
-        background: repeating-linear-gradient(
-          90deg,
-          var(--stripe-pink) 0,
-          var(--stripe-pink) 20px,
-          var(--white) 20px,
-          var(--white) 40px
-        );
+        background-color: var(--checker-offwhite);
+        background-image:
+          linear-gradient(45deg, var(--checker-blue) 25%, transparent 25%),
+          linear-gradient(-45deg, var(--checker-blue) 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, var(--checker-blue) 75%),
+          linear-gradient(-45deg, transparent 75%, var(--checker-blue) 75%);
+        background-size: 28px 28px;
+        background-position: 0 0, 0 14px, 14px -14px, -14px 0px;
         color: var(--navy);
         min-height: 100vh;
       }
@@ -123,7 +126,7 @@
         color: var(--navy);
         display: inline-block;
         padding: 4px 14px 6px;
-        background: var(--pink-highlight);
+        background: var(--label-highlight);
         border-radius: 999px;
       }
 
@@ -204,7 +207,7 @@
         margin: 0 0 18px;
         color: var(--navy);
         padding: 4px 18px 6px;
-        background: var(--pink-highlight);
+        background: var(--label-highlight);
         border-radius: 999px;
         display: inline-block;
       }
@@ -239,7 +242,7 @@
         margin: 0 0 18px;
         color: var(--navy);
         padding: 4px 18px 6px;
-        background: var(--pink-highlight);
+        background: var(--label-highlight);
         border-radius: 999px;
         display: inline-block;
       }
