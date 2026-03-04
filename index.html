@@ -136,13 +136,19 @@
 
       .welcome-line-wrap {
         margin: 10px auto 18px;
-        width: min(100%, 320px);
-        line-height: 0;
+        width: min(100%, 280px);
+        text-align: center;
       }
-      .welcome-line-wrap svg {
+      .welcome-line-wrap .wavy-line {
         display: block;
         width: 100%;
-        height: 14px;
+        font-size: 18px;
+        line-height: 1;
+        color: transparent;
+        text-decoration-line: underline;
+        text-decoration-style: wavy;
+        text-decoration-color: rgba(255, 244, 232, 0.95);
+        text-underline-offset: 4px;
       }
 
       .disco-wrap {
@@ -319,10 +325,7 @@
         <img src="assets/disco-ball.gif" alt="" class="disco" />
       </div>
       <div class="welcome-line-wrap" aria-hidden="true">
-        <svg viewBox="0 0 400 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M0 12 Q50 2, 100 12 T200 12 T300 12 T400 12" stroke="rgba(255,244,232,0.95)" stroke-width="1.5" stroke-linecap="round"/>
-          <path d="M0 16 Q50 6, 100 16 T200 16 T300 16 T400 16" stroke="rgba(255,244,232,0.85)" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+        <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
       <a class="hero-rsvp" href="/rsvp.html">RSVP Here!</a>
       <div class="event-block">
