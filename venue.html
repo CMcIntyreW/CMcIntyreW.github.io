@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Venue | Ryan & Carly Get Hitched</title>
+    <meta
+      name="description"
+      content="Our wedding venue — Northridge Inn & Resort, Sundridge, ON."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --orange: #d35f1d;
+        --orange-deep: #b24816;
+        --cream: #fff4e8;
+        --ink: #2f1a10;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Dancing Script", cursive;
+        font-weight: 500;
+        font-size: 1.35rem;
+        background: linear-gradient(160deg, #e47834 0%, var(--orange) 50%, var(--orange-deep) 100%);
+        color: var(--cream);
+        min-height: 100vh;
+      }
+
+      .container {
+        width: min(720px, 92%);
+        margin: 0 auto;
+        padding: 24px 0 48px;
+      }
+
+      .nav-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 20px;
+        padding: 16px 0 8px;
+        border-bottom: 1px solid rgba(255, 244, 232, 0.25);
+      }
+      .nav-tabs a {
+        color: var(--cream);
+        text-decoration: none;
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 6px 12px;
+        border-radius: 8px;
+        opacity: 0.9;
+      }
+      .nav-tabs a:hover {
+        background: rgba(255, 244, 232, 0.15);
+        opacity: 1;
+      }
+      .nav-tabs a.active {
+        background: rgba(255, 244, 232, 0.2);
+        opacity: 1;
+      }
+
+      .venue-hero {
+        text-align: center;
+        padding: 32px 0 28px;
+      }
+
+      .venue-hero h1 {
+        margin: 0 0 12px;
+        font-family: "Dancing Script", cursive;
+        font-weight: 700;
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        font-style: normal;
+        letter-spacing: 0.02em;
+      }
+
+      .venue-card {
+        background: rgba(255, 244, 232, 0.95);
+        color: var(--ink);
+        border-radius: 18px;
+        padding: 28px 24px;
+        box-shadow: 0 12px 28px rgba(48, 12, 0, 0.25);
+        font-size: 1.4rem;
+        line-height: 1.6;
+      }
+
+      .venue-card h2 {
+        font-family: "Dancing Script", cursive;
+        font-weight: 700;
+        font-size: 1.85rem;
+        margin: 0 0 12px;
+      }
+
+      .venue-card p {
+        margin: 0 0 14px;
+      }
+
+      .venue-card p:last-child {
+        margin-bottom: 0;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 24px;
+        color: var(--cream);
+        text-decoration: none;
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        opacity: 0.95;
+      }
+      .back-link:hover {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav-tabs container" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html" class="active">The Venue</a>
+      <a href="rsvp.html">RSVP</a>
+    </nav>
+
+    <div class="container">
+      <header class="venue-hero">
+        <h1>The Venue</h1>
+      </header>
+
+      <section class="venue-card">
+        <h2>Northridge Inn & Resort</h2>
+        <p>Sundridge, Ontario</p>
+        <p>We’re so excited to celebrate with you at Northridge Inn & Resort — a cozy spot in the heart of Ontario’s cottage country.</p>
+        <p>More details about the space, parking, and what to expect will be here soon.</p>
+      </section>
+
+      <p style="text-align: center;">
+        <a href="index.html" class="back-link">← Back to home</a>
+      </p>
+    </div>
+  </body>
+</html>
