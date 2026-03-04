@@ -16,10 +16,11 @@
     />
     <style>
       :root {
-        --orange: #d35f1d;
-        --orange-deep: #b24816;
-        --cream: #fff4e8;
-        --ink: #2f1a10;
+        --baby-blue: #a8d8ea;
+        --baby-blue-deep: #7eb8d4;
+        --baby-blue-light: #d4eef7;
+        --cream: #fff9f5;
+        --ink: #2c3e50;
         --white: #ffffff;
       }
 
@@ -32,13 +33,13 @@
         font-family: "Dancing Script", cursive;
         font-weight: 500;
         font-size: 1.35rem;
-        background: linear-gradient(160deg, #e47834 0%, var(--orange) 50%, var(--orange-deep) 100%);
-        color: var(--cream);
+        background: linear-gradient(160deg, #d4eef7 0%, var(--baby-blue) 50%, var(--baby-blue-deep) 100%);
+        color: var(--ink);
         min-height: 100vh;
       }
 
       .container {
-        width: min(720px, 92%);
+        width: min(960px, 92%);
         margin: 0 auto;
         padding: 24px 0 48px;
       }
@@ -49,10 +50,10 @@
         justify-content: center;
         gap: 6px 20px;
         padding: 16px 0 8px;
-        border-bottom: 1px solid rgba(255, 244, 232, 0.25);
+        border-bottom: 1px solid rgba(44, 62, 80, 0.15);
       }
       .nav-tabs a {
-        color: var(--cream);
+        color: var(--ink);
         text-decoration: none;
         font-family: "Montserrat", sans-serif;
         font-size: 0.9rem;
@@ -63,11 +64,11 @@
         opacity: 0.9;
       }
       .nav-tabs a:hover {
-        background: rgba(255, 244, 232, 0.15);
+        background: rgba(255, 255, 255, 0.5);
         opacity: 1;
       }
       .nav-tabs a.active {
-        background: rgba(255, 244, 232, 0.2);
+        background: rgba(255, 255, 255, 0.6);
         opacity: 1;
       }
 
@@ -86,13 +87,14 @@
       }
 
       .venue-card {
-        background: rgba(255, 244, 232, 0.95);
+        background: rgba(255, 255, 255, 0.95);
         color: var(--ink);
         border-radius: 18px;
         padding: 28px 24px;
-        box-shadow: 0 12px 28px rgba(48, 12, 0, 0.25);
+        box-shadow: 0 12px 28px rgba(44, 62, 80, 0.15);
         font-size: 1.4rem;
         line-height: 1.6;
+        border: 1px solid rgba(255, 255, 255, 0.8);
       }
 
       .venue-card h2 {
@@ -113,16 +115,134 @@
       .back-link {
         display: inline-block;
         margin-top: 24px;
-        color: var(--cream);
+        color: var(--ink);
         text-decoration: none;
         font-family: "Montserrat", sans-serif;
         font-size: 0.9rem;
         font-weight: 600;
-        opacity: 0.95;
+        opacity: 0.9;
       }
       .back-link:hover {
         opacity: 1;
         text-decoration: underline;
+      }
+
+      .venue-intro {
+        text-align: center;
+        padding: 24px 0 32px;
+      }
+      .venue-intro h1 {
+        margin: 0;
+        font-family: "Dancing Script", cursive;
+        font-weight: 700;
+        font-size: clamp(2.2rem, 6vw, 3.5rem);
+      }
+
+      .venue-section-label {
+        font-family: "Dancing Script", cursive;
+        font-weight: 700;
+        font-size: 1.75rem;
+        margin: 0 0 14px;
+        color: var(--ink);
+      }
+
+      .venue-two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 36px;
+      }
+      @media (max-width: 640px) {
+        .venue-two-col {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .venue-block {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 8px 24px rgba(44, 62, 80, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+      }
+
+      .venue-photos {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .venue-photos.one-col {
+        grid-template-columns: 1fr;
+      }
+
+      .venue-photo {
+        aspect-ratio: 4 / 3;
+        background: var(--baby-blue-light);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Montserrat", sans-serif;
+        font-size: 0.8rem;
+        color: var(--ink);
+        opacity: 0.8;
+        overflow: hidden;
+      }
+      .venue-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .venue-photo .placeholder-text {
+        display: none;
+        position: absolute;
+        inset: 0;
+        align-items: center;
+        justify-content: center;
+      }
+      .venue-photo.placeholder .placeholder-text {
+        display: flex;
+      }
+      .venue-photo.placeholder img {
+        display: none !important;
+      }
+      .venue-photo {
+        position: relative;
+      }
+
+      .rooms-label {
+        font-family: "Dancing Script", cursive;
+        font-weight: 700;
+        font-size: 2rem;
+        margin: 0 0 20px;
+        color: var(--ink);
+        text-align: center;
+      }
+
+      .venue-rooms {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 32px;
+      }
+      @media (max-width: 768px) {
+        .venue-rooms {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .venue-room-block {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: 0 8px 24px rgba(44, 62, 80, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+      }
+      .venue-room-block .venue-section-label {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
       }
     </style>
   </head>
@@ -134,15 +254,69 @@
     </nav>
 
     <div class="container">
-      <header class="venue-hero">
-        <h1>The Venue</h1>
+      <header class="venue-intro">
+        <h1>Let us show you around....</h1>
       </header>
 
-      <section class="venue-card">
-        <h2>Northridge Inn & Resort</h2>
-        <p>Sundridge, Ontario</p>
-        <p>We’re so excited to celebrate with you at Northridge Inn & Resort — a cozy spot in the heart of Ontario’s cottage country.</p>
-        <p>More details about the space, parking, and what to expect will be here soon.</p>
+      <section class="venue-two-col">
+        <div class="venue-block">
+          <h2 class="venue-section-label">The Lake & Ground</h2>
+          <div class="venue-photos">
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-lake1.jpg" alt="Lake and grounds" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-lake2.jpg" alt="Lake and grounds" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+          </div>
+        </div>
+        <div class="venue-block">
+          <h2 class="venue-section-label">The Pool Area</h2>
+          <div class="venue-photos one-col">
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-pool.jpg" alt="Pool area" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="rooms-label">Rooms</h2>
+
+      <section class="venue-rooms">
+        <div class="venue-room-block">
+          <h2 class="venue-section-label">Double Queen Rooms</h2>
+          <div class="venue-photos">
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-double-queen1.jpg" alt="Double queen room" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-double-queen2.jpg" alt="Double queen room" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+          </div>
+        </div>
+        <div class="venue-room-block">
+          <h2 class="venue-section-label">Glamping (Single Queen & Double Queen)</h2>
+          <div class="venue-photos one-col">
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-glamping.jpg" alt="Glamping" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+          </div>
+        </div>
+        <div class="venue-room-block">
+          <h2 class="venue-section-label">King Suite</h2>
+          <div class="venue-photos one-col">
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-king.jpg" alt="King suite" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <p style="text-align: center;">
