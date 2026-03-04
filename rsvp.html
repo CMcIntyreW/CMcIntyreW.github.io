@@ -47,6 +47,33 @@
         padding: 42px 0 58px;
       }
 
+      .nav-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 20px;
+        padding: 16px 0 8px;
+        border-bottom: 1px solid rgba(255, 244, 232, 0.25);
+      }
+      .nav-tabs a {
+        color: var(--cream);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 6px 12px;
+        border-radius: 8px;
+        opacity: 0.9;
+      }
+      .nav-tabs a:hover {
+        background: rgba(255, 244, 232, 0.15);
+        opacity: 1;
+      }
+      .nav-tabs a.active {
+        background: rgba(255, 244, 232, 0.2);
+        opacity: 1;
+      }
+
       h1 {
         margin: 0 0 10px;
         font-family: "Abril Fatface", Georgia, serif;
@@ -168,6 +195,11 @@
     </style>
   </head>
   <body>
+    <nav class="nav-tabs container" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html">The Venue</a>
+      <a href="rsvp.html" class="active">RSVP</a>
+    </nav>
     <main class="container">
       <h1>RSVP Here!</h1>
       <p class="lead">We can't wait to celebrate with you. Please send your response by July 15, 2026.</p>
