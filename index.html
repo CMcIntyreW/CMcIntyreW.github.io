@@ -114,7 +114,7 @@
 
       .eyebrow {
         margin: 0 0 32px 0;
-        font-size: 1.25rem;
+        font-size: .9rem;
         font-weight: 700;
         letter-spacing: 0.18em;
         text-transform: uppercase;
@@ -129,36 +129,39 @@
       h1 {
         margin: 0 auto 36px;
         font-family: "Abril Fatface", Georgia, serif;
-        font-size: clamp(2.2rem, 6vw, 5rem);
+        font-size: clamp(5rem, 6vw, 5rem);
         line-height: 0.98;
         max-width: 13ch;
       }
 
       .welcome-line-wrap {
         margin: 14px auto 20px;
-        width: min(100%, 260px);
+        width: fit-content;
+        max-width: 200px;
         padding: 0;
         box-sizing: border-box;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transform: translateX(30px);
       }
       .welcome-line-wrap .wavy-line {
-        display: block;
-        width: 100%;
+        display: inline-block;
         font-size: 72px;
-        line-height: 1;
+        line-height: 0.5;
         color: transparent;
         text-decoration-line: underline;
         text-decoration-style: wavy;
         text-decoration-color: rgba(255, 244, 232, 0.95);
         text-decoration-thickness: 8px;
-        text-underline-offset: 10px;
+        text-underline-offset: 5px;
       }
       .welcome-line-wrap .wavy-line + .wavy-line {
         margin-top: 8px;
       }
 
       .disco-wrap {
-        width: clamp(110px, 16vw, 170px);
+        width: clamp(175px, 26vw, 285px);
         margin: 4px auto 20px;
         position: relative;
       }
@@ -327,12 +330,12 @@
     <header class="hero container">
       <p class="eyebrow">Ryan & Carly</p>
       <h1>You made it!<br />Welcome to our wedding HQ!</h1>
-      <div class="welcome-line-wrap" aria-hidden="true">
-        <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-      </div>
       <div class="disco-wrap" aria-hidden="true">
         <img src="assets/disco-ball.gif" alt="" class="disco" />
+      </div>
+      <div class="welcome-line-wrap" aria-hidden="true">
+        <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
       <div class="event-block">
         <p class="event-title">The Time:</p>
