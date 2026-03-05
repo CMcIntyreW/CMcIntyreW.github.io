@@ -143,7 +143,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        transform: translateX(30px);
+        transform: translate(30px, -30px);
       }
       .welcome-line-wrap .wavy-line {
         display: inline-block;
@@ -161,9 +161,10 @@
       }
 
       .disco-wrap {
-        width: clamp(175px, 26vw, 285px);
+        width: clamp(220px, 32vw, 340px);
         margin: 4px auto 20px;
         position: relative;
+        cursor: pointer;
       }
 
       .disco {
@@ -203,12 +204,9 @@
       }
 
       .event-block {
-        border: 2px solid rgba(255, 244, 232, 0.5);
-        border-radius: 18px;
-        padding: 20px;
-        background: rgba(59, 19, 0, 0.14);
         max-width: 760px;
-        margin: 0 auto 24px;
+        margin: 40px auto 24px;
+        padding: 0;
       }
 
       .event-title {
@@ -233,11 +231,8 @@
       }
 
       .card {
-        background: var(--cream);
-        color: var(--ink-dark);
-        border-radius: 18px;
-        padding: 18px;
-        box-shadow: 0 10px 26px rgba(42, 11, 0, 0.22);
+        color: var(--cream);
+        padding: 18px 0;
       }
 
       .card h2 {
@@ -247,15 +242,6 @@
 
       .card p {
         margin: 7px 0;
-      }
-
-      .actions {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 8px;
-        margin-bottom: 34px;
       }
 
       .button {
@@ -305,6 +291,92 @@
         background: var(--orange-deep);
       }
 
+      @keyframes record-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .countdown {
+        width: clamp(150px, 35vw, 200px);
+        height: clamp(150px, 35vw, 200px);
+        margin: 0 auto 24px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .countdown .record-vinyl {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='99' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='95' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='91' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='87' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='83' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='79' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='75' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='71' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='67' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='63' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='59' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='55' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='51' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='47' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3Ccircle cx='100' cy='100' r='43' fill='none' stroke='%231a1a1a' stroke-width='0.4'/%3E%3Ccircle cx='100' cy='100' r='39' fill='none' stroke='%23252525' stroke-width='0.35'/%3E%3C/svg%3E"),
+          radial-gradient(
+            circle at 50% 50%,
+            #252525 0%,
+            #1f1f1f 35%,
+            #151515 100%
+          );
+        background-size: 100% 100%, 100% 100%;
+        background-position: center, center;
+        box-shadow:
+          0 6px 24px rgba(0, 0, 0, 0.4),
+          inset 0 0 0 2px rgba(255, 255, 255, 0.06);
+        animation: record-spin 8s linear infinite;
+      }
+      .countdown .record-vinyl .record-curved-text {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      .countdown .record-label {
+        width: 38%;
+        height: 38%;
+        min-width: 52px;
+        min-height: 52px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle at 50% 50%,
+          rgba(211, 95, 29, 0.55) 0%,
+          rgba(211, 95, 29, 0.55) 26%,
+          #2db1a8 27%
+        );
+        border: 3px solid rgba(255, 255, 255, 0.25);
+        box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 1px 4px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+      }
+      .countdown .countdown-number {
+        font-family: "Abril Fatface", Georgia, serif;
+        font-size: clamp(1.9rem, 4.8vw, 2.65rem);
+        font-weight: 700;
+        line-height: 1;
+        color: #fff;
+        text-shadow:
+          0 1px 0 rgba(0, 0, 0, 0.25),
+          0 2px 8px rgba(0, 0, 0, 0.35),
+          0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      .countdown .countdown-label {
+        display: none;
+        font-size: clamp(0.35rem, 1vw, 0.45rem);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #fff;
+        margin-top: 2px;
+        text-align: center;
+        line-height: 1.2;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+
       footer {
         text-align: center;
         font-size: 0.86rem;
@@ -330,14 +402,14 @@
     <header class="hero container">
       <p class="eyebrow">Ryan & Carly</p>
       <h1>You made it!<br />Welcome to our wedding HQ!</h1>
-      <div class="disco-wrap" aria-hidden="true">
+      <div class="disco-wrap" id="disco-ball" aria-hidden="true">
         <img src="assets/disco-ball.gif" alt="" class="disco" />
       </div>
       <div class="welcome-line-wrap" aria-hidden="true">
         <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         <span class="wavy-line" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
       </div>
-      <div class="event-block">
+      <div class="event-block" aria-label="Event date and location">
         <p class="event-title">The Time:</p>
         <p class="event-value">August 21st - 23rd, 2026</p>
         <p class="event-title">The Place:</p>
@@ -346,27 +418,24 @@
     </header>
 
     <main class="container">
-      <section class="details">
-        <article class="card">
-          <h2>Weekend Schedule</h2>
-          <p><strong>Friday:</strong> Check In & Welcome BBQ</p>
-          <p><strong>Saturday:</strong> Ceremony, dinner, and dance party</p>
-          <p><strong>Sunday:</strong> Farewell Continental Breakfast</p>
-          <div class="wave"></div>
-          <h2>Travel</h2>
-          <p>Nearest airport: Toronto Pearson (YYZ), then a drive north to Sundridge.</p>
-          <p>More hotel and shuttle details coming soon.</p>
-          <div class="wave"></div>
-          <h2>Dress Code</h2>
-          <p>Dress to impress and bring your dancing shoes.</p>
-        </article>
-      </section>
-
-      <section class="actions">
-        <a class="button dark" href="#">View Registry</a>
-        <a class="button dark" href="#">Travel Info</a>
-      </section>
     </main>
+
+    <div class="countdown" id="countdown" aria-live="polite" role="img" aria-label="Countdown to wedding day">
+      <div class="record-vinyl" aria-hidden="true">
+        <svg class="record-curved-text" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <path id="record-arc" d="M 12 50 A 38 38 0 0 1 88 50" fill="none" />
+          </defs>
+          <text fill="rgba(255,255,255,0.7)" font-size="9" font-weight="700" letter-spacing="0.3em" text-anchor="middle">
+            <textPath href="#record-arc" startOffset="50%">DAYS TO GO</textPath>
+          </text>
+        </svg>
+      </div>
+      <div class="record-label">
+        <span class="countdown-number" id="countdown-number">—</span>
+        <span class="countdown-label" id="countdown-label">days to go!</span>
+      </div>
+    </div>
 
     <footer>
       Questions: ryan.a.lee88@gmail.com or carlyyw@live.com
@@ -382,37 +451,69 @@
       (function () {
         var audio = document.getElementById("wedding-music");
         var btn = document.getElementById("music-toggle");
+        var disco = document.getElementById("disco-ball");
         if (!audio || !btn) return;
-        audio.play().then(function () {
-          btn.classList.add("playing");
-          btn.setAttribute("aria-label", "Pause background music");
-          btn.setAttribute("title", "Pause music");
-          btn.textContent = "♫";
-        }).catch(function () {});
-        btn.addEventListener("click", function () {
-          if (audio.paused) {
-            var p = audio.play();
-            if (p && typeof p.then === "function") {
-              p.then(function () {
-                btn.classList.add("playing");
-                btn.setAttribute("aria-label", "Pause background music");
-                btn.setAttribute("title", "Pause music");
-                btn.textContent = "♫";
-              }).catch(function () {});
-            } else {
-              btn.classList.add("playing");
-              btn.setAttribute("aria-label", "Pause background music");
-              btn.setAttribute("title", "Pause music");
-              btn.textContent = "♫";
-            }
+
+        function setPlaying(playing) {
+          if (playing) {
+            btn.classList.add("playing");
+            btn.setAttribute("aria-label", "Pause background music");
+            btn.setAttribute("title", "Pause music");
+            btn.textContent = "♫";
           } else {
-            audio.pause();
             btn.classList.remove("playing");
             btn.setAttribute("aria-label", "Play background music");
             btn.setAttribute("title", "Play music");
             btn.textContent = "♪";
           }
+        }
+
+        audio.play().then(function () {
+          setPlaying(true);
+        }).catch(function () {});
+        btn.addEventListener("click", function () {
+          if (audio.paused) {
+            var p = audio.play();
+            if (p && typeof p.then === "function") {
+              p.then(function () { setPlaying(true); }).catch(function () {});
+            } else {
+              setPlaying(true);
+            }
+          } else {
+            audio.pause();
+            setPlaying(false);
+          }
         });
+
+        if (disco) {
+          disco.addEventListener("mouseenter", function () {
+            audio.play().then(function () { setPlaying(true); }).catch(function () {});
+          });
+        }
+      })();
+
+      (function () {
+        var wedding = new Date(2026, 7, 22);
+        var numEl = document.getElementById("countdown-number");
+        var labelEl = document.getElementById("countdown-label");
+        if (!numEl || !labelEl) return;
+        function update() {
+          var now = new Date();
+          now.setHours(0, 0, 0, 0);
+          wedding.setHours(0, 0, 0, 0);
+          var diff = Math.ceil((wedding - now) / (1000 * 60 * 60 * 24));
+          if (diff > 0) {
+            numEl.textContent = diff;
+            labelEl.textContent = diff === 1 ? "day to go!" : "days to go!";
+          } else if (diff === 0) {
+            numEl.textContent = "0";
+            labelEl.textContent = "It's the big day!";
+          } else {
+            numEl.textContent = "♥";
+            labelEl.textContent = "We did it!";
+          }
+        }
+        update();
       })();
     </script>
   </body>
