@@ -204,30 +204,14 @@
       <h1>RSVP Here!</h1>
       <p class="lead">We can't wait to celebrate with you. Please send your response by July 15, 2026.</p>
 
-      <!--
-        HOW TO WIRE TO GOOGLE FORMS:
-        1. Go to forms.google.com and create a new form with your RSVP questions.
-        2. Add questions that match what you want (name, email, attending, events, dietary, song, etc.).
-        3. Click "Send" (paper plane) → click the "<>" embed icon.
-        4. Copy the URL inside src="..." (it looks like https://docs.google.com/forms/d/e/XXXX/viewform?embedded=true).
-        5. Replace the URL below in the iframe src with your copied URL.
-      -->
+      <!-- RSVP form is a Flask app. For local testing use http://localhost:5000; after deploy, change the link to your app URL. -->
       <section class="card">
-        <div class="form-embed-wrap">
-          <iframe
-            class="google-form-embed"
-            src="https://docs.google.com/forms/d/1HViR02SOsAgHDmZdpCdZYELl0dOSElSYAzJCcNjj7G8/viewform?embedded=true"
-            width="100%"
-            height="1200"
-            frameborder="0"
-            marginheight="0"
-            marginwidth="0"
-            title="RSVP form"
-          >Loading…</iframe>
-        </div>
-        <div class="actions" style="margin-top: 1.5rem;">
+        <p style="margin-bottom: 1rem;">Click the button below to open the RSVP form.</p>
+        <div class="actions">
+          <a class="btn primary" href="http://localhost:5000/">Open RSVP form</a>
           <a class="btn secondary" href="index.html">Back to home</a>
         </div>
+        <p class="note" style="margin-top: 1rem;">After you deploy the Flask app (see rsvp_flask/README.md), update this link to your app URL.</p>
       </section>
     </main>
   </body>
