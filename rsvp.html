@@ -176,15 +176,25 @@
         opacity: 0.85;
       }
 
-      .form-embed-wrap {
-        border-radius: 12px;
-        overflow: hidden;
-        min-height: 600px;
+      .rsvp-step {
+        display: none;
       }
-
-      .google-form-embed {
+      .rsvp-step.step-active {
         display: block;
-        min-height: 1200px;
+      }
+      .step-progress {
+        font-size: 0.85rem;
+        opacity: 0.9;
+        margin-bottom: 18px;
+      }
+      .step-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 22px;
+      }
+      .step-actions .btn {
+        cursor: pointer;
       }
 
       @media (min-width: 760px) {
@@ -202,33 +212,169 @@
     </nav>
     <main class="container">
       <h1>RSVP Here!</h1>
-      <p class="lead">We can't wait to celebrate with you. Please send your response by July 15, 2026.</p>
+      <p class="lead">Please respond as soon as you can. With limited rooms, we will be assigning them based on who we hear from first and how we can best fit everyone in. We love you all, but we have to make the room puzzle work somehow. And please make sure you check out the Venue tab so you are informed of the available options!</p>
 
-      <!--
-        HOW TO WIRE TO GOOGLE FORMS:
-        1. Go to forms.google.com and create a new form with your RSVP questions.
-        2. Add questions that match what you want (name, email, attending, events, dietary, song, etc.).
-        3. Click "Send" (paper plane) → click the "<>" embed icon.
-        4. Copy the URL inside src="..." (it looks like https://docs.google.com/forms/d/e/XXXX/viewform?embedded=true).
-        5. Replace the URL below in the iframe src with your copied URL.
-      -->
+      <!-- Set the form action to your Formspree URL (e.g. https://formspree.io/f/YOUR_ID) or backend to receive submissions. -->
       <section class="card">
-        <div class="form-embed-wrap">
-          <iframe
-            class="google-form-embed"
-            src="https://docs.google.com/forms/d/1HViR02SOsAgHDmZdpCdZYELl0dOSElSYAzJCcNjj7G8/viewform?embedded=true"
-            width="100%"
-            height="1200"
-            frameborder="0"
-            marginheight="0"
-            marginwidth="0"
-            title="RSVP form"
-          >Loading…</iframe>
-        </div>
-        <div class="actions" style="margin-top: 1.5rem;">
-          <a class="btn secondary" href="index.html">Back to home</a>
-        </div>
+        <form id="rsvp-form" action="" method="post">
+          <p class="step-progress" id="step-progress" aria-live="polite">Question 1 of 8</p>
+
+          <div class="rsvp-step step-active" data-step="1">
+            <div class="field">
+              <label for="name">Your name *</label>
+              <input type="text" id="name" name="name" required placeholder="Full name" />
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn primary" id="next-1">Next</button>
+              <a class="btn secondary" href="index.html">Back to home</a>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="2">
+            <div class="field">
+              <label for="email">Email *</label>
+              <input type="email" id="email" name="email" required placeholder="you@example.com" />
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-2">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="3">
+            <div class="field">
+              <label>Will you be joining us? *</label>
+              <div class="check-group">
+                <label class="check-item"><input type="radio" name="attending" value="yes" required /> Yes, I'll be there!</label>
+                <label class="check-item"><input type="radio" name="attending" value="no" /> Sadly, I can't make it</label>
+              </div>
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-3">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="4">
+            <div class="field">
+              <label>Which events will you attend?</label>
+              <div class="check-group">
+                <label class="check-item"><input type="checkbox" name="friday" value="yes" /> Friday — Check-in & Welcome BBQ</label>
+                <label class="check-item"><input type="checkbox" name="saturday" value="yes" /> Saturday — Ceremony, dinner & dance</label>
+                <label class="check-item"><input type="checkbox" name="sunday" value="yes" /> Sunday — Farewell breakfast</label>
+              </div>
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-4">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="5">
+            <div class="field">
+              <label for="guests">Number of guests (including you)</label>
+              <input type="text" id="guests" name="guests" placeholder="e.g. 2" />
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-5">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="6">
+            <div class="field">
+              <label for="dietary">Dietary restrictions or allergies</label>
+              <input type="text" id="dietary" name="dietary" placeholder="None / vegetarian / etc." />
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-6">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="7">
+            <div class="field">
+              <label for="song_request">Song request for the dance floor</label>
+              <input type="text" id="song_request" name="song_request" placeholder="Optional" />
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-7">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="8">
+            <div class="field">
+              <label for="message">Anything else we should know?</label>
+              <textarea id="message" name="message" placeholder="Optional note"></textarea>
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="submit" class="btn primary">Submit RSVP</button>
+            </div>
+          </div>
+        </form>
       </section>
+    </main>
+    <script>
+      (function () {
+        var form = document.getElementById("rsvp-form");
+        var steps = form.querySelectorAll(".rsvp-step");
+        var progressEl = document.getElementById("step-progress");
+        var total = steps.length;
+
+        function showStep(index) {
+          steps.forEach(function (step, i) {
+            step.classList.toggle("step-active", i === index);
+          });
+          progressEl.textContent = "Question " + (index + 1) + " of " + total;
+        }
+
+        function goNext() {
+          var active = form.querySelector(".rsvp-step.step-active");
+          var firstInvalid = null;
+          var inputs = active.querySelectorAll("input[required], select[required], textarea[required]");
+          var radioNames = {};
+          for (var i = 0; i < inputs.length; i++) {
+            var el = inputs[i];
+            if (el.type === "radio") {
+              radioNames[el.name] = radioNames[el.name] || [];
+              radioNames[el.name].push(el);
+            } else {
+              if (el.value.trim() === "") {
+                firstInvalid = firstInvalid || el;
+              }
+            }
+          }
+          for (var name in radioNames) {
+            var group = radioNames[name];
+            var checked = active.querySelector("input[name=" + name + "]:checked");
+            if (!checked) firstInvalid = firstInvalid || group[0];
+          }
+          if (firstInvalid) {
+            firstInvalid.focus();
+            return;
+          }
+          var idx = Array.prototype.indexOf.call(steps, active);
+          if (idx < total - 1) showStep(idx + 1);
+        }
+
+        function goBack() {
+          var active = form.querySelector(".rsvp-step.step-active");
+          var idx = Array.prototype.indexOf.call(steps, active);
+          if (idx > 0) showStep(idx - 1);
+        }
+
+        steps.forEach(function (step, i) {
+          var nextBtn = step.querySelector(".btn.primary");
+          if (nextBtn && nextBtn.type === "button") {
+            nextBtn.addEventListener("click", goNext);
+          }
+          var backBtn = step.querySelector(".step-back");
+          if (backBtn) backBtn.addEventListener("click", goBack);
+        });
+      })();
+    </script>
     </main>
   </body>
 </html>

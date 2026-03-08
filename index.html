@@ -441,7 +441,7 @@
       Questions: ryan.a.lee88@gmail.com or carlyyw@live.com
     </footer>
 
-    <audio id="wedding-music" loop preload="auto" autoplay>
+    <audio id="wedding-music" loop preload="auto">
       <source src="assets/song.mp3" type="audio/mpeg" />
     </audio>
     <button type="button" class="music-toggle" id="music-toggle" aria-label="Play background music" title="Play music">
@@ -468,9 +468,17 @@
           }
         }
 
-        audio.play().then(function () {
-          setPlaying(true);
-        }).catch(function () {});
+        function startMusicOnFirstClick(e) {
+          if (e && e.target && (e.target.id === "music-toggle" || e.target.closest("#music-toggle"))) return;
+          document.removeEventListener("click", startMusicOnFirstClick, true);
+          document.removeEventListener("keydown", startMusicOnFirstClick, true);
+          document.removeEventListener("touchstart", startMusicOnFirstClick, true);
+          audio.play().then(function () { setPlaying(true); }).catch(function () {});
+        }
+        document.addEventListener("click", startMusicOnFirstClick, { once: true, capture: true });
+        document.addEventListener("keydown", startMusicOnFirstClick, { once: true, capture: true });
+        document.addEventListener("touchstart", startMusicOnFirstClick, { once: true, capture: true });
+
         btn.addEventListener("click", function () {
           if (audio.paused) {
             var p = audio.play();

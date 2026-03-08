@@ -43,8 +43,8 @@
           linear-gradient(-45deg, var(--checker-blue) 25%, transparent 25%),
           linear-gradient(45deg, transparent 75%, var(--checker-blue) 75%),
           linear-gradient(-45deg, transparent 75%, var(--checker-blue) 75%);
-        background-size: 28px 28px;
-        background-position: 0 0, 0 14px, 14px -14px, -14px 0px;
+        background-size: 72px 72px;
+        background-position: 0 0, 0 36px, 36px -36px, -36px 0px;
         color: var(--navy);
         min-height: 100vh;
       }
@@ -61,67 +61,70 @@
         justify-content: center;
         gap: 6px 20px;
         padding: 16px 0 8px;
-        border-bottom: 1px solid rgba(44, 74, 112, 0.2);
+        border-bottom: 1px solid rgba(44, 74, 112, 0.3);
+        background: #6b8fb4;
       }
       .nav-tabs a {
-        color: var(--navy);
+        color: var(--checker-offwhite);
         text-decoration: none;
-        font-family: "Montserrat", sans-serif;
-        font-size: 0.9rem;
+        font-family: "Caveat", "Dancing Script", cursive;
+        font-size: 1.5rem;
         font-weight: 600;
-        letter-spacing: 0.04em;
-        padding: 6px 12px;
+        letter-spacing: 0.02em;
+        padding: 8px 14px;
         border-radius: 8px;
-        opacity: 0.9;
+        opacity: 0.95;
       }
       .nav-tabs a:hover {
-        background: rgba(255, 255, 255, 0.7);
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
         opacity: 1;
       }
       .nav-tabs a.active {
-        background: rgba(143, 178, 219, 0.3);
+        background: rgba(143, 178, 219, 0.4);
+        color: #fff;
         opacity: 1;
       }
 
       .venue-sheet {
-        background: var(--sheet-bg);
+        background: rgba(255, 255, 255, 0.25);
         border-radius: 24px;
-        padding: 32px 28px 40px;
+        padding: 16px 28px 40px;
         margin: 0 auto 28px;
         max-width: 900px;
         position: relative;
-        box-shadow: 0 4px 24px rgba(44, 74, 112, 0.12);
-        border: 3px solid var(--wavy-blue);
-      }
-      .venue-sheet::before {
-        content: "";
-        position: absolute;
-        inset: -6px;
-        border-radius: 28px;
-        border: 2px solid var(--wavy-blue);
-        opacity: 0.5;
-        pointer-events: none;
+        box-shadow: 0 4px 24px rgba(44, 74, 112, 0.08);
       }
 
       .venue-intro {
         text-align: center;
-        padding: 0 0 20px;
-        margin-bottom: 24px;
-        border-bottom: 2px dashed var(--navy);
+        padding: 0 0 16px;
+        margin-bottom: 18px;
+        position: relative;
+      }
+      .venue-intro::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 14px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 14'%3E%3Cpath d='M0,7 Q15,1 30,7 T60,7' stroke='%232C4A70' stroke-width='2' fill='none'/%3E%3C/svg%3E") repeat-x left center;
+        background-size: 60px 14px;
       }
       .venue-intro h1 {
         margin: 0 0 8px;
         font-family: "Caveat", "Dancing Script", cursive;
-        font-weight: 700;
-        font-size: clamp(2.4rem, 7vw, 3.6rem);
+        font-weight: 600;
+        font-size: clamp(2.6rem, 7vw, 4rem);
         color: var(--navy);
         letter-spacing: 0.02em;
       }
 
       .venue-section-label {
         font-family: "Caveat", "Dancing Script", cursive;
-        font-weight: 700;
-        font-size: 1.85rem;
+        font-weight: 600;
+        font-size: 2rem;
         margin: 0 0 12px;
         color: var(--navy);
         display: inline-block;
@@ -133,8 +136,8 @@
       .venue-two-col {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        margin-bottom: 32px;
+        gap: 28px;
+        margin-bottom: 24px;
       }
       @media (max-width: 640px) {
         .venue-two-col {
@@ -143,17 +146,22 @@
       }
 
       .venue-block {
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 14px;
-        padding: 18px;
-        border: 1px solid rgba(143, 178, 219, 0.35);
+        padding: 16px;
+        border: 1px solid rgba(143, 178, 219, 0.3);
+      }
+      .venue-block--pool .venue-section-label,
+      .venue-block--lake .venue-section-label {
+        display: block;
+        text-align: center;
       }
 
       .venue-photos {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
-        margin-top: 12px;
+        margin-top: 14px;
       }
       .venue-photos.one-col {
         grid-template-columns: 1fr;
@@ -174,11 +182,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: "Montserrat", sans-serif;
-        font-size: 0.8rem;
+        font-family: "Dancing Script", cursive;
+        font-size: 1rem;
         color: var(--muted-blue);
         overflow: hidden;
         position: relative;
+        cursor: pointer;
+      }
+      .venue-photo:not(.placeholder):hover {
+        outline: 2px solid var(--wavy-blue);
+        outline-offset: 2px;
       }
       .venue-photo img {
         width: 100%;
@@ -204,7 +217,7 @@
         font-family: "Caveat", "Dancing Script", cursive;
         font-weight: 700;
         font-size: 2rem;
-        margin: 0 0 18px;
+        margin: -4px 0 18px 0;
         color: var(--navy);
         padding: 4px 18px 6px;
         background: var(--label-highlight);
@@ -214,21 +227,20 @@
 
       .venue-rooms {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 20px;
-        margin-bottom: 28px;
-      }
-      @media (max-width: 768px) {
-        .venue-rooms {
-          grid-template-columns: 1fr;
-        }
+        grid-template-columns: 1fr;
+        gap: 28px;
+        margin-bottom: 32px;
       }
 
       .venue-room-block {
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 14px;
-        padding: 18px;
-        border: 1px solid rgba(143, 178, 219, 0.35);
+        padding: 12px;
+        border: 1px solid rgba(143, 178, 219, 0.3);
+      }
+      .venue-room-block .venue-photos {
+        gap: 8px;
+        margin-top: 12px;
       }
       .venue-room-block .venue-section-label {
         font-size: 1.35rem;
@@ -248,11 +260,11 @@
       }
 
       .venue-pricing {
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 14px;
         padding: 24px 20px;
         margin-bottom: 28px;
-        border: 1px solid rgba(143, 178, 219, 0.35);
+        border: 1px solid rgba(143, 178, 219, 0.3);
       }
 
       .pricing-block {
@@ -264,8 +276,8 @@
 
       .pricing-block h3 {
         font-family: "Caveat", "Dancing Script", cursive;
-        font-weight: 700;
-        font-size: 1.5rem;
+        font-weight: 600;
+        font-size: 1.65rem;
         color: var(--navy);
         margin: 0 0 10px;
       }
@@ -276,8 +288,9 @@
         align-items: baseline;
         gap: 6px 20px;
         margin-bottom: 6px;
-        font-family: "Montserrat", sans-serif;
-        font-size: 0.95rem;
+        font-family: "Dancing Script", cursive;
+        font-size: 1.2rem;
+        font-weight: 500;
         color: var(--muted-blue);
       }
       .pricing-row .label {
@@ -293,14 +306,64 @@
         margin-top: 16px;
         color: var(--muted-blue);
         text-decoration: none;
-        font-family: "Montserrat", sans-serif;
-        font-size: 0.9rem;
+        font-family: "Dancing Script", cursive;
+        font-size: 1.25rem;
         font-weight: 600;
-        font-style: italic;
       }
       .back-link:hover {
         color: var(--navy);
         text-decoration: underline;
+      }
+
+      .venue-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .venue-lightbox.is-open {
+        display: flex;
+      }
+      .venue-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(44, 74, 112, 0.85);
+        cursor: pointer;
+      }
+      .venue-lightbox-img {
+        position: relative;
+        z-index: 1;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+      }
+      .venue-lightbox-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 2;
+        width: 44px;
+        height: 44px;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--navy);
+        font-size: 1.75rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+      .venue-lightbox-close:hover {
+        background: #fff;
       }
     </style>
   </head>
@@ -311,16 +374,19 @@
       <a href="rsvp.html">RSVP</a>
     </nav>
 
+    <audio id="venue-music" loop preload="auto">
+      <source src="assets/Home.mp3" type="audio/mpeg" />
+    </audio>
     <div class="container">
       <article class="venue-sheet">
       <header class="venue-intro">
-        <h1>Let us show you around....</h1>
+        <h1>Let us show you around our home for the weekend, Northridge Inn…</h1>
       </header>
 
       <section class="venue-two-col">
-        <div class="venue-block">
-          <h2 class="venue-section-label">The Lake & Ground</h2>
-          <div class="venue-photos three-col">
+        <div class="venue-block venue-block--lake">
+          <h2 class="venue-section-label">The Lake & Grounds</h2>
+          <div class="venue-photos">
             <div class="venue-photo placeholder">
               <img src="assets/venue-lake1.jpg" alt="Lake and grounds" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
               <span class="placeholder-text">Add photo</span>
@@ -333,20 +399,36 @@
               <img src="assets/venue-lake3.jpg" alt="Lake and grounds" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
               <span class="placeholder-text">Add photo</span>
             </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-lake4.jpg" alt="Lake and grounds" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
           </div>
         </div>
-        <div class="venue-block">
+        <div class="venue-block venue-block--pool">
           <h2 class="venue-section-label">The Pool Area</h2>
-          <div class="venue-photos one-col">
+          <div class="venue-photos">
             <div class="venue-photo placeholder">
-              <img src="assets/venue-pool.jpg" alt="Pool area" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <img src="assets/venue-pool1.jpg" alt="Pool area" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-pool2.jpg" alt="Pool area" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-pool3.jpg" alt="Pool area" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-pool4.jpg" alt="Pool area" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
               <span class="placeholder-text">Add photo</span>
             </div>
           </div>
         </div>
       </section>
 
-      <h2 class="rooms-label">Rooms</h2>
+      <h2 class="rooms-label">On-Site Room Options</h2>
 
       <section class="venue-rooms">
         <div class="venue-room-block">
@@ -364,9 +446,17 @@
         </div>
         <div class="venue-room-block">
           <h2 class="venue-section-label">Glamping (Single Queen & Double Queen)</h2>
-          <div class="venue-photos one-col">
+          <div class="venue-photos">
             <div class="venue-photo placeholder">
-              <img src="assets/venue-glamping.jpg" alt="Glamping" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <img src="assets/venue-glamping1.jpg" alt="Glamping" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-glamping2.jpg" alt="Glamping" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-glamping3.jpg" alt="Glamping" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
               <span class="placeholder-text">Add photo</span>
             </div>
           </div>
@@ -375,7 +465,7 @@
           <h2 class="venue-section-label">King Suite</h2>
           <div class="venue-photos one-col">
             <div class="venue-photo placeholder">
-              <img src="assets/venue-king.jpg" alt="King suite" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <img src="assets/venue-king1.jpg" alt="King suite" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
               <span class="placeholder-text">Add photo</span>
             </div>
           </div>
@@ -407,5 +497,60 @@
       </p>
       </article>
     </div>
+
+    <div id="venue-lightbox" class="venue-lightbox" aria-hidden="true" role="dialog" aria-label="Enlarged photo">
+      <div class="venue-lightbox-backdrop" id="venue-lightbox-backdrop"></div>
+      <img class="venue-lightbox-img" id="venue-lightbox-img" alt="" />
+      <button type="button" class="venue-lightbox-close" id="venue-lightbox-close" aria-label="Close">×</button>
+    </div>
+    <script>
+      (function () {
+        var lightbox = document.getElementById("venue-lightbox");
+        var lightboxImg = document.getElementById("venue-lightbox-img");
+        var backdrop = document.getElementById("venue-lightbox-backdrop");
+        var closeBtn = document.getElementById("venue-lightbox-close");
+
+        function openLightbox(src, alt) {
+          if (!src) return;
+          lightboxImg.src = src;
+          lightboxImg.alt = alt || "";
+          lightbox.classList.add("is-open");
+          lightbox.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+        }
+        function closeLightbox() {
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+        }
+
+        document.querySelectorAll(".venue-photo").forEach(function (el) {
+          el.addEventListener("click", function () {
+            var img = el.querySelector("img");
+            if (img && img.src) openLightbox(img.src, img.alt || "");
+          });
+        });
+        backdrop.addEventListener("click", closeLightbox);
+        closeBtn.addEventListener("click", closeLightbox);
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && lightbox.classList.contains("is-open")) closeLightbox();
+        });
+      })();
+
+      (function () {
+        var audio = document.getElementById("venue-music");
+        if (!audio) return;
+        function startVenueMusic(e) {
+          if (e && e.target && (e.target.id === "venue-music-toggle" || e.target.closest("#venue-music-toggle"))) return;
+          document.removeEventListener("click", startVenueMusic, true);
+          document.removeEventListener("keydown", startVenueMusic, true);
+          document.removeEventListener("touchstart", startVenueMusic, true);
+          audio.play().catch(function () {});
+        }
+        document.addEventListener("click", startVenueMusic, { once: true, capture: true });
+        document.addEventListener("keydown", startVenueMusic, { once: true, capture: true });
+        document.addEventListener("touchstart", startVenueMusic, { once: true, capture: true });
+      })();
+    </script>
   </body>
 </html>
