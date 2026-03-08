@@ -340,8 +340,8 @@
         border-radius: 50%;
         background: radial-gradient(
           circle at 50% 50%,
-          rgba(211, 95, 29, 0.55) 0%,
-          rgba(211, 95, 29, 0.55) 26%,
+          rgba(235, 165, 110, 0.45) 0%,
+          rgba(235, 165, 110, 0.45) 26%,
           #2db1a8 27%
         );
         border: 3px solid rgba(255, 255, 255, 0.25);
@@ -355,14 +355,10 @@
       }
       .countdown .countdown-number {
         font-family: "Abril Fatface", Georgia, serif;
-        font-size: clamp(1.9rem, 4.8vw, 2.65rem);
+        font-size: clamp(1.6rem, 4.2vw, 2.25rem);
         font-weight: 700;
         line-height: 1;
         color: #fff;
-        text-shadow:
-          0 1px 0 rgba(0, 0, 0, 0.25),
-          0 2px 8px rgba(0, 0, 0, 0.35),
-          0 0 20px rgba(0, 0, 0, 0.15);
       }
       .countdown .countdown-label {
         display: none;
@@ -475,6 +471,9 @@
           document.removeEventListener("touchstart", startMusicOnFirstClick, true);
           audio.play().then(function () { setPlaying(true); }).catch(function () {});
         }
+        audio.addEventListener("play", function () { setPlaying(true); });
+        audio.addEventListener("pause", function () { setPlaying(false); });
+
         document.addEventListener("click", startMusicOnFirstClick, { once: true, capture: true });
         document.addEventListener("keydown", startMusicOnFirstClick, { once: true, capture: true });
         document.addEventListener("touchstart", startMusicOnFirstClick, { once: true, capture: true });

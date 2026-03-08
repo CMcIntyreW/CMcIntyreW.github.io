@@ -212,11 +212,13 @@
     </nav>
     <main class="container">
       <h1>RSVP Here!</h1>
-      <p class="lead">Please respond as soon as you can. With limited rooms, we will be assigning them based on who we hear from first and how we can best fit everyone in. We love you all, but we have to make the room puzzle work somehow. And please make sure you check out the Venue tab so you are informed of the available options!</p>
+      <p class="lead"> Hello friends and family! Thanks for RSVPing and officially becoming part of the wedding spreadsheet. Our rooms are limited, so we will assign them based on who we hear from first and how creatively we can fit everyone in. Think of it as wedding Tetris. We recommend checking out the Venue tab so you know what options exist before responding.
 
-      <!-- Set the form action to your Formspree URL (e.g. https://formspree.io/f/YOUR_ID) or backend to receive submissions. -->
+      As for the the little ones... Aside from family and those trekking from far away, we would love for you to enjoy this one without kids in tow. We adore your tiny people, but we want you to have a weekend where the only meltdown risk is from someone losing at lawn games. If you have extenuating circumstances, please reach out and we'll be happy to chat and figure out what works. </p>
+
+      <!-- Form submits to Flask /submit. If rsvp.html is on another domain (e.g. GitHub Pages), set action to your Flask URL + /submit -->
       <section class="card">
-        <form id="rsvp-form" action="" method="post">
+        <form id="rsvp-form" action="/submit" method="post">
           <p class="step-progress" id="step-progress" aria-live="polite">Question 1 of 8</p>
 
           <div class="rsvp-step step-active" data-step="1">

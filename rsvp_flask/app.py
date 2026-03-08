@@ -3,11 +3,13 @@ Flask RSVP app for Ryan & Carly's wedding.
 Saves responses to a CSV file. Run: flask --app app run
 """
 import csv
+import io
 import os
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, send_file, url_for
+from openpyxl import Workbook
 
 app = Flask(__name__)
 
@@ -65,6 +67,41 @@ def submit():
 @app.route("/thank-you")
 def thank_you():
     return render_template("thank_you.html", site_base_url=SITE_BASE_URL)
+
+
+@app.route("/download-excel")
+def download_excel():
+    """Download all RSVP responses as an Excel (.xlsx) file."""
+    ensure_responses_file()
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "RSVP Responses"
+    with open(RESPONSES_FILE, "r", newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            ws.append(row)
+    buf = io.BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+    return send_file(
+        buf,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        as_attachment=True,
+        download_name="wedding-rsvp-responses.xlsx",
+    )
+
+
+@app.route("/download-csv")
+def download_csv():
+    """Download all RSVP responses as a CSV file (opens in Excel)."""
+    if not RESPONSES_FILE.exists():
+        ensure_responses_file()
+    return send_file(
+        RESPONSES_FILE,
+        mimetype="text/csv",
+        as_attachment=True,
+        download_name="wedding-rsvp-responses.csv",
+    )
 
 
 if __name__ == "__main__":
