@@ -8,6 +8,9 @@
       name="description"
       content="RSVP for Ryan and Carly's wedding weekend. Share your attendance details and preferences."
     />
+    <!-- When the site is on a different domain (e.g. GitHub Pages), uncomment and set your Flask app URL so the form posts to it:
+    <meta name="rsvp-backend-url" content="https://your-rsvp.railway.app" />
+    -->
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"
@@ -196,6 +199,13 @@
       .step-actions .btn {
         cursor: pointer;
       }
+      .guest-rows { margin-top: 8px; }
+      .guest-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+      .guest-row input { flex: 1; }
+      .guest-row input[name="guest_name"] { min-width: 0; }
+      .guest-row input[name="guest_email"] { min-width: 0; }
+      .add-guest { font-size: 0.9rem; margin-top: 6px; }
+      .q-hint { font-size: 0.9rem; font-weight: 400; margin-top: 4px; opacity: 0.9; }
 
       @media (min-width: 760px) {
         .two-col {
@@ -212,19 +222,21 @@
     </nav>
     <main class="container">
       <h1>RSVP Here!</h1>
-      <p class="lead"> Hello friends and family! Thanks for RSVPing and officially becoming part of the wedding spreadsheet. Our rooms are limited, so we will assign them based on who we hear from first and how creatively we can fit everyone in. Think of it as wedding Tetris. We recommend checking out the Venue tab so you know what options exist before responding.
+      <p class="lead">Hello friends and family! Thanks for RSVPing and officially becoming part of the wedding spreadsheet. On-site rooms are limited, so we will assign them based on who we hear from first and how creatively we can fit everyone in. Think of it as loved-ones Tetris. Please check out the Venue tab so you know what options exist before responding!</p>
+      <p class="lead">As for the little ones... Aside from family and those trekking from far away, we would love for you to enjoy this one without kids in tow. We adore your tiny people, but we want you to have a weekend where the only meltdown risk is from someone losing at lawn games. If you have extenuating circumstances, please reach out and we'll be happy to chat and figure out what works.</p>
 
-      As for the the little ones... Aside from family and those trekking from far away, we would love for you to enjoy this one without kids in tow. We adore your tiny people, but we want you to have a weekend where the only meltdown risk is from someone losing at lawn games. If you have extenuating circumstances, please reach out and we'll be happy to chat and figure out what works. </p>
-
-      <!-- Form submits to Flask /submit. If rsvp.html is on another domain (e.g. GitHub Pages), set action to your Flask URL + /submit -->
+      <!-- Form action: /submit (same origin) or set via meta name="rsvp-backend-url" for cross-origin (e.g. GitHub Pages). -->
       <section class="card">
         <form id="rsvp-form" action="/submit" method="post">
-          <p class="step-progress" id="step-progress" aria-live="polite">Question 1 of 8</p>
+          <p class="step-progress" id="step-progress" aria-live="polite">Question 1 of 7</p>
 
           <div class="rsvp-step step-active" data-step="1">
             <div class="field">
-              <label for="name">Your name *</label>
-              <input type="text" id="name" name="name" required placeholder="Full name" />
+              <label>Q1. Give us the deets! What is your name and email address?</label>
+              <div class="two-col">
+                <input type="text" id="name" name="name" required placeholder="Name" />
+                <input type="email" id="email" name="email" required placeholder="Email address" />
+              </div>
             </div>
             <div class="step-actions">
               <button type="button" class="btn primary" id="next-1">Next</button>
@@ -234,8 +246,15 @@
 
           <div class="rsvp-step" data-step="2">
             <div class="field">
-              <label for="email">Email *</label>
-              <input type="email" id="email" name="email" required placeholder="you@example.com" />
+              <label>Q2. Are you completing this RSVP for anyone else?</label>
+              <p class="q-hint">If so, please add their names below. If they want to be on the mailing list, include their email addresses too.</p>
+              <div class="guest-rows" id="guest-rows">
+                <div class="guest-row">
+                  <input type="text" data-guest-name placeholder="Name" />
+                  <input type="email" data-guest-email placeholder="Email address" />
+                </div>
+              </div>
+              <button type="button" class="btn secondary add-guest" id="add-guest">Add another guest</button>
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
@@ -245,10 +264,10 @@
 
           <div class="rsvp-step" data-step="3">
             <div class="field">
-              <label>Will you be joining us? *</label>
+              <label>Q3. Will you be joining us on the big day? *</label>
               <div class="check-group">
-                <label class="check-item"><input type="radio" name="attending" value="yes" required /> Yes, I'll be there!</label>
-                <label class="check-item"><input type="radio" name="attending" value="no" /> Sadly, I can't make it</label>
+                <label class="check-item"><input type="radio" name="attending" value="yes" required /> Yes, count me in!</label>
+                <label class="check-item"><input type="radio" name="attending" value="no" /> Sadly, I will not be able to make it.</label>
               </div>
             </div>
             <div class="step-actions">
@@ -259,11 +278,12 @@
 
           <div class="rsvp-step" data-step="4">
             <div class="field">
-              <label>Which events will you attend?</label>
+              <label>Q4. Are you in for the whole weekend adventure? (only if yes to Q3)</label>
               <div class="check-group">
-                <label class="check-item"><input type="checkbox" name="friday" value="yes" /> Friday — Check-in & Welcome BBQ</label>
-                <label class="check-item"><input type="checkbox" name="saturday" value="yes" /> Saturday — Ceremony, dinner & dance</label>
-                <label class="check-item"><input type="checkbox" name="sunday" value="yes" /> Sunday — Farewell breakfast</label>
+                <label class="check-item"><input type="radio" name="weekend_scope" value="all_weekend" required /> All weekend long!</label>
+                <label class="check-item"><input type="radio" name="weekend_scope" value="saturday_only" /> I can only attend Saturday (afternoon and evening).</label>
+                <label class="check-item"><input type="radio" name="weekend_scope" value="other" /> Other:</label>
+                <input type="text" name="weekend_other" placeholder="Other" style="margin-top: 8px;" />
               </div>
             </div>
             <div class="step-actions">
@@ -274,8 +294,13 @@
 
           <div class="rsvp-step" data-step="5">
             <div class="field">
-              <label for="guests">Number of guests (including you)</label>
-              <input type="text" id="guests" name="guests" placeholder="e.g. 2" />
+              <label>Q5. Where are you planning to crash for the weekend? (only if &ldquo;all weekend long&rdquo; to Q4)</label>
+              <div class="check-group">
+                <label class="check-item"><input type="radio" name="accommodation_plan" value="on_site" required /> I am open to staying on site.</label>
+                <label class="check-item"><input type="radio" name="accommodation_plan" value="off_site" /> I have or will be arranging to stay off site.</label>
+                <label class="check-item"><input type="radio" name="accommodation_plan" value="other" /> Other:</label>
+                <input type="text" name="accommodation_other" placeholder="Other" style="margin-top: 8px;" />
+              </div>
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
@@ -285,8 +310,13 @@
 
           <div class="rsvp-step" data-step="6">
             <div class="field">
-              <label for="dietary">Dietary restrictions or allergies</label>
-              <input type="text" id="dietary" name="dietary" placeholder="None / vegetarian / etc." />
+              <label>Q6. Re: Guest Tetris (only if &ldquo;I am open to staying on site.&rdquo; to Q5)</label>
+              <p class="q-hint">We are trying to make the most of the on site accommodations so as many guests as possible can stay at the venue. Your preferences will help us plan room assignments in a way that works for everyone. Tell us your accommodation vibe and we will do our best to make it happen. (Select all that apply.)</p>
+              <div class="check-group">
+                <label class="check-item"><input type="checkbox" name="open_to_sharing" value="yes" /> I or we are open to sharing a double queen suite with another person or couple.</label>
+                <label class="check-item"><input type="checkbox" name="prefer_own_room" value="yes" /> I or we prefer our own room.</label>
+                <label class="check-item"><input type="checkbox" name="interested_glamping" value="yes" /> I or we are interested in glamping.</label>
+              </div>
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
@@ -296,19 +326,9 @@
 
           <div class="rsvp-step" data-step="7">
             <div class="field">
-              <label for="song_request">Song request for the dance floor</label>
-              <input type="text" id="song_request" name="song_request" placeholder="Optional" />
-            </div>
-            <div class="step-actions">
-              <button type="button" class="btn secondary step-back">Back</button>
-              <button type="button" class="btn primary" id="next-7">Next</button>
-            </div>
-          </div>
-
-          <div class="rsvp-step" data-step="8">
-            <div class="field">
-              <label for="message">Anything else we should know?</label>
-              <textarea id="message" name="message" placeholder="Optional note"></textarea>
+              <label>Q7. Who are you open to bunking with? (only if &ldquo;I or we are open to sharing a double queen suite with another person or couple&rdquo; was selected in Q6)</label>
+              <p class="q-hint">Please list names:</p>
+              <textarea id="bunking_with" name="bunking_with" placeholder="Names of people you're open to sharing with"></textarea>
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
@@ -321,9 +341,14 @@
     <script>
       (function () {
         var form = document.getElementById("rsvp-form");
+        var backendMeta = document.querySelector('meta[name="rsvp-backend-url"]');
+        if (backendMeta && backendMeta.getAttribute("content")) {
+          var base = backendMeta.getAttribute("content").trim().replace(/\/$/, "");
+          form.action = base + "/submit";
+        }
         var steps = form.querySelectorAll(".rsvp-step");
         var progressEl = document.getElementById("step-progress");
-        var total = steps.length;
+        var total = 7;
 
         function showStep(index) {
           steps.forEach(function (step, i) {
@@ -332,33 +357,63 @@
           progressEl.textContent = "Question " + (index + 1) + " of " + total;
         }
 
-        function goNext() {
-          var active = form.querySelector(".rsvp-step.step-active");
-          var firstInvalid = null;
+        function getNextStepIndex(currentIdx) {
+          if (currentIdx === 2) {
+            var attending = form.querySelector("input[name=attending]:checked");
+            if (attending && attending.value === "no") return -1;
+            return 3;
+          }
+          if (currentIdx === 3) {
+            var weekend = form.querySelector("input[name=weekend_scope]:checked");
+            if (!weekend || weekend.value !== "all_weekend") return -1;
+            return 4;
+          }
+          if (currentIdx === 4) {
+            var accom = form.querySelector("input[name=accommodation_plan]:checked");
+            if (!accom || accom.value !== "on_site") return -1;
+            return 5;
+          }
+          if (currentIdx === 5) {
+            var sharing = form.querySelector("input[name=open_to_sharing]:checked");
+            if (!sharing) return -1;
+            return 6;
+          }
+          if (currentIdx === 6) return -1;
+          return currentIdx < total - 1 ? currentIdx + 1 : -1;
+        }
+
+        function validateStep(active) {
           var inputs = active.querySelectorAll("input[required], select[required], textarea[required]");
           var radioNames = {};
           for (var i = 0; i < inputs.length; i++) {
             var el = inputs[i];
             if (el.type === "radio") {
-              radioNames[el.name] = radioNames[el.name] || [];
-              radioNames[el.name].push(el);
-            } else {
-              if (el.value.trim() === "") {
-                firstInvalid = firstInvalid || el;
-              }
+              radioNames[el.name] = true;
+            } else if (el.value.trim() === "") {
+              el.focus();
+              return false;
             }
           }
           for (var name in radioNames) {
-            var group = radioNames[name];
-            var checked = active.querySelector("input[name=" + name + "]:checked");
-            if (!checked) firstInvalid = firstInvalid || group[0];
+            if (!active.querySelector("input[name=" + name + "]:checked")) {
+              var first = active.querySelector("input[name=" + name + "]");
+              if (first) first.focus();
+              return false;
+            }
           }
-          if (firstInvalid) {
-            firstInvalid.focus();
+          return true;
+        }
+
+        function goNext() {
+          var active = form.querySelector(".rsvp-step.step-active");
+          var idx = Array.prototype.indexOf.call(steps, active);
+          if (!validateStep(active)) return;
+          var nextIdx = getNextStepIndex(idx);
+          if (nextIdx === -1) {
+            form.submit();
             return;
           }
-          var idx = Array.prototype.indexOf.call(steps, active);
-          if (idx < total - 1) showStep(idx + 1);
+          showStep(nextIdx);
         }
 
         function goBack() {
@@ -366,6 +421,31 @@
           var idx = Array.prototype.indexOf.call(steps, active);
           if (idx > 0) showStep(idx - 1);
         }
+
+        document.getElementById("add-guest").addEventListener("click", function () {
+          var container = document.getElementById("guest-rows");
+          var row = document.createElement("div");
+          row.className = "guest-row";
+          row.innerHTML = "<input type=\"text\" data-guest-name placeholder=\"Name\" /><input type=\"email\" data-guest-email placeholder=\"Email address\" />";
+          container.appendChild(row);
+        });
+
+        form.addEventListener("submit", function (e) {
+          var rows = form.querySelectorAll(".guest-rows .guest-row");
+          rows.forEach(function (row) {
+            var nameInput = row.querySelector("input[data-guest-name]");
+            var emailInput = row.querySelector("input[data-guest-email]");
+            var name = nameInput ? nameInput.value.trim() : "";
+            var email = emailInput ? emailInput.value.trim() : "";
+            if (name || email) {
+              var hidden = document.createElement("input");
+              hidden.type = "hidden";
+              hidden.name = "additional_guests";
+              hidden.value = name + " – " + email;
+              form.appendChild(hidden);
+            }
+          });
+        });
 
         steps.forEach(function (step, i) {
           var nextBtn = step.querySelector(".btn.primary");
@@ -377,6 +457,5 @@
         });
       })();
     </script>
-    </main>
   </body>
 </html>

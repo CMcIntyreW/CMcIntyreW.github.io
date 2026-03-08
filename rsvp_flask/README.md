@@ -26,8 +26,9 @@ Open http://localhost:5000/ for the built-in form.
 The main site has a step-by-step RSVP form in `rsvp.html`. To send those submissions to Flask:
 
 1. Deploy this Flask app (e.g. Railway, PythonAnywhere, Heroku) and note its URL (e.g. `https://your-rsvp.railway.app`).
-2. In the **main project** open `rsvp.html` and set the form’s `action` to your Flask URL + `/submit`:
+2. **If the wedding site is on a different domain** (e.g. GitHub Pages): in the main project open `rsvp.html`, find the commented meta tag in the `<head>`, uncomment it, and set your Flask URL:
    ```html
-   <form id="rsvp-form" action="https://your-rsvp.railway.app/submit" method="post">
+   <meta name="rsvp-backend-url" content="https://your-rsvp.railway.app" />
    ```
-3. If you serve the whole wedding site from this Flask app (same origin), you can keep `action="/submit"` and it will work without changing the URL.
+   The form will post to that URL + `/submit` automatically. No need to edit the `<form>` tag.
+3. **If you serve the whole wedding site from this Flask app** (same origin), do nothing — the form already uses `action="/submit"` and will work.

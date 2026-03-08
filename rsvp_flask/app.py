@@ -26,9 +26,9 @@ def ensure_responses_file():
         with open(path, "w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
             w.writerow([
-                "timestamp", "name", "email", "attending",
-                "friday", "saturday", "sunday",
-                "guests", "dietary", "song_request", "message"
+                "timestamp", "name", "email", "additional_guests", "attending",
+                "weekend_scope", "weekend_other", "accommodation_plan", "accommodation_other",
+                "open_to_sharing", "prefer_own_room", "interested_glamping", "bunking_with"
             ])
     return path
 
@@ -42,23 +42,26 @@ def index():
 def submit():
     name = (request.form.get("name") or "").strip()
     email = (request.form.get("email") or "").strip()
+    additional_guests_raw = request.form.getlist("additional_guests")
+    additional_guests = "\n".join((g or "").strip() for g in additional_guests_raw if (g or "").strip())
     attending = request.form.get("attending", "")
-    friday = "yes" if request.form.get("friday") else "no"
-    saturday = "yes" if request.form.get("saturday") else "no"
-    sunday = "yes" if request.form.get("sunday") else "no"
-    guests = (request.form.get("guests") or "").strip()
-    dietary = (request.form.get("dietary") or "").strip()
-    song_request = (request.form.get("song_request") or "").strip()
-    message = (request.form.get("message") or "").strip()
+    weekend_scope = request.form.get("weekend_scope", "")
+    weekend_other = (request.form.get("weekend_other") or "").strip()
+    accommodation_plan = request.form.get("accommodation_plan", "")
+    accommodation_other = (request.form.get("accommodation_other") or "").strip()
+    open_to_sharing = "yes" if request.form.get("open_to_sharing") else "no"
+    prefer_own_room = "yes" if request.form.get("prefer_own_room") else "no"
+    interested_glamping = "yes" if request.form.get("interested_glamping") else "no"
+    bunking_with = (request.form.get("bunking_with") or "").strip()
 
     path = ensure_responses_file()
     with open(path, "a", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow([
             datetime.utcnow().isoformat() + "Z",
-            name, email, attending,
-            friday, saturday, sunday,
-            guests, dietary, song_request, message,
+            name, email, additional_guests, attending,
+            weekend_scope, weekend_other, accommodation_plan, accommodation_other,
+            open_to_sharing, prefer_own_room, interested_glamping, bunking_with,
         ])
 
     return redirect(url_for("thank_you"))
