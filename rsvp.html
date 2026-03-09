@@ -107,6 +107,10 @@
         font-weight: 700;
         margin-bottom: 6px;
       }
+      .field > label {
+        font-size: clamp(1.05rem, 2vw, 1.2rem);
+        font-weight: 700;
+      }
 
       input,
       select,
@@ -133,18 +137,30 @@
       .check-group {
         display: grid;
         gap: 8px;
-        margin-top: 6px;
+        margin-top: 14px;
       }
 
       .check-item {
         display: flex;
         align-items: center;
         gap: 8px;
+        font-size: 0.92rem;
+        font-weight: 400;
       }
 
       .check-item input {
         width: 18px;
         height: 18px;
+      }
+
+      .rsvp-complete {
+        padding: 8px 0;
+      }
+      .rsvp-complete-message {
+        font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+        line-height: 1.5;
+        margin: 0 0 22px;
+        font-weight: 400;
       }
 
       .actions {
@@ -219,20 +235,22 @@
     <nav class="nav-tabs container" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="venue.html">The Venue</a>
+      <a href="timeline.html">Weekend Timeline</a>
       <a href="rsvp.html" class="active">RSVP</a>
     </nav>
     <main class="container">
-      <p class="lead">Hello friends and family! Thanks for RSVPing and officially becoming part of the wedding spreadsheet. On-site rooms are limited, so we will assign them based on who we hear from first and how creatively we can fit everyone in. Think of it as loved-ones Tetris. Please check out the Venue tab so you know what options exist before responding!</p>
-      <p class="lead">As for the little ones... Aside from family and those trekking from far away, we would love for you to enjoy this one without kids in tow. We adore your tiny people, but we want you to have a weekend where the only meltdown risk is from someone losing at lawn games. If you have extenuating circumstances, please reach out and we'll be happy to chat and figure out what works.</p>
+      <p class="lead">Hello friends and family! Thanks for RSVPing and officially becoming part of the wedding spreadsheet!</p>
+      <p class="lead">Please note: On-site rooms are limited, so we will assign them based on who we hear from first and how creatively we can fit everyone in. Think of it as wedding Tetris. Please check out the Venue tab so you know the options before responding!</p>
+      <p class="lead">As for the little ones... Aside from family and those trekking from far away, we would love for you to enjoy this one without kids in tow. We adore your tiny people, but we want you to have a weekend where the only meltdown risk is from someone losing at lawn bowling. If this is not possible for you, just reach out and we are happy to chat and figure something out!</p>
 
       <!-- Form action: /submit (same origin) or set via meta name="rsvp-backend-url" for cross-origin (e.g. GitHub Pages). -->
       <section class="card">
         <form id="rsvp-form" action="/submit" method="post">
-          <p class="step-progress" id="step-progress" aria-live="polite">Question 1 of 7</p>
+          <p class="step-progress" id="step-progress" aria-live="polite">Question 1 of 8</p>
 
           <div class="rsvp-step step-active" data-step="1">
             <div class="field">
-              <label>Q1. Give us the deets! What is your name and email address?</label>
+              <label>Give us the deets! What is your name and email address?</label>
               <div class="two-col">
                 <input type="text" id="name" name="name" required placeholder="Name" />
                 <input type="email" id="email" name="email" required placeholder="Email address" />
@@ -246,7 +264,7 @@
 
           <div class="rsvp-step" data-step="2">
             <div class="field">
-              <label>Q2. Are you completing this RSVP for anyone else?</label>
+              <label>Are you completing this RSVP for anyone else?</label>
               <p class="q-hint">If so, please add their names below. If they want to be on the mailing list, include their email addresses too.</p>
               <div class="guest-rows" id="guest-rows">
                 <div class="guest-row">
@@ -264,7 +282,7 @@
 
           <div class="rsvp-step" data-step="3">
             <div class="field">
-              <label>Q3. Will you be joining us on the big day? *</label>
+              <label>Will you be joining us on the big day? </label>
               <div class="check-group">
                 <label class="check-item"><input type="radio" name="attending" value="yes" required /> Yes, count me in!</label>
                 <label class="check-item"><input type="radio" name="attending" value="no" /> Sadly, I will not be able to make it.</label>
@@ -278,10 +296,10 @@
 
           <div class="rsvp-step" data-step="4">
             <div class="field">
-              <label>Q4. Are you in for the whole weekend adventure? (only if yes to Q3)</label>
+              <label>Are you in for the whole weekend adventure?</label>
               <div class="check-group">
                 <label class="check-item"><input type="radio" name="weekend_scope" value="all_weekend" required /> All weekend long!</label>
-                <label class="check-item"><input type="radio" name="weekend_scope" value="saturday_only" /> I can only attend Saturday (afternoon and evening).</label>
+                <label class="check-item"><input type="radio" name="weekend_scope" value="saturday_only" /> I can only attend Saturday.</label>
                 <label class="check-item"><input type="radio" name="weekend_scope" value="other" /> Other:</label>
                 <input type="text" name="weekend_other" placeholder="Other" style="margin-top: 8px;" />
               </div>
@@ -294,12 +312,13 @@
 
           <div class="rsvp-step" data-step="5">
             <div class="field">
-              <label>Q5. Where are you planning to crash for the weekend? (only if &ldquo;all weekend long&rdquo; to Q4)</label>
+              <label>What kind of meal are you most interested in? (official meal selection will be sent out in a couple of weeks!)</label>
               <div class="check-group">
-                <label class="check-item"><input type="radio" name="accommodation_plan" value="on_site" required /> I am open to staying on site.</label>
-                <label class="check-item"><input type="radio" name="accommodation_plan" value="off_site" /> I have or will be arranging to stay off site.</label>
-                <label class="check-item"><input type="radio" name="accommodation_plan" value="other" /> Other:</label>
-                <input type="text" name="accommodation_other" placeholder="Other" style="margin-top: 8px;" />
+                <label class="check-item"><input type="radio" name="meal" value="chicken" required /> Chicken</label>
+                <label class="check-item"><input type="radio" name="meal" value="beef" required /> Beef</label>
+                <label class="check-item"><input type="radio" name="meal" value="fish" required /> Fish</label>
+                <label class="check-item"><input type="radio" name="meal" value="vegetarian" required /> Vegetarian</label>
+                <label class="check-item"><input type="radio" name="meal" value="vegan" required /> Vegan</label>
               </div>
             </div>
             <div class="step-actions">
@@ -310,12 +329,12 @@
 
           <div class="rsvp-step" data-step="6">
             <div class="field">
-              <label>Q6. Re: Guest Tetris (only if &ldquo;I am open to staying on site.&rdquo; to Q5)</label>
-              <p class="q-hint">We are trying to make the most of the on site accommodations so as many guests as possible can stay at the venue. Your preferences will help us plan room assignments in a way that works for everyone. Tell us your accommodation vibe and we will do our best to make it happen. (Select all that apply.)</p>
+              <label>Where are you planning to crash for the weekend? Please note: Whether or not you end up sleeping on- or off-site, we encourage everyone to spend as much time as possible enjoying the lake, pool, and wedding vibes at Northridge! </label>
               <div class="check-group">
-                <label class="check-item"><input type="checkbox" name="open_to_sharing" value="yes" /> I or we are open to sharing a double queen suite with another person or couple.</label>
-                <label class="check-item"><input type="checkbox" name="prefer_own_room" value="yes" /> I or we prefer our own room.</label>
-                <label class="check-item"><input type="checkbox" name="interested_glamping" value="yes" /> I or we are interested in glamping.</label>
+                <label class="check-item"><input type="radio" name="accommodation_plan" value="on_site" required /> I am interested in staying on site</label>
+                <label class="check-item"><input type="radio" name="accommodation_plan" value="off_site" /> I have or will be arranging to stay off site</label>
+                <label class="check-item"><input type="radio" name="accommodation_plan" value="other" /> Other:</label>
+                <input type="text" name="accommodation_other" placeholder="Other" style="margin-top: 8px;" />
               </div>
             </div>
             <div class="step-actions">
@@ -326,13 +345,35 @@
 
           <div class="rsvp-step" data-step="7">
             <div class="field">
-              <label>Q7. Who are you open to bunking with? (only if &ldquo;I or we are open to sharing a double queen suite with another person or couple&rdquo; was selected in Q6)</label>
-              <p class="q-hint">Please list names:</p>
+              <label>Re: Guest Tetris</label>
+              <div class="check-group">
+                <label class="check-item"><input type="checkbox" name="open_to_sharing" value="yes" /> I or we are open to sharing a double queen suite with another person or couple</label>
+                <label class="check-item"><input type="checkbox" name="prefer_own_room" value="yes" /> I or we prefer our own room</label>
+                <label class="check-item"><input type="checkbox" name="interested_glamping" value="yes" /> I or we are interested in glamping</label>
+                <label class="check-item"><input type="checkbox" name="wedding party" value="yes" /> I'm in the wedding party (allocated to chalets) </label>
+              </div>
+            </div>
+            <div class="step-actions">
+              <button type="button" class="btn secondary step-back">Back</button>
+              <button type="button" class="btn primary" id="next-7">Next</button>
+            </div>
+          </div>
+
+          <div class="rsvp-step" data-step="8">
+            <div class="field">
+              <label>If you have a preference for who you bunk with, please list them below! 
               <textarea id="bunking_with" name="bunking_with" placeholder="Names of people you're open to sharing with"></textarea>
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
               <button type="submit" class="btn primary">Submit RSVP</button>
+            </div>
+          </div>
+
+          <div class="rsvp-complete" id="rsvp-complete" aria-live="polite" style="display: none;">
+            <p class="rsvp-complete-message">Thanks so much! We appreciate you taking the time to RSVP!</p>
+            <div class="step-actions">
+              <button type="button" class="btn secondary" id="complete-back">Back</button>
             </div>
           </div>
         </form>
@@ -348,13 +389,29 @@
         }
         var steps = form.querySelectorAll(".rsvp-step");
         var progressEl = document.getElementById("step-progress");
-        var total = 7;
+        var completeEl = document.getElementById("rsvp-complete");
+        var total = 8;
+        var lastStepBeforeComplete = 0;
+        var completeSubmitTimeout = null;
 
         function showStep(index) {
+          if (completeSubmitTimeout) {
+            clearTimeout(completeSubmitTimeout);
+            completeSubmitTimeout = null;
+          }
           steps.forEach(function (step, i) {
             step.classList.toggle("step-active", i === index);
           });
+          if (completeEl) completeEl.style.display = "none";
           progressEl.textContent = "Question " + (index + 1) + " of " + total;
+          progressEl.style.display = "";
+        }
+
+        function showComplete() {
+          steps.forEach(function (step) { step.classList.remove("step-active"); });
+          progressEl.style.display = "none";
+          if (completeEl) completeEl.style.display = "block";
+          completeSubmitTimeout = setTimeout(function () { form.submit(); }, 1500);
         }
 
         function getNextStepIndex(currentIdx) {
@@ -363,22 +420,19 @@
             if (attending && attending.value === "no") return -1;
             return 3;
           }
-          if (currentIdx === 3) {
-            var weekend = form.querySelector("input[name=weekend_scope]:checked");
-            if (!weekend || weekend.value !== "all_weekend") return -1;
-            return 4;
-          }
-          if (currentIdx === 4) {
+          if (currentIdx === 3) return 4;
+          if (currentIdx === 4) return 5;
+          if (currentIdx === 5) {
             var accom = form.querySelector("input[name=accommodation_plan]:checked");
             if (!accom || accom.value !== "on_site") return -1;
-            return 5;
-          }
-          if (currentIdx === 5) {
-            var sharing = form.querySelector("input[name=open_to_sharing]:checked");
-            if (!sharing) return -1;
             return 6;
           }
-          if (currentIdx === 6) return -1;
+          if (currentIdx === 6) {
+            var sharing = form.querySelector("input[name=open_to_sharing]:checked");
+            if (!sharing) return -1;
+            return 7;
+          }
+          if (currentIdx === 7) return -1;
           return currentIdx < total - 1 ? currentIdx + 1 : -1;
         }
 
@@ -410,7 +464,8 @@
           if (!validateStep(active)) return;
           var nextIdx = getNextStepIndex(idx);
           if (nextIdx === -1) {
-            form.submit();
+            lastStepBeforeComplete = idx;
+            showComplete();
             return;
           }
           showStep(nextIdx);
@@ -422,6 +477,13 @@
           if (idx > 0) showStep(idx - 1);
         }
 
+        if (completeEl) {
+          var completeBack = document.getElementById("complete-back");
+          if (completeBack) completeBack.addEventListener("click", function () {
+            showStep(lastStepBeforeComplete);
+          });
+        }
+
         document.getElementById("add-guest").addEventListener("click", function () {
           var container = document.getElementById("guest-rows");
           var row = document.createElement("div");
@@ -431,6 +493,16 @@
         });
 
         form.addEventListener("submit", function (e) {
+          var active = form.querySelector(".rsvp-step.step-active");
+          var onComplete = completeEl && completeEl.style.display === "block";
+          if (active && !onComplete) {
+            var idx = Array.prototype.indexOf.call(steps, active);
+            if (idx < total - 1) {
+              e.preventDefault();
+              goNext();
+              return;
+            }
+          }
           var rows = form.querySelectorAll(".guest-rows .guest-row");
           rows.forEach(function (row) {
             var nameInput = row.querySelector("input[data-guest-name]");

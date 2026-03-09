@@ -27,7 +27,8 @@ def ensure_responses_file():
             w = csv.writer(f)
             w.writerow([
                 "timestamp", "name", "email", "additional_guests", "attending",
-                "weekend_scope", "weekend_other", "accommodation_plan", "accommodation_other",
+                "weekend_scope", "weekend_other", "meal", "meal_other",
+                "accommodation_plan", "accommodation_other",
                 "open_to_sharing", "prefer_own_room", "interested_glamping", "bunking_with"
             ])
     return path
@@ -47,6 +48,8 @@ def submit():
     attending = request.form.get("attending", "")
     weekend_scope = request.form.get("weekend_scope", "")
     weekend_other = (request.form.get("weekend_other") or "").strip()
+    meal = request.form.get("meal", "")
+    meal_other = (request.form.get("meal_other") or "").strip()
     accommodation_plan = request.form.get("accommodation_plan", "")
     accommodation_other = (request.form.get("accommodation_other") or "").strip()
     open_to_sharing = "yes" if request.form.get("open_to_sharing") else "no"
@@ -60,7 +63,8 @@ def submit():
         w.writerow([
             datetime.utcnow().isoformat() + "Z",
             name, email, additional_guests, attending,
-            weekend_scope, weekend_other, accommodation_plan, accommodation_other,
+            weekend_scope, weekend_other, meal, meal_other,
+            accommodation_plan, accommodation_other,
             open_to_sharing, prefer_own_room, interested_glamping, bunking_with,
         ])
 

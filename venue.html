@@ -260,7 +260,7 @@
       }
 
       .venue-pricing {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--label-highlight);
         border-radius: 14px;
         padding: 24px 20px;
         margin-bottom: 28px;
@@ -299,6 +299,58 @@
       .pricing-row .amount {
         font-weight: 600;
         color: var(--navy);
+      }
+
+      .venue-pricing-table-wrap {
+        overflow-x: auto;
+        margin: 0 -4px;
+      }
+      .venue-pricing table {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Caveat", "Dancing Script", cursive;
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .venue-pricing table th,
+      .venue-pricing table td {
+        padding: 10px 12px;
+        text-align: left;
+        border-bottom: 1px solid rgba(143, 178, 219, 0.35);
+      }
+      .venue-pricing table th {
+        font-weight: 600;
+        color: var(--navy);
+        background: rgba(184, 212, 232, 0.25);
+      }
+      .venue-pricing table td:first-child {
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .venue-pricing table td:not(:first-child) {
+        font-weight: 600;
+        color: var(--navy);
+      }
+      .venue-pricing table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .venue-pricing table .cell-empty {
+        color: var(--navy);
+        font-weight: 400;
+      }
+      .venue-pricing table tr.pricing-row-spacer td {
+        border-bottom: none;
+        height: 12px;
+        padding: 0;
+        vertical-align: middle;
+      }
+
+      .venue-pricing-note {
+        margin: 14px 0 0;
+        font-size: 1rem;
+        color: var(--navy);
+        font-weight: 500;
       }
 
       .back-link {
@@ -371,6 +423,7 @@
     <nav class="nav-tabs container" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="venue.html" class="active">The Venue</a>
+      <a href="timeline.html">Weekend Timeline</a>
       <a href="rsvp.html">RSVP</a>
     </nav>
 
@@ -445,6 +498,15 @@
           </div>
         </div>
         <div class="venue-room-block">
+          <h2 class="venue-section-label">King Suite</h2>
+          <div class="venue-photos one-col">
+            <div class="venue-photo placeholder">
+              <img src="assets/venue-king1.jpg" alt="King suite" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
+              <span class="placeholder-text">Add photo</span>
+            </div>
+          </div>
+        </div>
+        <div class="venue-room-block">
           <h2 class="venue-section-label">Glamping (Single Queen & Double Queen)</h2>
           <div class="venue-photos">
             <div class="venue-photo placeholder">
@@ -461,35 +523,72 @@
             </div>
           </div>
         </div>
-        <div class="venue-room-block">
-          <h2 class="venue-section-label">King Suite</h2>
-          <div class="venue-photos one-col">
-            <div class="venue-photo placeholder">
-              <img src="assets/venue-king1.jpg" alt="King suite" onload="this.parentElement.classList.remove('placeholder')" onerror="this.parentElement.classList.add('placeholder')">
-              <span class="placeholder-text">Add photo</span>
-            </div>
-          </div>
-        </div>
       </section>
 
-      <h2 class="pricing-label">Pricing</h2>
+      <h2 class="pricing-label">Price/Night (Before Tax)</h2>
 
       <section class="venue-pricing">
-        <div class="pricing-block">
-          <h3>Double Queen Rooms</h3>
-          <div class="pricing-row"><span class="label">1 person</span><span class="amount">—</span></div>
-          <div class="pricing-row"><span class="label">2 people</span><span class="amount">—</span></div>
-          <div class="pricing-row"><span class="label">3 people</span><span class="amount">—</span></div>
-          <div class="pricing-row"><span class="label">4 people</span><span class="amount">—</span></div>
+        <div class="venue-pricing-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Room Type</th>
+                <th>1 person</th>
+                <th>2 people</th>
+                <th>3 people</th>
+                <th>4 people</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Double Queen</td>
+                <td>$325</td>
+                <td>$163</td>
+                <td>$108</td>
+                <td>$81</td>
+              </tr>
+              <tr>
+                <td>King Suite</td>
+                <td>$325</td>
+                <td>$163</td>
+                <td class="cell-empty">—</td>
+                <td class="cell-empty">—</td>
+              </tr>
+              <tr class="pricing-row-spacer">
+                <td colspan="5"></td>
+              </tr>
+              <tr>
+                <td>Glamping King – Cedar Grove</td>
+                <td>$300</td>
+                <td>$150</td>
+                <td class="cell-empty">—</td>
+                <td class="cell-empty">—</td>
+              </tr>
+              <tr>
+                <td>Glamping King – Lake Side</td>
+                <td>$325</td>
+                <td>$163</td>
+                <td class="cell-empty">—</td>
+                <td class="cell-empty">—</td>
+              </tr>
+              <tr>
+                <td>Glamping 1 Queen – Pinedale</td>
+                <td>$300</td>
+                <td>$150</td>
+                <td class="cell-empty">—</td>
+                <td class="cell-empty">—</td>
+              </tr>
+              <tr>
+                <td>Glamping 2 Queen – Riverside</td>
+                <td>$300</td>
+                <td>$150</td>
+                <td>$100</td>
+                <td>$75</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="pricing-block">
-          <h3>Glamping (Single Queen & Double Queen)</h3>
-          <div class="pricing-row"><span class="label">Rate</span><span class="amount">—</span></div>
-        </div>
-        <div class="pricing-block">
-          <h3>King Suite</h3>
-          <div class="pricing-row"><span class="label">Rate</span><span class="amount">—</span></div>
-        </div>
+        <p class="venue-pricing-note">All prices are before tax.</p>
       </section>
 
       <p style="text-align: center;">

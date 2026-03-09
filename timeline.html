@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekend Timeline | Ryan & Carly Get Hitched</title>
+    <meta
+      name="description"
+      content="What's happening when — Friday through Sunday of our wedding weekend."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --peach: #f5d5c8;
+        --teal: #c5e8e0;
+        --note-white: #fefefe;
+        --note-shadow: rgba(92, 74, 61, 0.12);
+        --tape: #e8ddd0;
+        --text-dark: #2a2a2a;
+        --text-muted: #555;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Lora", Georgia, serif;
+        color: var(--text-dark);
+        min-height: 100vh;
+        background: var(--peach);
+        background-image:
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 400'%3E%3Cpath fill='%23c5e8e0' d='M0,0 Q200,60 400,0 T800,0 L800,400 Q600,340 400,400 T0,400 Z'/%3E%3Cpath fill='%23f5d5c8' d='M0,120 Q400,60 800,120 L800,400 Q400,340 0,400 Z'/%3E%3Cpath fill='%23c5e8e0' d='M0,240 Q400,180 800,240 L800,400 Q400,460 0,400 Z'/%3E%3Cpath fill='%23f5d5c8' d='M0,360 Q400,300 800,360 L800,400 L0,400 Z'/%3E%3C/svg%3E");
+        background-size: 100% 100vh;
+        background-repeat: repeat-y;
+      }
+
+      .container {
+        width: min(880px, 92%);
+        margin: 0 auto;
+        padding: 24px 0 56px;
+      }
+
+      .nav-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 20px;
+        padding: 16px 0 8px;
+        border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+      }
+      .nav-tabs a {
+        color: var(--text-dark);
+        text-decoration: none;
+        font-family: "Montserrat", Arial, sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 6px 12px;
+        border-radius: 8px;
+        opacity: 0.9;
+      }
+      .nav-tabs a:hover {
+        background: rgba(197, 232, 224, 0.5);
+        color: var(--text-dark);
+        opacity: 1;
+      }
+      .nav-tabs a.active {
+        background: rgba(255, 255, 255, 0.7);
+        color: var(--text-dark);
+        opacity: 1;
+      }
+
+      .timeline-hero {
+        position: relative;
+        margin: 32px 0 48px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 120px;
+      }
+
+      .timeline-hero-note {
+        position: relative;
+        background: var(--note-white);
+        color: var(--text-dark);
+        padding: 20px 40px 28px;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(232, 221, 208, 0.6) inset;
+        border: 1px solid rgba(232, 221, 208, 0.8);
+        display: inline-block;
+        max-width: 90%;
+      }
+
+      .timeline-hero-title {
+        font-family: "Lora", Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+        margin: 0;
+        text-align: center;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .day-section {
+        margin-bottom: 40px;
+        position: relative;
+      }
+
+      .day-blob {
+        position: relative;
+        background: var(--note-white);
+        border-radius: 12px;
+        padding: 36px 32px 32px;
+        box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(232, 221, 208, 0.5) inset;
+        border: 1px solid rgba(232, 221, 208, 0.8);
+        text-align: center;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .day-title {
+        font-family: "Lora", Georgia, serif;
+        font-weight: 700;
+        font-size: clamp(1.5rem, 4vw, 2rem);
+        color: var(--text-dark);
+        margin: 0 0 20px;
+        text-align: center;
+        letter-spacing: 0.06em;
+      }
+
+      .timeline-list {
+        list-style: none;
+        margin: 0 auto;
+        padding: 0;
+        display: inline-block;
+        text-align: left;
+      }
+
+      .timeline-list li {
+        position: relative;
+        padding-left: 24px;
+        margin-bottom: 12px;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--text-dark);
+      }
+
+      .timeline-list li::before {
+        content: "—";
+        position: absolute;
+        left: 0;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        top: 0;
+      }
+
+      .timeline-time {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-right: 6px;
+      }
+
+      .timeline-event {
+        color: var(--text-dark);
+      }
+
+      @media (min-width: 600px) {
+        .day-blob {
+          padding: 40px 40px 36px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav-tabs container" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html">The Venue</a>
+      <a href="timeline.html" class="active">Weekend Timeline</a>
+      <a href="rsvp.html">RSVP</a>
+    </nav>
+
+    <main class="container">
+      <header class="timeline-hero">
+        <div class="timeline-hero-note">
+          <h1 class="timeline-hero-title">Weekend Timeline</h1>
+        </div>
+      </header>
+
+      <section class="day-section" aria-labelledby="friday-heading">
+        <div class="day-blob">
+          <h2 id="friday-heading" class="day-title">Friday</h2>
+          <ul class="timeline-list">
+            <li><span class="timeline-time">Afternoon</span><span class="timeline-event">Check-in & welcome</span></li>
+            <li><span class="timeline-time">Evening</span><span class="timeline-event">Welcome BBQ & mingling</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="day-section" aria-labelledby="saturday-heading">
+        <div class="day-blob">
+          <h2 id="saturday-heading" class="day-title">Saturday</h2>
+          <ul class="timeline-list">
+            <li><span class="timeline-time">Afternoon</span><span class="timeline-event">Ceremony</span></li>
+            <li><span class="timeline-time">Evening</span><span class="timeline-event">Dinner & dance</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="day-section" aria-labelledby="sunday-heading">
+        <div class="day-blob">
+          <h2 id="sunday-heading" class="day-title">Sunday</h2>
+          <ul class="timeline-list">
+            <li><span class="timeline-time">Morning</span><span class="timeline-event">Farewell breakfast</span></li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
