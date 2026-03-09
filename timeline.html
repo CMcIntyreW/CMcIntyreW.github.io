@@ -33,18 +33,20 @@
 
       html {
         min-height: 100%;
+        height: 100%;
       }
 
       body {
         margin: 0;
+        min-height: 100vh;
         font-family: "Lora", Georgia, serif;
         color: var(--text-dark);
-        min-height: 100vh;
         background: var(--periwinkle);
         background-image:
           url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cpath fill='%23f0e8a8' opacity='0.9' d='M0,80 Q200,20 400,100 T800,60 L800,600 Q600,520 400,580 T0,600 Z'/%3E%3Cpath fill='%23a8d4d4' opacity='0.9' d='M0,200 Q300,120 600,220 T800,180 L800,600 Q500,520 200,600 T0,500 Z'/%3E%3Cpath fill='%23f0c9b8' opacity='0.9' d='M0,350 Q400,280 800,320 L800,600 Q400,560 0,600 Z'/%3E%3Cpath fill='%23f0c8d4' opacity='0.85' d='M0,450 Q250,380 500,420 T800,400 L800,600 L0,600 Z'/%3E%3Cpath fill='%23b8c5e0' opacity='0.7' d='M0,0 Q400,80 800,40 L800,300 Q400,240 0,280 Z'/%3E%3C/svg%3E");
-        background-size: 100% 100vh;
-        background-repeat: repeat-y;
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
       }
 
       .container {
@@ -198,8 +200,8 @@
         <div class="day-blob">
           <h2 id="friday-heading" class="day-title">Friday</h2>
           <ul class="timeline-list">
-            <li><span class="timeline-time">Afternoon</span><span class="timeline-event">Check-in & welcome</span></li>
-            <li><span class="timeline-time">Evening</span><span class="timeline-event">Welcome BBQ & mingling</span></li>
+            <li><span class="timeline-time">Late Afternoon</span><span class="timeline-event">Check in and start settling into weekend mode</span></li>
+            <li><span class="timeline-time">Evening</span><span class="timeline-event">Welcome BBQ and a bonfire under the stars</span></li>
           </ul>
         </div>
       </section>
@@ -208,8 +210,9 @@
         <div class="day-blob">
           <h2 id="saturday-heading" class="day-title">Saturday</h2>
           <ul class="timeline-list">
-            <li><span class="timeline-time">Afternoon</span><span class="timeline-event">Ceremony</span></li>
-            <li><span class="timeline-time">Evening</span><span class="timeline-event">Dinner & dance</span></li>
+            <li><span class="timeline-time">Morning and Early Afternoon</span><span class="timeline-event">Free time to enjoy the lake, the pool, and cottage‑weekend vibes</span></li>
+            <li><span class="timeline-time">Afternoon</span><span class="timeline-event">The &ldquo;I do&rdquo; portion of the program</span></li>
+            <li><span class="timeline-time">Evening</span><span class="timeline-event">Dinner, dancing, and general merriment</span></li>
           </ul>
         </div>
       </section>
@@ -218,7 +221,7 @@
         <div class="day-blob">
           <h2 id="sunday-heading" class="day-title">Sunday</h2>
           <ul class="timeline-list">
-            <li><span class="timeline-time">Morning</span><span class="timeline-event">Farewell breakfast</span></li>
+            <li><span class="timeline-time">Morning</span><span class="timeline-event">Continental breakfast before everyone drifts back to reality</span></li>
           </ul>
         </div>
       </section>
