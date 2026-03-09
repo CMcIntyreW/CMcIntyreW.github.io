@@ -417,7 +417,16 @@
           steps.forEach(function (step) { step.classList.remove("step-active"); });
           progressEl.style.display = "none";
           if (completeEl) completeEl.style.display = "block";
-          completeSubmitTimeout = setTimeout(function () { form.submit(); }, 1500);
+          completeSubmitTimeout = setTimeout(function () {
+            completeSubmitTimeout = null;
+            // Remove any existing additional_guests inputs so we don’t duplicate
+            form.querySelectorAll("input[name=additional_guests]").forEach(function (el) { el.remove(); });
+            appendAdditionalGuests();
+            var action = form.action || "/submit";
+            var formData = new FormData(form);
+            fetch(action, { method: "POST", body: formData }).catch(function () {});
+            // Stay on thank-you page; do not navigate
+          }, 1500);
         }
 
         function getNextStepIndex(currentIdx) {

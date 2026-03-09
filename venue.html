@@ -316,21 +316,26 @@
       .venue-pricing table th,
       .venue-pricing table td {
         padding: 10px 12px;
-        text-align: left;
         border-bottom: 1px solid rgba(143, 178, 219, 0.35);
       }
       .venue-pricing table th {
         font-weight: 600;
         color: var(--navy);
         background: rgba(184, 212, 232, 0.25);
+        text-align: center;
+      }
+      .venue-pricing table th:first-child {
+        text-align: left;
       }
       .venue-pricing table td:first-child {
         font-weight: 600;
         color: var(--navy);
+        text-align: left;
       }
       .venue-pricing table td:not(:first-child) {
         font-weight: 600;
         color: var(--navy);
+        text-align: center;
       }
       .venue-pricing table tbody tr:last-child td {
         border-bottom: none;

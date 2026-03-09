@@ -180,6 +180,125 @@
         text-align: center;
       }
 
+      .timeline-music-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid rgba(42, 42, 42, 0.25);
+        background: var(--note-white);
+        color: var(--text-dark);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        z-index: 10;
+        box-shadow: 0 2px 12px var(--note-shadow);
+        transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      }
+      .timeline-music-toggle:hover {
+        background: var(--soft-yellow);
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px var(--note-shadow);
+      }
+      .timeline-music-toggle.playing {
+        background: var(--muted-teal);
+        color: var(--text-dark);
+        border-color: rgba(42, 42, 42, 0.2);
+      }
+
+      .timeline-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        align-items: center;
+      }
+      .timeline-polaroids {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        max-width: 100%;
+      }
+      .polaroid {
+        background: var(--note-white);
+        padding: 8px;
+        box-shadow: 0 4px 20px var(--note-shadow), 0 1px 0 rgba(0,0,0,0.06);
+        width: 130px;
+        height: 130px;
+        flex-shrink: 0;
+        position: relative;
+        box-sizing: border-box;
+      }
+      .polaroid-left { transform: rotate(-4deg); }
+      .polaroid-left:nth-child(2) { transform: rotate(2deg); }
+      .polaroid-left:nth-child(3) { transform: rotate(-3deg); }
+      .polaroid-right { transform: rotate(3deg); }
+      .polaroid-right:nth-child(2) { transform: rotate(-2deg); }
+      .polaroid-right:nth-child(3) { transform: rotate(5deg); }
+      .polaroid-photo {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1;
+        background: var(--soft-yellow);
+        overflow: hidden;
+        display: block;
+        box-sizing: border-box;
+      }
+      .polaroid-photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .polaroid-caption {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        right: 8px;
+        font-family: "Lora", Georgia, serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+        color: var(--text-dark);
+        letter-spacing: 0.02em;
+        text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+      }
+      .timeline-center {
+        width: 100%;
+      }
+
+      @media (min-width: 900px) {
+        .timeline-layout {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: start;
+          gap: 2rem;
+          max-width: 1100px;
+          margin: 0 auto;
+          padding: 0 1rem;
+        }
+        .timeline-polaroids {
+          flex-direction: column;
+          gap: 28px;
+          width: 130px;
+          flex-shrink: 0;
+        }
+        .timeline-polaroids-left {
+          justify-self: end;
+        }
+        .timeline-center {
+          min-width: 0;
+          max-width: 520px;
+        }
+        .timeline-polaroids-right {
+          justify-self: start;
+        }
+      }
+
       @media (min-width: 600px) {
         .day-blob {
           padding: 20px 40px 24px;
@@ -202,35 +321,114 @@
         </div>
       </header>
 
-      <section class="day-section" aria-labelledby="friday-heading">
-        <div class="day-blob">
-          <h2 id="friday-heading" class="day-title">Friday</h2>
-          <ul class="timeline-list">
-            <li><span class="timeline-time">Late Afternoon</span><span class="timeline-event">Check in and start settling into weekend mode</span></li>
-            <li><span class="timeline-time">Evening</span><span class="timeline-event">Welcome BBQ and a bonfire under the stars</span></li>
-          </ul>
-        </div>
-      </section>
+    <audio id="timeline-music" loop preload="auto">
+      <source src="assets/ElectricFeel.mp3" type="audio/mpeg" />
+    </audio>
+    <button type="button" class="timeline-music-toggle" id="timeline-music-toggle" aria-label="Play background music" title="Play music">♪</button>
 
-      <section class="day-section" aria-labelledby="saturday-heading">
-        <div class="day-blob">
-          <h2 id="saturday-heading" class="day-title">Saturday</h2>
-          <ul class="timeline-list">
-            <li><span class="timeline-time">Morning and Early Afternoon</span><span class="timeline-event">Free time to enjoy the lake, the pool, and cottage‑weekend vibes</span></li>
-            <li><span class="timeline-time">Afternoon</span><span class="timeline-event">The &ldquo;I do&rdquo; portion of the program</span></li>
-            <li><span class="timeline-time">Evening</span><span class="timeline-event">Dinner, dancing, and general merriment</span></li>
-          </ul>
+      <div class="timeline-layout">
+        <div class="timeline-polaroids timeline-polaroids-left" aria-hidden="true">
+          <figure class="polaroid polaroid-left">
+            <div class="polaroid-photo"><img src="assets/timeline/2021.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2021</figcaption>
+          </figure>
+          <figure class="polaroid polaroid-left">
+            <div class="polaroid-photo"><img src="assets/timeline/2023.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2023</figcaption>
+          </figure>
+          <figure class="polaroid polaroid-left">
+            <div class="polaroid-photo"><img src="assets/timeline/2025.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2025</figcaption>
+          </figure>
         </div>
-      </section>
 
-      <section class="day-section" aria-labelledby="sunday-heading">
-        <div class="day-blob">
-          <h2 id="sunday-heading" class="day-title">Sunday</h2>
-          <ul class="timeline-list">
-            <li><span class="timeline-time">Morning</span><span class="timeline-event">Continental breakfast before everyone drifts back to reality</span></li>
-          </ul>
+        <div class="timeline-center">
+          <section class="day-section" aria-labelledby="friday-heading">
+            <div class="day-blob">
+              <h2 id="friday-heading" class="day-title">Friday</h2>
+              <ul class="timeline-list">
+                <li><span class="timeline-time">Late Afternoon</span><span class="timeline-event">Check in and start settling into weekend mode</span></li>
+                <li><span class="timeline-time">Evening</span><span class="timeline-event">Welcome BBQ and a bonfire under the stars</span></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="day-section" aria-labelledby="saturday-heading">
+            <div class="day-blob">
+              <h2 id="saturday-heading" class="day-title">Saturday</h2>
+              <ul class="timeline-list">
+                <li><span class="timeline-time">Morning and Early Afternoon</span><span class="timeline-event">Free time to enjoy the lake, the pool, and cottage‑weekend vibes</span></li>
+                <li><span class="timeline-time">Afternoon</span><span class="timeline-event">The &ldquo;I do&rdquo; portion of the program</span></li>
+                <li><span class="timeline-time">Evening</span><span class="timeline-event">Dinner, dancing, and general merriment</span></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="day-section" aria-labelledby="sunday-heading">
+            <div class="day-blob">
+              <h2 id="sunday-heading" class="day-title">Sunday</h2>
+              <ul class="timeline-list">
+                <li><span class="timeline-time">Morning</span><span class="timeline-event">Continental breakfast before everyone drifts back to reality</span></li>
+              </ul>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <div class="timeline-polaroids timeline-polaroids-right" aria-hidden="true">
+          <figure class="polaroid polaroid-right">
+            <div class="polaroid-photo"><img src="assets/timeline/2022.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2022</figcaption>
+          </figure>
+          <figure class="polaroid polaroid-right">
+            <div class="polaroid-photo"><img src="assets/timeline/2024.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2024</figcaption>
+          </figure>
+          <figure class="polaroid polaroid-right">
+            <div class="polaroid-photo"><img src="assets/timeline/2026.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2026</figcaption>
+          </figure>
+        </div>
+      </div>
     </main>
+    <script>
+      (function () {
+        var audio = document.getElementById("timeline-music");
+        var btn = document.getElementById("timeline-music-toggle");
+        if (!audio || !btn) return;
+        function setPlaying(playing) {
+          if (playing) {
+            btn.classList.add("playing");
+            btn.setAttribute("aria-label", "Pause background music");
+            btn.setAttribute("title", "Pause music");
+            btn.textContent = "♫";
+          } else {
+            btn.classList.remove("playing");
+            btn.setAttribute("aria-label", "Play background music");
+            btn.setAttribute("title", "Play music");
+            btn.textContent = "♪";
+          }
+        }
+        function startMusicOnFirstClick(e) {
+          if (e && e.target && (e.target.id === "timeline-music-toggle" || e.target.closest("#timeline-music-toggle"))) return;
+          document.removeEventListener("click", startMusicOnFirstClick, true);
+          document.removeEventListener("keydown", startMusicOnFirstClick, true);
+          document.removeEventListener("touchstart", startMusicOnFirstClick, true);
+          audio.play().then(function () { setPlaying(true); }).catch(function () {});
+        }
+        audio.addEventListener("play", function () { setPlaying(true); });
+        audio.addEventListener("pause", function () { setPlaying(false); });
+        document.addEventListener("click", startMusicOnFirstClick, { once: true, capture: true });
+        document.addEventListener("keydown", startMusicOnFirstClick, { once: true, capture: true });
+        document.addEventListener("touchstart", startMusicOnFirstClick, { once: true, capture: true });
+        btn.addEventListener("click", function () {
+          if (audio.paused) {
+            audio.play().then(function () { setPlaying(true); }).catch(function () {});
+          } else {
+            audio.pause();
+            setPlaying(false);
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
