@@ -126,7 +126,7 @@
         position: relative;
         background: var(--note-white);
         border-radius: 12px;
-        padding: 28px 28px 24px;
+        padding: 16px 28px 20px;
         box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(232, 221, 208, 0.5) inset;
         border: 1px solid rgba(232, 221, 208, 0.8);
         text-align: center;
@@ -141,7 +141,7 @@
         font-weight: 700;
         font-size: clamp(1.5rem, 4vw, 2rem);
         color: var(--text-dark);
-        margin: 0 0 20px;
+        margin: 0 0 12px;
         text-align: center;
         letter-spacing: 0.06em;
       }
@@ -151,32 +151,38 @@
         margin: 0 auto;
         padding: 0;
         display: inline-block;
-        text-align: left;
+        text-align: center;
       }
 
       .timeline-list li {
-        margin-bottom: 10px;
+        margin-bottom: 18px;
         font-size: 1rem;
         line-height: 1.5;
         color: var(--text-dark);
+        text-align: center;
       }
 
       .timeline-time {
+        display: block;
         font-weight: 600;
         color: var(--text-dark);
-        margin-right: 4px;
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(42, 42, 42, 0.2);
       }
       .timeline-time::after {
         content: ":";
       }
 
       .timeline-event {
+        display: block;
         color: var(--text-dark);
+        text-align: center;
       }
 
       @media (min-width: 600px) {
         .day-blob {
-          padding: 40px 40px 36px;
+          padding: 20px 40px 24px;
         }
       }
     </style>
