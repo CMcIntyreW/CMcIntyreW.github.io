@@ -376,9 +376,6 @@
 
           <div class="rsvp-complete" id="rsvp-complete" aria-live="polite" style="display: none;">
             <p class="rsvp-complete-message">Thanks so much! We appreciate you taking the time to RSVP!</p>
-            <div class="step-actions">
-              <button type="button" class="btn secondary" id="complete-back">Back</button>
-            </div>
           </div>
         </form>
       </section>
@@ -501,13 +498,6 @@
           var active = form.querySelector(".rsvp-step.step-active");
           var idx = Array.prototype.indexOf.call(steps, active);
           if (idx > 0) showStep(idx - 1);
-        }
-
-        if (completeEl) {
-          var completeBack = document.getElementById("complete-back");
-          if (completeBack) completeBack.addEventListener("click", function () {
-            showStep(lastStepBeforeComplete);
-          });
         }
 
         document.getElementById("add-guest").addEventListener("click", function () {
