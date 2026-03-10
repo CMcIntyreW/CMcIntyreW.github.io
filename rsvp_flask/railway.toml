@@ -1,7 +1,7 @@
-# Railway config: use when this service's Root Directory is set to rsvp_flask
+# Railway config when Root Directory is rsvp_flask
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
+builder = "nixpacks"
+buildCommand = "pip install -r requirements.txt"
 
 [deploy]
 startCommand = "gunicorn -w 1 -b 0.0.0.0:$PORT app:app"
