@@ -76,6 +76,12 @@ def thank_you():
     return render_template("thank_you.html", site_base_url=SITE_BASE_URL)
 
 
+@app.route("/data")
+def rsvp_export():
+    """Unlinked page to download RSVP responses. Bookmark this URL; do not link from the site."""
+    return render_template("rsvp_export.html")
+
+
 @app.route("/download-excel")
 def download_excel():
     """Download all RSVP responses as an Excel (.xlsx) file."""
