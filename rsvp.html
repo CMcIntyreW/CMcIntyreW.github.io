@@ -508,17 +508,15 @@
         });
 
         form.addEventListener("submit", function (e) {
+          e.preventDefault();
           var active = form.querySelector(".rsvp-step.step-active");
           var onComplete = completeEl && completeEl.style.display === "block";
           if (active && !onComplete) {
             var idx = Array.prototype.indexOf.call(steps, active);
             if (idx < total - 1) {
-              e.preventDefault();
               goNext();
-              return;
             }
           }
-          appendAdditionalGuests();
         });
 
         function appendAdditionalGuests() {
