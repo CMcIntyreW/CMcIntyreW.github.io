@@ -7,8 +7,9 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
-# Railway sets PORT; must listen on 0.0.0.0
+# Railway sets PORT; start.sh ensures it expands at runtime
 ENV PORT=5000
 EXPOSE 5000
 
-CMD gunicorn -w 1 -b 0.0.0.0:${PORT} app:app
+RUN chmod +x start.sh
+CMD ["./start.sh"]
