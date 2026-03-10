@@ -1,0 +1,9 @@
+# Railway config: use when this service's Root Directory is set to rsvp_flask
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "gunicorn -w 1 -b 0.0.0.0:$PORT app:app"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
