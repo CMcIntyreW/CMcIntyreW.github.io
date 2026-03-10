@@ -293,7 +293,7 @@
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
-              <button type="button" class="btn primary" id="next-3">Next</button>
+              <button type="button" class="btn primary" id="next-3" data-may-submit>Next</button>
             </div>
           </div>
 
@@ -309,7 +309,7 @@
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
-              <button type="button" class="btn primary" id="next-4">Next</button>
+              <button type="button" class="btn primary" id="next-4" data-may-submit>Next</button>
             </div>
           </div>
 
@@ -326,7 +326,7 @@
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
-              <button type="button" class="btn primary" id="next-5">Next</button>
+              <button type="button" class="btn primary" id="next-5" data-may-submit>Next</button>
             </div>
           </div>
 
@@ -345,7 +345,7 @@
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
-              <button type="button" class="btn primary" id="next-6">Next</button>
+              <button type="button" class="btn primary" id="next-6" data-may-submit>Next</button>
             </div>
           </div>
 
@@ -361,7 +361,7 @@
             </div>
             <div class="step-actions">
               <button type="button" class="btn secondary step-back">Back</button>
-              <button type="button" class="btn primary" id="next-7">Next</button>
+              <button type="button" class="btn primary" id="next-7" data-may-submit>Next</button>
             </div>
           </div>
 
@@ -400,6 +400,16 @@
         var lastStepBeforeComplete = 0;
         var completeSubmitTimeout = null;
 
+        function updatePrimaryButtonText() {
+          var active = form.querySelector(".rsvp-step.step-active");
+          if (!active) return;
+          var idx = Array.prototype.indexOf.call(steps, active);
+          var nextBtn = active.querySelector(".btn.primary");
+          if (nextBtn && nextBtn.id !== "rsvp-submit-btn") {
+            nextBtn.textContent = getNextStepIndex(idx) === -1 ? "Submit RSVP" : "Next";
+          }
+        }
+
         function showStep(index) {
           if (completeSubmitTimeout) {
             clearTimeout(completeSubmitTimeout);
@@ -411,22 +421,25 @@
           if (completeEl) completeEl.style.display = "none";
           progressEl.textContent = "Question " + (index + 1) + " of " + total;
           progressEl.style.display = "";
+          updatePrimaryButtonText();
         }
 
         function showComplete() {
           steps.forEach(function (step) { step.classList.remove("step-active"); });
           progressEl.style.display = "none";
           if (completeEl) completeEl.style.display = "block";
-          completeSubmitTimeout = setTimeout(function () {
-            completeSubmitTimeout = null;
+          // Submit immediately so data is saved even if guest leaves quickly
             // Remove any existing additional_guests inputs so we don’t duplicate
             form.querySelectorAll("input[name=additional_guests]").forEach(function (el) { el.remove(); });
             appendAdditionalGuests();
             var action = form.action || "/submit";
             var formData = new FormData(form);
-            fetch(action, { method: "POST", body: formData }).catch(function () {});
-            // Stay on thank-you page; do not navigate
-          }, 1500);
+            fetch(action, { method: "POST", body: formData })
+              .then(function (res) {
+                if (res.redirected) window.location.href = res.url;
+                else if (res.ok) window.location.href = action.replace("/submit", "/thank-you");
+              })
+              .catch(function () {});
         }
 
         function getNextStepIndex(currentIdx) {
@@ -505,6 +518,13 @@
           row.className = "guest-row";
           row.innerHTML = "<input type=\"text\" data-guest-name placeholder=\"Name\" /><input type=\"email\" data-guest-email placeholder=\"Email address\" />";
           container.appendChild(row);
+        });
+
+        // Update button to "Submit RSVP" when answer makes this the final step
+        ["attending", "accommodation_plan", "open_to_sharing"].forEach(function (name) {
+          form.querySelectorAll("input[name=" + name + "]").forEach(function (el) {
+            el.addEventListener("change", updatePrimaryButtonText);
+          });
         });
 
         form.addEventListener("submit", function (e) {
