@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -41,9 +41,9 @@
         min-height: 100vh;
         font-family: "Lora", Georgia, serif;
         color: var(--text-dark);
-        background: var(--periwinkle);
+        background: #d4e8a0;
         background-image:
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cpath fill='%23f0e8a8' opacity='0.9' d='M0,80 Q200,20 400,100 T800,60 L800,600 Q600,520 400,580 T0,600 Z'/%3E%3Cpath fill='%23a8d4d4' opacity='0.9' d='M0,200 Q300,120 600,220 T800,180 L800,600 Q500,520 200,600 T0,500 Z'/%3E%3Cpath fill='%23f0c9b8' opacity='0.9' d='M0,350 Q400,280 800,320 L800,600 Q400,560 0,600 Z'/%3E%3Cpath fill='%23f0c8d4' opacity='0.85' d='M0,450 Q250,380 500,420 T800,400 L800,600 L0,600 Z'/%3E%3Cpath fill='%23b8c5e0' opacity='0.7' d='M0,0 Q400,80 800,40 L800,300 Q400,240 0,280 Z'/%3E%3C/svg%3E");
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cpath fill='%239bc85c' opacity='0.95' d='M0,120 Q150,80 350,140 T700,100 L800,120 L800,600 Q600,540 400,580 T0,600 Z'/%3E%3Cpath fill='%23c8e08a' opacity='0.9' d='M0,250 Q250,180 500,260 T800,220 L800,600 Q550,550 300,600 T0,520 Z'/%3E%3Cpath fill='%239bc85c' opacity='0.9' d='M0,380 Q350,320 700,360 L800,340 L800,600 Q500,560 200,600 T0,480 Z'/%3E%3Cpath fill='%23c8e08a' opacity='0.95' d='M0,480 Q200,420 450,460 T800,440 L800,600 L0,600 Z'/%3E%3Cpath fill='%23a8d85c' opacity='0.85' d='M0,0 Q400,60 800,20 L800,200 Q450,160 0,200 Z'/%3E%3Cpath fill='%23d4e8a0' opacity='0.9' d='M0,50 Q300,10 600,80 T800,40 L800,150 Q500,120 0,140 Z'/%3E%3C/svg%3E");
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
@@ -87,21 +87,21 @@
 
       .timeline-hero {
         position: relative;
-        margin: 32px 0 48px;
+        margin: 24px 0 20px;
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 120px;
+        min-height: 100px;
       }
 
       .timeline-hero-note {
         position: relative;
-        background: var(--note-white);
+        background: rgba(200, 235, 180, 0.75);
         color: var(--text-dark);
         padding: 20px 36px 24px;
         border-radius: 12px;
-        box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(232, 221, 208, 0.6) inset;
-        border: 1px solid rgba(232, 221, 208, 0.8);
+        box-shadow: 0 4px 24px rgba(92, 74, 61, 0.12), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+        border: 1px solid rgba(150, 200, 130, 0.5);
         display: inline-block;
         width: fit-content;
         max-width: 90%;
@@ -116,6 +116,17 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
+      .timeline-hero-note-sub,
+      .timeline-hero-subtitle {
+        display: block;
+        margin-top: 10px;
+        font-size: 0.8rem;
+        font-weight: 400;
+        font-style: italic;
+        color: var(--text-muted);
+        letter-spacing: 0.02em;
+        text-align: center;
+      }
 
       .day-section {
         margin-bottom: 40px;
@@ -124,11 +135,11 @@
 
       .day-blob {
         position: relative;
-        background: var(--note-white);
+        background: rgba(200, 235, 180, 0.75);
         border-radius: 12px;
         padding: 16px 28px 20px;
-        box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(232, 221, 208, 0.5) inset;
-        border: 1px solid rgba(232, 221, 208, 0.8);
+        box-shadow: 0 4px 24px rgba(92, 74, 61, 0.12), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+        border: 1px solid rgba(150, 200, 130, 0.5);
         text-align: center;
         width: fit-content;
         max-width: min(92%, 520px);
@@ -210,40 +221,49 @@
         border-color: rgba(42, 42, 42, 0.2);
       }
 
-      .timeline-layout {
+      .timeline-rows {
         display: flex;
         flex-direction: column;
-        gap: 32px;
+        gap: 40px;
         align-items: center;
+        margin-top: -8px;
       }
-      .timeline-polaroids {
+      .timeline-row {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         gap: 20px;
-        max-width: 100%;
+        width: 100%;
+      }
+      .timeline-row:nth-child(2) {
+        margin-top: -210px;
+      }
+      .timeline-row:nth-child(2) .day-section {
+        margin-top: 32px;
       }
       .polaroid {
-        background: var(--note-white);
-        padding: 8px;
-        box-shadow: 0 4px 20px var(--note-shadow), 0 1px 0 rgba(0,0,0,0.06);
-        width: 130px;
-        height: 130px;
+        background: #0a0a0a;
+        padding: 8px 8px 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.06) inset;
+        width: 175px;
+        height: 220px;
         flex-shrink: 0;
         position: relative;
         box-sizing: border-box;
       }
       .polaroid-left { transform: rotate(-4deg); }
-      .polaroid-left:nth-child(2) { transform: rotate(2deg); }
-      .polaroid-left:nth-child(3) { transform: rotate(-3deg); }
+      .timeline-row:nth-child(2) .polaroid-left { transform: rotate(2deg); }
+      .timeline-row:nth-child(3) .polaroid-left { transform: rotate(-3deg); }
       .polaroid-right { transform: rotate(3deg); }
-      .polaroid-right:nth-child(2) { transform: rotate(-2deg); }
-      .polaroid-right:nth-child(3) { transform: rotate(5deg); }
+      .timeline-row:nth-child(2) .polaroid-right { transform: rotate(-2deg); }
+      .timeline-row:nth-child(3) .polaroid-right { transform: rotate(5deg); }
+      .timeline-row:nth-child(4) .polaroid-left { transform: rotate(-2deg); }
+      .timeline-row:nth-child(4) .polaroid-right { transform: rotate(4deg); }
       .polaroid-photo {
         width: 100%;
-        height: 100%;
-        aspect-ratio: 1;
-        background: var(--soft-yellow);
+        height: 155px;
+        flex-shrink: 0;
+        background: #0a0a0a;
         overflow: hidden;
         display: block;
         box-sizing: border-box;
@@ -253,49 +273,41 @@
         height: 100%;
         object-fit: cover;
         display: block;
+        opacity: 0;
+      }
+      .polaroid-show-photo .polaroid-photo img {
+        opacity: 1;
       }
       .polaroid-caption {
         position: absolute;
-        bottom: 8px;
+        bottom: 16px;
         left: 8px;
         right: 8px;
-        font-family: "Lora", Georgia, serif;
-        font-size: 0.9rem;
+        font-family: "Caveat", cursive;
+        font-size: 1.4rem;
         font-weight: 600;
         text-align: center;
-        color: var(--text-dark);
+        color: #f5f0e8;
         letter-spacing: 0.02em;
-        text-shadow: 0 1px 2px rgba(255,255,255,0.9);
-      }
-      .timeline-center {
-        width: 100%;
       }
 
       @media (min-width: 900px) {
-        .timeline-layout {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: start;
-          gap: 2rem;
+        .timeline-rows {
+          display: flex;
+          flex-direction: column;
+          gap: 48px;
           max-width: 1100px;
           margin: 0 auto;
           padding: 0 1rem;
         }
-        .timeline-polaroids {
-          flex-direction: column;
-          gap: 28px;
-          width: 130px;
+        .timeline-row {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+          gap: 1.25rem;
+        }
+        .timeline-row .polaroid {
           flex-shrink: 0;
-        }
-        .timeline-polaroids-left {
-          justify-self: end;
-        }
-        .timeline-center {
-          min-width: 0;
-          max-width: 520px;
-        }
-        .timeline-polaroids-right {
-          justify-self: start;
         }
       }
 
@@ -318,6 +330,7 @@
       <header class="timeline-hero">
         <div class="timeline-hero-note">
           <h1 class="timeline-hero-title">Weekend Timeline</h1>
+          <p class="timeline-hero-subtitle">Times are subject to slight changes &mdash; but here's a ballpark!</p>
         </div>
       </header>
 
@@ -326,24 +339,13 @@
     </audio>
     <button type="button" class="timeline-music-toggle" id="timeline-music-toggle" aria-label="Play background music" title="Play music">♪</button>
 
-      <div class="timeline-layout">
-        <div class="timeline-polaroids timeline-polaroids-left" aria-hidden="true">
-          <figure class="polaroid polaroid-left">
-            <div class="polaroid-photo"><img src="assets/timeline/2021.jpg" alt="" /></div>
-            <figcaption class="polaroid-caption">2021</figcaption>
+      <div class="timeline-rows">
+        <div class="timeline-row" aria-labelledby="friday-heading">
+          <figure class="polaroid polaroid-left polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/2021_1.JPG" alt="" /></div>
+            <figcaption class="polaroid-caption">July 2021</figcaption>
           </figure>
-          <figure class="polaroid polaroid-left">
-            <div class="polaroid-photo"><img src="assets/timeline/2023.jpg" alt="" /></div>
-            <figcaption class="polaroid-caption">2023</figcaption>
-          </figure>
-          <figure class="polaroid polaroid-left">
-            <div class="polaroid-photo"><img src="assets/timeline/2025.jpg" alt="" /></div>
-            <figcaption class="polaroid-caption">2025</figcaption>
-          </figure>
-        </div>
-
-        <div class="timeline-center">
-          <section class="day-section" aria-labelledby="friday-heading">
+          <section class="day-section">
             <div class="day-blob">
               <h2 id="friday-heading" class="day-title">Friday</h2>
               <ul class="timeline-list">
@@ -352,8 +354,18 @@
               </ul>
             </div>
           </section>
+          <figure class="polaroid polaroid-right polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/2021_3.png" alt="" /></div>
+            <figcaption class="polaroid-caption">October 2021</figcaption>
+          </figure>
+        </div>
 
-          <section class="day-section" aria-labelledby="saturday-heading">
+        <div class="timeline-row" aria-labelledby="saturday-heading">
+          <figure class="polaroid polaroid-left polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/2022_1.png" alt="" /></div>
+            <figcaption class="polaroid-caption">summer 2022</figcaption>
+          </figure>
+          <section class="day-section">
             <div class="day-blob">
               <h2 id="saturday-heading" class="day-title">Saturday</h2>
               <ul class="timeline-list">
@@ -363,8 +375,18 @@
               </ul>
             </div>
           </section>
+          <figure class="polaroid polaroid-right polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/2022_2.png" alt="" /></div>
+            <figcaption class="polaroid-caption">fall 2022</figcaption>
+          </figure>
+        </div>
 
-          <section class="day-section" aria-labelledby="sunday-heading">
+        <div class="timeline-row" aria-labelledby="sunday-heading">
+          <figure class="polaroid polaroid-left polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/2023_1.png" alt="" /></div>
+            <figcaption class="polaroid-caption">February 2023</figcaption>
+          </figure>
+          <section class="day-section">
             <div class="day-blob">
               <h2 id="sunday-heading" class="day-title">Sunday</h2>
               <ul class="timeline-list">
@@ -372,20 +394,21 @@
               </ul>
             </div>
           </section>
-        </div>
-
-        <div class="timeline-polaroids timeline-polaroids-right" aria-hidden="true">
-          <figure class="polaroid polaroid-right">
-            <div class="polaroid-photo"><img src="assets/timeline/2022.jpg" alt="" /></div>
-            <figcaption class="polaroid-caption">2022</figcaption>
-          </figure>
-          <figure class="polaroid polaroid-right">
-            <div class="polaroid-photo"><img src="assets/timeline/2024.jpg" alt="" /></div>
-            <figcaption class="polaroid-caption">2024</figcaption>
-          </figure>
-          <figure class="polaroid polaroid-right">
+          <figure class="polaroid polaroid-right" aria-hidden="true">
             <div class="polaroid-photo"><img src="assets/timeline/2026.jpg" alt="" /></div>
             <figcaption class="polaroid-caption">2026</figcaption>
+          </figure>
+        </div>
+
+        <div class="timeline-row timeline-row-photos-only">
+          <figure class="polaroid polaroid-left polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/timeline/2025.jpg" alt="" /></div>
+            <figcaption class="polaroid-caption">2025</figcaption>
+          </figure>
+          <div class="timeline-row-spacer" aria-hidden="true"></div>
+          <figure class="polaroid polaroid-right polaroid-show-photo" aria-hidden="true">
+            <div class="polaroid-photo"><img src="assets/2024_1.png" alt="" /></div>
+            <figcaption class="polaroid-caption">2024</figcaption>
           </figure>
         </div>
       </div>
