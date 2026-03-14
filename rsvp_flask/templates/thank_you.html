@@ -22,6 +22,7 @@
     <div class="card">
       <h1>Thanks for responding!</h1>
       <p>We're so excited to celebrate with you. See you at Northridge Inn!</p>
+      {% if on_site %}<p>We will be in touch asap about room assignments!</p>{% endif %}
       <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px;">
         <a href="{{ site_base_url }}">Back to wedding site</a>
         <a href="{{ site_base_url }}/rsvp.html" style="background: #f4e3d1; color: #2f1a10;">Change my response</a>
