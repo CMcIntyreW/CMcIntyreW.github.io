@@ -41,6 +41,14 @@ The app saves responses to `responses.csv` in the app directory. For deployment 
 4. Your app URL will be like `https://your-app.up.railway.app`. Download data at:
    - `https://your-app.up.railway.app/data`
 
+5. **Email notifications (optional):** Railway blocks outbound SMTP, so use **Resend** instead:
+   - Sign up at [resend.com](https://resend.com) (free tier: 100 emails/day)
+   - Create an API key in the Resend dashboard
+   - In Railway **Variables**, add:
+     - `RSVP_NOTIFY_EMAIL` = your email (e.g. `carly@example.com`)
+     - `RESEND_API_KEY` = your Resend API key
+   - Emails will be sent from `onboarding@resend.dev` by default. To use your own domain, verify it in Resend and set `RSVP_FROM_EMAIL=Wedding <rsvp@yourdomain.com>`
+
 ---
 
 ## Option 3: PythonAnywhere (free tier, files persist)

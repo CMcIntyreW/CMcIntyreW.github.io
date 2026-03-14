@@ -11,9 +11,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
       :root {
         --periwinkle: #b8c5e0;
@@ -41,7 +42,8 @@
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: "Lora", Georgia, serif;
+        font-family: "Caveat", cursive;
+        font-weight: 500;
         color: var(--text-dark);
         background: #d4e8a0;
         background-image:
@@ -68,7 +70,7 @@
       .nav-tabs a {
         color: var(--text-dark);
         text-decoration: none;
-        font-family: "Montserrat", Arial, sans-serif;
+        font-family: "Caveat", cursive;
         font-size: 0.9rem;
         font-weight: 600;
         letter-spacing: 0.04em;
@@ -99,7 +101,7 @@
       .timeline-hero-note {
         position: relative;
         background: rgba(180, 218, 115, 0.7);
-        color: var(--text-dark);
+        color: #000;
         padding: 20px 36px 24px;
         border-radius: 12px;
         box-shadow: 0 4px 24px rgba(92, 74, 61, 0.12), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
@@ -110,9 +112,9 @@
       }
 
       .timeline-hero-title {
-        font-family: "Lora", Georgia, serif;
+        font-family: "Caveat", cursive;
         font-weight: 700;
-        font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+        font-size: clamp(2rem, 5vw, 2.75rem);
         margin: 0;
         text-align: center;
         letter-spacing: 0.08em;
@@ -125,7 +127,7 @@
         font-size: 0.8rem;
         font-weight: 400;
         font-style: italic;
-        color: var(--text-muted);
+        color: #000;
         letter-spacing: 0.02em;
         text-align: center;
       }
@@ -153,10 +155,10 @@
       }
 
       .day-title {
-        font-family: "Lora", Georgia, serif;
+        font-family: "Caveat", cursive;
         font-weight: 700;
-        font-size: clamp(1.5rem, 4vw, 2rem);
-        color: var(--text-dark);
+        font-size: clamp(1.75rem, 5vw, 2.5rem);
+        color: #000;
         margin: 0 0 12px;
         text-align: center;
         letter-spacing: 0.06em;
@@ -173,16 +175,16 @@
 
       .timeline-list li {
         margin-bottom: 18px;
-        font-size: 1rem;
+        font-size: 1.2rem;
         line-height: 1.5;
-        color: var(--text-dark);
+        color: #000;
         text-align: center;
       }
 
       .timeline-time {
         display: block;
-        font-weight: 600;
-        color: var(--text-dark);
+        font-weight: 700;
+        color: #000;
         margin-bottom: 6px;
         padding-bottom: 6px;
         border-bottom: 1px solid rgba(42, 42, 42, 0.2);
@@ -440,6 +442,7 @@
       <a href="rsvp.html">RSVP</a>
     </nav>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <main class="container">
       <header class="timeline-hero">
         <div class="timeline-hero-note">
@@ -580,12 +583,36 @@
         var lightboxClose = lightbox && lightbox.querySelector(".lightbox-close");
         if (!lightbox || !lightboxImg) return;
 
-        function openLightbox(src, caption) {
+        function fireFireworks() {
+          if (typeof confetti !== "function") return;
+          var duration = 2000;
+          var end = Date.now() + duration;
+          (function frame() {
+            confetti({
+              particleCount: 4,
+              angle: 60,
+              spread: 55,
+              origin: { x: 0.3, y: 0.6 },
+              colors: ["#9bc85c", "#c8e08a", "#d4e8a0", "#f0e8a8", "#fff4e8"],
+            });
+            confetti({
+              particleCount: 4,
+              angle: 120,
+              spread: 55,
+              origin: { x: 0.7, y: 0.6 },
+              colors: ["#9bc85c", "#c8e08a", "#d4e8a0", "#f0e8a8", "#fff4e8"],
+            });
+            if (Date.now() < end) requestAnimationFrame(frame);
+          })();
+        }
+
+        function openLightbox(src, caption, triggerFireworks) {
           lightboxImg.src = src;
           lightboxImg.alt = caption || "";
           lightboxCaption.textContent = caption || "";
           lightbox.classList.add("open");
           document.body.style.overflow = "hidden";
+          if (triggerFireworks) fireFireworks();
         }
         function closeLightbox() {
           lightbox.classList.remove("open");
@@ -596,8 +623,10 @@
           var img = fig.querySelector(".polaroid-photo img");
           var cap = fig.querySelector(".polaroid-caption");
           if (!img || !img.src) return;
+          var captionText = cap ? cap.textContent.trim().toLowerCase() : "";
+          var isAugust2026 = captionText.indexOf("august 2026") !== -1;
           fig.addEventListener("click", function () {
-            openLightbox(img.src, cap ? cap.textContent : "");
+            openLightbox(img.src, cap ? cap.textContent : "", isAugust2026);
           });
         });
 
