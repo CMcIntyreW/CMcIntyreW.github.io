@@ -294,7 +294,7 @@
         text-transform: lowercase;
       }
 
-      /* Mobile: reset overlapping margins so rows stack cleanly */
+      /* Mobile: reset transforms so photos stack cleanly in vertical layout */
       @media (max-width: 899px) {
         .timeline-row:nth-child(2) {
           margin-top: 0;
@@ -309,7 +309,10 @@
           margin-top: 0;
         }
         .timeline-rows {
-          gap: 1px;
+          gap: 20px;
+        }
+        .timeline-row {
+          gap: 12px;
         }
         .polaroid {
           width: 140px;
@@ -321,6 +324,21 @@
         .polaroid-caption {
           font-size: 1.2rem;
         }
+        /* Reset desktop transforms – use subtle rotation only for mobile stack */
+        .polaroid-left,
+        .polaroid-right {
+          transform: none !important;
+        }
+        .timeline-row:nth-child(1) .polaroid-left { transform: rotate(-4deg) !important; }
+        .timeline-row:nth-child(1) .polaroid-right { transform: rotate(4deg) !important; }
+        .timeline-row:nth-child(2) .polaroid-left { transform: rotate(3deg) !important; }
+        .timeline-row:nth-child(2) .polaroid-right { transform: rotate(-3deg) !important; }
+        .timeline-row:nth-child(3) .polaroid-left { transform: rotate(-4deg) !important; }
+        .timeline-row:nth-child(3) .polaroid-right { transform: rotate(4deg) !important; }
+        .timeline-row:nth-child(4) .polaroid-left { transform: rotate(3deg) !important; }
+        .timeline-row:nth-child(4) .polaroid-right { transform: rotate(-3deg) !important; }
+        .timeline-row:nth-child(5) .polaroid-left { transform: rotate(-4deg) !important; }
+        .timeline-row:nth-child(5) .polaroid-right { transform: rotate(4deg) !important; }
       }
 
       @media (min-width: 900px) {
