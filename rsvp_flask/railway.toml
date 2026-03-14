@@ -1,7 +1,7 @@
 # Railway config when Root Directory is rsvp_flask
 [build]
 builder = "nixpacks"
-buildCommand = "pip install -r requirements.txt"
+buildCommand = "pip install -r requirements.txt && pip install resend>=2.0"
 
 [deploy]
 startCommand = "gunicorn -w 1 -b 0.0.0.0:$PORT app:app"
