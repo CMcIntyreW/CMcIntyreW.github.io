@@ -5,10 +5,7 @@ Saves responses to a CSV file. Run: flask --app app run
 import csv
 import io
 import os
-import smtplib
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, send_file, url_for
@@ -21,25 +18,21 @@ RESPONSES_DIR = Path(os.environ.get("RSVP_RESPONSES_DIR", str(RESPONSES_DIR)))
 RESPONSES_FILE = RESPONSES_DIR / "responses.csv"
 SITE_BASE_URL = os.environ.get("WEDDING_SITE_URL", "https://cmcintyrew.github.io")
 
-# Optional: notify email when someone RSVPs (set RSVP_NOTIFY_EMAIL + SMTP vars)
+# Optional: notify email when someone RSVPs (Resend only - SMTP is blocked on Railway)
 RSVP_NOTIFY_EMAIL = os.environ.get("RSVP_NOTIFY_EMAIL", "").strip()
-SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
-SMTP_USER = os.environ.get("SMTP_USER", "").strip()
-SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "").strip()
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
+RSVP_FROM_EMAIL = os.environ.get("RSVP_FROM_EMAIL", "RSVP <onboarding@resend.dev>").strip()
 
 
 def _send_rsvp_notification(name, email, attending, weekend_scope, meal_choices, accommodation_plan):
-    """Send an email when someone submits an RSVP. Fails silently if not configured."""
-    if not RSVP_NOTIFY_EMAIL or not SMTP_USER or not SMTP_PASSWORD:
+    """Send an email when someone submits an RSVP. Uses Resend (works on Railway) or SMTP."""
+    if not RSVP_NOTIFY_EMAIL:
+        app.logger.warning("RSVP email not sent: RSVP_NOTIFY_EMAIL not set.")
         return
-    try:
-        msg = MIMEMultipart()
-        msg["From"] = SMTP_USER
-        msg["To"] = RSVP_NOTIFY_EMAIL
-        msg["Subject"] = f"New RSVP: {name}" + (" — Attending!" if attending == "yes" else " — Not attending")
-        data_url = os.environ.get("RSVP_BACKEND_URL", "").rstrip("/") or "(set RSVP_BACKEND_URL)"
-        body = f"""Someone just submitted an RSVP!
+
+    data_url = os.environ.get("RSVP_BACKEND_URL", "").rstrip("/") or "(set RSVP_BACKEND_URL)"
+    subject = f"New RSVP: {name}" + (" — Attending!" if attending == "yes" else " — Not attending")
+    body = f"""Someone just submitted an RSVP!
 
 Name: {name}
 Email: {email}
@@ -50,13 +43,30 @@ Accommodation: {accommodation_plan or "(not specified)"}
 
 View all responses: {data_url}/data
 """
-        msg.attach(MIMEText(body, "plain"))
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, RSVP_NOTIFY_EMAIL, msg.as_string())
-    except Exception:
-        pass  # Don't fail the RSVP if email fails
+
+    # Option A: Resend (works on Railway - uses HTTPS)
+    if RESEND_API_KEY:
+        try:
+            import resend
+            resend.api_key = RESEND_API_KEY
+            resend.Emails.send({
+                "from": RSVP_FROM_EMAIL,
+                "to": [RSVP_NOTIFY_EMAIL],
+                "subject": subject,
+                "text": body,
+            })
+            app.logger.info("RSVP notification email sent via Resend")
+            return
+        except Exception as e:
+            app.logger.error("Resend email failed: %s", e, exc_info=True)
+            return
+
+    # SMTP is disabled - Railway blocks outbound SMTP and it crashes the worker.
+    # Use Resend instead (free at resend.com).
+    app.logger.warning(
+        "RSVP email not sent: set RESEND_API_KEY and RSVP_NOTIFY_EMAIL on Railway. "
+        "Get an API key at https://resend.com (free tier: 100 emails/day)."
+    )
 
 
 def ensure_responses_file():
