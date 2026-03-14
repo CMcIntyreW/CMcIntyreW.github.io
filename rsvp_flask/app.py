@@ -5,7 +5,10 @@ Saves responses to a CSV file. Run: flask --app app run
 import csv
 import io
 import os
+import smtplib
 from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from pathlib import Path
 
 from flask import Flask, redirect, render_template, request, send_file, url_for
@@ -18,6 +21,43 @@ RESPONSES_DIR = Path(os.environ.get("RSVP_RESPONSES_DIR", str(RESPONSES_DIR)))
 RESPONSES_FILE = RESPONSES_DIR / "responses.csv"
 SITE_BASE_URL = os.environ.get("WEDDING_SITE_URL", "https://cmcintyrew.github.io")
 
+# Optional: notify email when someone RSVPs (set RSVP_NOTIFY_EMAIL + SMTP vars)
+RSVP_NOTIFY_EMAIL = os.environ.get("RSVP_NOTIFY_EMAIL", "").strip()
+SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
+SMTP_USER = os.environ.get("SMTP_USER", "").strip()
+SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "").strip()
+
+
+def _send_rsvp_notification(name, email, attending, weekend_scope, meal_choices, accommodation_plan):
+    """Send an email when someone submits an RSVP. Fails silently if not configured."""
+    if not RSVP_NOTIFY_EMAIL or not SMTP_USER or not SMTP_PASSWORD:
+        return
+    try:
+        msg = MIMEMultipart()
+        msg["From"] = SMTP_USER
+        msg["To"] = RSVP_NOTIFY_EMAIL
+        msg["Subject"] = f"New RSVP: {name}" + (" — Attending!" if attending == "yes" else " — Not attending")
+        data_url = os.environ.get("RSVP_BACKEND_URL", "").rstrip("/") or "(set RSVP_BACKEND_URL)"
+        body = f"""Someone just submitted an RSVP!
+
+Name: {name}
+Email: {email}
+Attending: {"Yes" if attending == "yes" else "No"}
+Weekend: {weekend_scope or "(not specified)"}
+Meal choices: {meal_choices or "(none)"}
+Accommodation: {accommodation_plan or "(not specified)"}
+
+View all responses: {data_url}/data
+"""
+        msg.attach(MIMEText(body, "plain"))
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.sendmail(SMTP_USER, RSVP_NOTIFY_EMAIL, msg.as_string())
+    except Exception:
+        pass  # Don't fail the RSVP if email fails
+
 
 def ensure_responses_file():
     RESPONSES_DIR.mkdir(parents=True, exist_ok=True)
@@ -27,7 +67,7 @@ def ensure_responses_file():
             w = csv.writer(f)
             w.writerow([
                 "timestamp", "name", "email", "additional_guests", "attending",
-                "weekend_scope", "weekend_other", "meal", "meal_other",
+                "weekend_scope", "weekend_other", "meal_choices", "meal_other",
                 "accommodation_plan", "accommodation_other",
                 "open_to_sharing", "prefer_own_room", "interested_glamping", "bunking_with"
             ])
@@ -48,7 +88,19 @@ def submit():
     attending = request.form.get("attending", "")
     weekend_scope = request.form.get("weekend_scope", "")
     weekend_other = (request.form.get("weekend_other") or "").strip()
-    meal = request.form.get("meal", "")
+    meal_names = {
+        "chicken": "chicken",
+        "beef": "beef",
+        "fish": "fish",
+        "vegetarian": "vegetarian",
+        "vegan": "vegan",
+    }
+    parts = []
+    for key, label in meal_names.items():
+        count = int(request.form.get(f"meal_count_{key}") or "0") or 0
+        if count > 0:
+            parts.append(f"{count} {label}")
+    meal_choices = ", ".join(parts) if parts else ""
     meal_other = (request.form.get("meal_other") or "").strip()
     accommodation_plan = request.form.get("accommodation_plan", "")
     accommodation_other = (request.form.get("accommodation_other") or "").strip()
@@ -63,10 +115,12 @@ def submit():
         w.writerow([
             datetime.utcnow().isoformat() + "Z",
             name, email, additional_guests, attending,
-            weekend_scope, weekend_other, meal, meal_other,
+            weekend_scope, weekend_other, meal_choices, meal_other,
             accommodation_plan, accommodation_other,
             open_to_sharing, prefer_own_room, interested_glamping, bunking_with,
         ])
+
+    _send_rsvp_notification(name, email, attending, weekend_scope, meal_choices, accommodation_plan)
 
     return redirect(url_for("thank_you"))
 

@@ -56,6 +56,27 @@ In **Variables**, you can add:
 |---------------------|--------------------------------------------|--------|
 | `WEDDING_SITE_URL`  | `https://www.ryanandcarlygethitched.com`   | Used in thank-you / redirect links if needed. |
 
+### Email notifications (optional)
+
+To get an email whenever someone submits an RSVP, add these variables:
+
+| Variable             | Example value                     | Purpose |
+|----------------------|-----------------------------------|--------|
+| `RSVP_NOTIFY_EMAIL`  | `ryanandcarlygethitched@gmail.com` | Where to send the notification. |
+| `SMTP_USER`          | `your-email@gmail.com`            | Gmail address (or SMTP username). |
+| `SMTP_PASSWORD`     | `xxxx xxxx xxxx xxxx`             | Gmail app password (see below). |
+| `RSVP_BACKEND_URL`   | `https://your-app.up.railway.app`  | Your Railway URL; used for the "View responses" link in the email. |
+| `SMTP_SERVER`        | `smtp.gmail.com`                  | Optional; defaults to Gmail. |
+| `SMTP_PORT`          | `587`                             | Optional; defaults to 587. |
+
+**Gmail app password:**
+
+1. Go to [Google Account → Security](https://myaccount.google.com/security).
+2. Turn on **2-Step Verification** if it’s not already on.
+3. Open **App passwords** (under “How you sign in to Google”).
+4. Create a new app password for “Mail” (or “Other”).
+5. Use that 16-character password as `SMTP_PASSWORD` (spaces optional).
+
 ---
 
 ## 5. Deploy

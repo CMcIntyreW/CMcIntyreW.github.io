@@ -150,6 +150,23 @@
         width: 18px;
         height: 18px;
       }
+      .check-item input.meal-count {
+        width: 3.5em;
+        height: auto;
+        min-width: 48px;
+        padding: 6px 8px;
+      }
+      .meal-num { font-weight: 600; margin-right: 2px; }
+      .check-item input.meal-count {
+        width: 3.5em;
+        height: auto;
+        min-height: 36px;
+      }
+      .check-item input.meal-count {
+        width: 3.5em;
+        height: auto;
+        min-height: 36px;
+      }
 
       .rsvp-complete {
         padding: 8px 0;
@@ -221,9 +238,19 @@
       .guest-row input[name="guest_email"] { min-width: 0; }
       .add-guest { font-size: 0.9rem; margin-top: 6px; }
       .q-hint { font-size: 0.9rem; font-weight: 400; margin-top: 4px; opacity: 0.9; }
+      .meal-choice input.meal-count {
+        width: 3.5em;
+        min-width: 48px;
+        height: auto;
+        padding: 8px 10px;
+      }
       .rsvp-step[data-step="6"] .field > label { margin-bottom: 14px; }
       .rsvp-step[data-step="6"] .q-hint { font-size: 1.08rem; }
       .rsvp-step[data-step="6"] .check-group { margin-top: 20px; }
+      .rsvp-step[data-step="7"] .q-hint { font-size: 1.15rem; }
+      .rsvp-step[data-step="7"] .check-item { font-size: 1.12rem; }
+      .rsvp-step[data-step="7"] .field > label { font-size: clamp(1.15rem, 2.2vw, 1.35rem); }
+      .meal-num { font-weight: 600; margin-right: 4px; }
 
       @media (min-width: 760px) {
         .two-col {
@@ -311,15 +338,16 @@
             </div>
           </div>
 
-          <div class="rsvp-step" data-step="5">
+          <div class="rsvp-step" data-step="5" id="meal-step">
             <div class="field">
               <label>What kind of meal are you most interested in? (official meal selection will be sent out in a couple of weeks!)</label>
-              <div class="check-group">
-                <label class="check-item"><input type="radio" name="meal" value="chicken" required /> Chicken</label>
-                <label class="check-item"><input type="radio" name="meal" value="beef" required /> Beef</label>
-                <label class="check-item"><input type="radio" name="meal" value="fish" required /> Fish</label>
-                <label class="check-item"><input type="radio" name="meal" value="vegetarian" required /> Vegetarian</label>
-                <label class="check-item"><input type="radio" name="meal" value="vegan" required /> Vegan</label>
+              <p class="q-hint">Select as many as you need — e.g. 1 chicken and 1 beef for you and a guest. Enter 0 or leave blank for meals you don't want.</p>
+              <div class="check-group meal-choices">
+                <label class="check-item meal-choice"><span class="meal-num">1.</span> Chicken <input type="number" name="meal_count_chicken" class="meal-count" data-meal="chicken" min="0" max="20" value="0" placeholder="0" title="Number of people" aria-label="Number of people wanting Chicken" /></label>
+                <label class="check-item meal-choice"><span class="meal-num">2.</span> Beef <input type="number" name="meal_count_beef" class="meal-count" data-meal="beef" min="0" max="20" value="0" placeholder="0" title="Number of people" aria-label="Number of people wanting Beef" /></label>
+                <label class="check-item meal-choice"><span class="meal-num">3.</span> Fish <input type="number" name="meal_count_fish" class="meal-count" data-meal="fish" min="0" max="20" value="0" placeholder="0" title="Number of people" aria-label="Number of people wanting Fish" /></label>
+                <label class="check-item meal-choice"><span class="meal-num">4.</span> Vegetarian <input type="number" name="meal_count_vegetarian" class="meal-count" data-meal="vegetarian" min="0" max="20" value="0" placeholder="0" title="Number of people" aria-label="Number of people wanting Vegetarian" /></label>
+                <label class="check-item meal-choice"><span class="meal-num">5.</span> Vegan <input type="number" name="meal_count_vegan" class="meal-count" data-meal="vegan" min="0" max="20" value="0" placeholder="0" title="Number of people" aria-label="Number of people wanting Vegan" /></label>
               </div>
             </div>
             <div class="step-actions">
@@ -331,9 +359,8 @@
           <div class="rsvp-step" data-step="6">
             <div class="field">
               <label>Re: Wedding Tetris</label>
-              <p class="q-hint">These answers will help us sort out the on-site accommodations. Rooms are limited, so we are aiming to piece things together in a way that works for everyone. Let us know your accommodation vibe and we will do our best to make it happen. (Select all that apply)</p>
-              <p class="q-hint">P.S. Whether you stay on- or off-site, please plan to spend lots of time soaking up the lake, the pool, and all the wedding vibes at Northridge. We also greedily want as much time with you as we can get.</p>
-              <p class="q-hint">P.P.S. If off-site is more your style, nearby Airbnbs are your best bet. Huntsville does have hotels, but most are a 30-minute drive. If you need a ride back after the wedding, let us know and we can help arrange taxis.</p>
+              <p class="q-hint">Whether you stay on- or off-site, please plan to spend lots of time soaking up the lake, the pool, and all the wedding vibes at Northridge. We also greedily want as much time with you as we can get.</p>
+              <p class="q-hint">P.S. If off-site is more your style, nearby Airbnbs are your best bet. Huntsville does have hotels, but most are a 30-minute drive. If you need a ride back after the wedding, let us know and we can help arrange taxis.</p>
               <div class="check-group">
                 <label class="check-item"><input type="radio" name="accommodation_plan" value="on_site" required /> I am interested in staying on-site</label>
                 <label class="check-item"><input type="radio" name="accommodation_plan" value="off_site" /> I have or will be arranging to stay off-site</label>
@@ -350,6 +377,8 @@
           <div class="rsvp-step" data-step="7">
             <div class="field">
               <label>Re: Wedding Tetris (cont'd)</label>
+              <p class="q-hint">These answers will help us sort out the on-site accommodations. Rooms are limited, so we are aiming to piece things together in a way that works for everyone. Let us know your accommodation vibe and we will do our best to make it happen!</p>
+              <p class="q-hint">(please select all that apply)</p>
               <div class="check-group">
                 <label class="check-item"><input type="checkbox" name="open_to_sharing" value="yes" /> I or we are open to sharing a double queen suite with another person or couple</label>
                 <label class="check-item"><input type="checkbox" name="prefer_own_room" value="yes" /> I or we prefer our own room</label>
@@ -460,6 +489,20 @@
         }
 
         function validateStep(active) {
+          if (active.id === "meal-step") {
+            var counts = active.querySelectorAll(".meal-count");
+            var total = 0;
+            for (var i = 0; i < counts.length; i++) {
+              var val = parseInt(counts[i].value, 10) || 0;
+              total += val;
+            }
+            if (total < 1) {
+              var first = active.querySelector(".meal-count");
+              if (first) first.focus();
+              return false;
+            }
+            return true;
+          }
           var inputs = active.querySelectorAll("input[required], select[required], textarea[required]");
           var radioNames = {};
           for (var i = 0; i < inputs.length; i++) {
