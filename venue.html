@@ -692,18 +692,8 @@
             btn.textContent = "♪";
           }
         }
-        function startVenueMusic(e) {
-          if (e && e.target && (e.target.id === "venue-music-toggle" || e.target.closest("#venue-music-toggle"))) return;
-          document.removeEventListener("click", startVenueMusic, true);
-          document.removeEventListener("keydown", startVenueMusic, true);
-          document.removeEventListener("touchstart", startVenueMusic, true);
-          audio.play().then(function () { setPlaying(true); }).catch(function () {});
-        }
         audio.addEventListener("play", function () { setPlaying(true); });
         audio.addEventListener("pause", function () { setPlaying(false); });
-        document.addEventListener("click", startVenueMusic, { once: true, capture: true });
-        document.addEventListener("keydown", startVenueMusic, { once: true, capture: true });
-        document.addEventListener("touchstart", startVenueMusic, { once: true, capture: true });
         btn.addEventListener("click", function () {
           if (audio.paused) {
             audio.play().then(function () { setPlaying(true); }).catch(function () {});

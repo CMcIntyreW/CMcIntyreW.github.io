@@ -560,18 +560,8 @@
             btn.textContent = "♪";
           }
         }
-        function startMusicOnFirstClick(e) {
-          if (e && e.target && (e.target.id === "timeline-music-toggle" || e.target.closest("#timeline-music-toggle"))) return;
-          document.removeEventListener("click", startMusicOnFirstClick, true);
-          document.removeEventListener("keydown", startMusicOnFirstClick, true);
-          document.removeEventListener("touchstart", startMusicOnFirstClick, true);
-          audio.play().then(function () { setPlaying(true); }).catch(function () {});
-        }
         audio.addEventListener("play", function () { setPlaying(true); });
         audio.addEventListener("pause", function () { setPlaying(false); });
-        document.addEventListener("click", startMusicOnFirstClick, { once: true, capture: true });
-        document.addEventListener("keydown", startMusicOnFirstClick, { once: true, capture: true });
-        document.addEventListener("touchstart", startMusicOnFirstClick, { once: true, capture: true });
         btn.addEventListener("click", function () {
           if (audio.paused) {
             audio.play().then(function () { setPlaying(true); }).catch(function () {});
