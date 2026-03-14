@@ -460,8 +460,7 @@
             var formData = new FormData(form);
             fetch(action, { method: "POST", body: formData })
               .then(function (res) {
-                if (res.redirected) window.location.href = res.url;
-                else if (res.ok) window.location.href = action.replace("/submit", "/thank-you");
+                if (!res.ok) { /* submission failed, user stays on page */ }
               })
               .catch(function () {});
         }

@@ -132,15 +132,7 @@ def submit():
 
     _send_rsvp_notification(name, email, attending, weekend_scope, meal_choices, accommodation_plan)
 
-    if accommodation_plan == "on_site":
-        return redirect(url_for("thank_you", on_site="1"))
-    return redirect(url_for("thank_you"))
-
-
-@app.route("/thank-you")
-def thank_you():
-    on_site = request.args.get("on_site") == "1"
-    return render_template("thank_you.html", site_base_url=SITE_BASE_URL, on_site=on_site)
+    return {"ok": True}, 200
 
 
 @app.route("/data")
