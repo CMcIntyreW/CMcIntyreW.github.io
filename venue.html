@@ -43,8 +43,8 @@
           linear-gradient(-45deg, var(--checker-blue) 25%, transparent 25%),
           linear-gradient(45deg, transparent 75%, var(--checker-blue) 75%),
           linear-gradient(-45deg, transparent 75%, var(--checker-blue) 75%);
-        background-size: 72px 72px;
-        background-position: 0 0, 0 36px, 36px -36px, -36px 0px;
+        background-size: 96px 96px;
+        background-position: 0 0, 0 48px, 48px -48px, -48px 0px;
         color: var(--navy);
         min-height: 100vh;
       }
@@ -422,6 +422,35 @@
       .venue-lightbox-close:hover {
         background: #fff;
       }
+
+      .venue-music-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid rgba(44, 74, 112, 0.3);
+        background: var(--checker-offwhite);
+        color: var(--navy);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        z-index: 10;
+        box-shadow: 0 2px 12px rgba(44, 74, 112, 0.15);
+      }
+      .venue-music-toggle:hover {
+        background: var(--baby-blue-light);
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px rgba(44, 74, 112, 0.2);
+      }
+      .venue-music-toggle.playing {
+        background: var(--wavy-blue);
+        color: var(--checker-offwhite);
+        border-color: rgba(44, 74, 112, 0.4);
+      }
     </style>
   </head>
   <body>
@@ -435,6 +464,8 @@
     <audio id="venue-music" loop preload="auto">
       <source src="assets/Home.mp3" type="audio/mpeg" />
     </audio>
+    <button type="button" class="venue-music-toggle" id="venue-music-toggle" aria-label="Play background music" title="Play music">♪</button>
+
     <div class="container">
       <article class="venue-sheet">
       <header class="venue-intro">
@@ -599,6 +630,9 @@
       <p style="text-align: center;">
         <a href="index.html" class="back-link">← Back to home</a>
       </p>
+      <p style="text-align: center; margin-top: 12px;">
+        <a href="https://northridgeinn.com" target="_blank" rel="noopener noreferrer" class="back-link">Click here for Northridge Inn website</a>
+      </p>
       </article>
     </div>
 
@@ -643,17 +677,41 @@
 
       (function () {
         var audio = document.getElementById("venue-music");
-        if (!audio) return;
+        var btn = document.getElementById("venue-music-toggle");
+        if (!audio || !btn) return;
+        function setPlaying(playing) {
+          if (playing) {
+            btn.classList.add("playing");
+            btn.setAttribute("aria-label", "Pause background music");
+            btn.setAttribute("title", "Pause music");
+            btn.textContent = "♫";
+          } else {
+            btn.classList.remove("playing");
+            btn.setAttribute("aria-label", "Play background music");
+            btn.setAttribute("title", "Play music");
+            btn.textContent = "♪";
+          }
+        }
         function startVenueMusic(e) {
           if (e && e.target && (e.target.id === "venue-music-toggle" || e.target.closest("#venue-music-toggle"))) return;
           document.removeEventListener("click", startVenueMusic, true);
           document.removeEventListener("keydown", startVenueMusic, true);
           document.removeEventListener("touchstart", startVenueMusic, true);
-          audio.play().catch(function () {});
+          audio.play().then(function () { setPlaying(true); }).catch(function () {});
         }
+        audio.addEventListener("play", function () { setPlaying(true); });
+        audio.addEventListener("pause", function () { setPlaying(false); });
         document.addEventListener("click", startVenueMusic, { once: true, capture: true });
         document.addEventListener("keydown", startVenueMusic, { once: true, capture: true });
         document.addEventListener("touchstart", startVenueMusic, { once: true, capture: true });
+        btn.addEventListener("click", function () {
+          if (audio.paused) {
+            audio.play().then(function () { setPlaying(true); }).catch(function () {});
+          } else {
+            audio.pause();
+            setPlaying(false);
+          }
+        });
       })();
     </script>
   </body>
