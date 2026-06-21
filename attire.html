@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekend Attire | Ryan & Carly Get Hitched</title>
+    <meta
+      name="description"
+      content="What to wear for our wedding weekend — Friday and Saturday."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chewy&family=Varela+Round&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --fuchsia-deep: #6b0f5a;
+        --fuchsia-mid: #c71585;
+        --fuchsia-hot: #ff1493;
+        --fuchsia-glow: #ff69b4;
+        --purple-disco: #7b2cbf;
+        --disco-green: #6fa82a;
+        --disco-green-deep: #4f7f18;
+        --disco-green-light: #d4f08a;
+        --ink-light: #3a1030;
+        --ink-muted: #6b2458;
+        --card-bg: rgba(255, 248, 252, 0.88);
+        --card-border: rgba(255, 105, 180, 0.55);
+        --card-glow: rgba(255, 20, 147, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      @keyframes disco-gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes shimmer {
+        0%, 100% { text-shadow: 0 0 12px rgba(255, 105, 180, 0.8), 0 0 24px rgba(199, 21, 133, 0.5); }
+        50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 20, 147, 0.8); }
+      }
+
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px var(--card-glow), 0 4px 24px rgba(0, 0, 0, 0.3); }
+        50% { box-shadow: 0 0 36px rgba(255, 105, 180, 0.65), 0 0 60px rgba(123, 44, 191, 0.35), 0 4px 24px rgba(0, 0, 0, 0.3); }
+      }
+
+      @keyframes sparkle {
+        0%, 100% { opacity: 0.15; transform: scale(1); }
+        50% { opacity: 0.55; transform: scale(1.15); }
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Varela Round", sans-serif;
+        font-weight: 500;
+        color: var(--ink-light);
+        background-color: #f4a7b8;
+        background-image: url("assets/attire_backdrop.png");
+        background-repeat: repeat;
+        background-size: 520px auto;
+        background-attachment: fixed;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      .container {
+        width: min(880px, 92%);
+        margin: 0 auto;
+        padding: 24px 0 56px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .nav-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 20px;
+        padding: 16px 0 8px;
+        border-bottom: 1px solid rgba(107, 15, 90, 0.2);
+        background: rgba(255, 248, 252, 0.82);
+        backdrop-filter: blur(6px);
+      }
+      .nav-tabs a {
+        color: var(--fuchsia-deep);
+        text-decoration: none;
+        font-family: "Varela Round", sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 6px 12px;
+        border-radius: 8px;
+        opacity: 0.9;
+      }
+      .nav-tabs a:hover {
+        background: rgba(255, 20, 147, 0.35);
+        opacity: 1;
+      }
+      .nav-tabs a.active {
+        background: rgba(255, 105, 180, 0.45);
+        box-shadow: 0 0 16px rgba(255, 20, 147, 0.5);
+        opacity: 1;
+      }
+
+      .attire-hero {
+        margin: 24px 0 28px;
+        display: flex;
+        justify-content: center;
+      }
+
+
+      .attire-hero-note {
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        color: var(--ink-light);
+        padding: 14px 36px 16px;
+        border-radius: 16px;
+        box-shadow: 0 0 24px var(--card-glow), 0 4px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--card-border);
+        text-align: center;
+        animation: pulse-glow 3s ease-in-out infinite;
+      }
+
+      .attire-hero-title {
+        font-family: "Chewy", cursive;
+        font-weight: 400;
+        font-size: clamp(2.2rem, 6vw, 3.2rem);
+        margin: 0;
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--disco-green);
+        -webkit-text-stroke: 1px var(--disco-green-light);
+        paint-order: stroke fill;
+        animation: none;
+      }
+
+      .attire-hero-subtitle {
+        margin: 8px 0 0;
+        font-size: 1.05rem;
+        font-style: normal;
+        color: var(--ink-muted);
+      }
+
+      .day-section {
+        margin-bottom: 36px;
+      }
+
+      .day-blob {
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 20px 28px 24px;
+        box-shadow: 0 0 20px var(--card-glow), 0 4px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--card-border);
+        max-width: min(92%, 640px);
+        margin: 0 auto;
+      }
+
+      .day-blob:hover {
+        box-shadow: 0 0 32px rgba(255, 105, 180, 0.55), 0 0 48px rgba(123, 44, 191, 0.25), 0 4px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      .day-title {
+        font-family: "Chewy", cursive;
+        font-weight: 400;
+        font-size: clamp(2rem, 5.5vw, 2.75rem);
+        margin: 0 0 12px;
+        text-align: center;
+        letter-spacing: 0.04em;
+        text-transform: none;
+        color: var(--disco-green);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+      }
+
+      .day-event {
+        margin: 0 0 10px;
+        font-family: "Varela Round", sans-serif;
+        font-size: 1.2rem;
+        text-align: center;
+        font-weight: 700;
+        color: var(--fuchsia-glow);
+      }
+
+      .day-copy {
+        margin: 0;
+        font-size: 1.35rem;
+        line-height: 1.55;
+        text-align: center;
+        color: var(--ink-light);
+      }
+
+      .day-copy--note {
+        margin-top: 8px;
+        font-size: 1.05rem;
+        color: var(--ink-muted);
+      }
+
+      .attire-photos {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 20px;
+        width: 100%;
+      }
+
+      .attire-photo {
+        flex: 1 1 calc(50% - 8px);
+        max-width: none;
+        min-width: min(100%, 260px);
+      }
+
+      .attire-photo img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        border: 2px solid rgba(255, 105, 180, 0.5);
+        box-shadow: 0 0 20px rgba(255, 20, 147, 0.45), 0 4px 16px rgba(0, 0, 0, 0.3);
+      }
+
+
+      .attire-music-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid var(--disco-green-light);
+        background: var(--disco-green-deep);
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        z-index: 10;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 0 16px rgba(111, 168, 42, 0.5);
+        transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      }
+      .attire-music-toggle:hover {
+        transform: scale(1.05);
+        border-color: var(--disco-green);
+        background: var(--disco-green);
+        box-shadow: 0 0 24px rgba(111, 168, 42, 0.75), 0 0 36px rgba(212, 240, 138, 0.35);
+      }
+      .attire-music-toggle.playing {
+        background: var(--disco-green);
+        border-color: var(--disco-green-light);
+        box-shadow: 0 0 28px rgba(111, 168, 42, 0.85), 0 0 48px rgba(212, 240, 138, 0.45);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav-tabs container" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html">The Venue</a>
+      <a href="timeline.html">Weekend Timeline</a>
+      <a href="attire.html" class="active">Weekend Attire</a>
+      <a href="rsvp.html">RSVP</a>
+    </nav>
+
+    <main class="container">
+      <header class="attire-hero">
+<div class="attire-hero-note">
+          <h1 class="attire-hero-title">Let’s Talk Outfits</h1>
+          <p class="attire-hero-subtitle">A little inspiration for each day of celebrating!</p>
+        </div>
+      </header>
+
+      <section class="day-section" aria-labelledby="friday-attire">
+        <div class="day-blob">
+          <h2 id="friday-attire" class="day-title">Friday</h2>
+          <p class="day-event">Welcome BBQ</p>
+          <p class="day-copy"><strong>Suggested Attire:</strong> Smart/Dressy Casual</p>
+          <p class="day-copy day-copy--note">Think polished but easy, like something you’d wear to a nice dinner or a summer night out!</p>
+        </div>
+      </section>
+
+      <section class="day-section" aria-labelledby="saturday-attire">
+        <div class="day-blob">
+          <h2 id="saturday-attire" class="day-title">Saturday &mdash; aka. the Main Event!</h2>
+          <p class="day-event">Ceremony, Dinner, Dance</p>
+          <p class="day-copy"><strong>Suggested Attire:</strong> Funky Formal</p>
+          <p class="day-copy day-copy--note">Think formal, but extra fun &mdash; bright colours, playful prints and fabrics, and a little drama if your heart desires (frills, feathers, and fun accesories encouraged)</p>
+          <div class="attire-photos">
+            <figure class="attire-photo">
+              <img src="assets/saturdayattire_1.png" alt="Saturday attire inspiration" />
+            </figure>
+            <figure class="attire-photo">
+              <img src="assets/saturdayattire_2.png" alt="Saturday attire inspiration" />
+            </figure>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <audio id="attire-music" loop preload="auto">
+      <source src="assets/The%20Emotions%20-%20Best%20of%20My%20Love%20(Official%20Audio).mp3" type="audio/mpeg" />
+    </audio>
+    <button type="button" class="attire-music-toggle" id="attire-music-toggle" aria-label="Play background music" title="Play music">♪</button>
+
+    <script>
+      (function () {
+        var audio = document.getElementById("attire-music");
+        var btn = document.getElementById("attire-music-toggle");
+        if (!audio || !btn) return;
+        function setPlaying(playing) {
+          btn.classList.toggle("playing", playing);
+          btn.setAttribute("aria-label", playing ? "Pause background music" : "Play background music");
+          btn.setAttribute("title", playing ? "Pause music" : "Play music");
+          btn.textContent = playing ? "♫" : "♪";
+        }
+        audio.addEventListener("play", function () { setPlaying(true); });
+        audio.addEventListener("pause", function () { setPlaying(false); });
+        btn.addEventListener("click", function () {
+          if (audio.paused) {
+            audio.play().then(function () { setPlaying(true); }).catch(function () {});
+          } else {
+            audio.pause();
+            setPlaying(false);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
