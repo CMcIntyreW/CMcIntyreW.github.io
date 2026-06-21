@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meal Selection | Ryan & Carly Get Hitched</title>
+    <meta
+      name="description"
+      content="Choose your wedding meal and complete our guest survey."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chewy&family=Varela+Round&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --fuchsia-glow: #ff69b4;
+        --disco-green: #6fa82a;
+        --disco-green-deep: #4f7f18;
+        --disco-green-light: #d4f08a;
+        --ink-light: #3a1030;
+        --ink-muted: #6b2458;
+        --card-bg: rgba(255, 248, 252, 0.88);
+        --card-border: rgba(255, 105, 180, 0.55);
+        --card-glow: rgba(255, 20, 147, 0.35);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Varela Round", sans-serif;
+        font-weight: 500;
+        color: var(--ink-light);
+        background-color: #f4a7b8;
+        background-image: url("assets/attire_backdrop.png");
+        background-repeat: repeat;
+        background-size: 520px auto;
+        background-attachment: fixed;
+      }
+
+      .container {
+        width: min(880px, 92%);
+        margin: 0 auto;
+        padding: 24px 0 56px;
+      }
+
+      .nav-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 20px;
+        padding: 16px 0 8px;
+        border-bottom: 1px solid rgba(107, 15, 90, 0.2);
+        background: rgba(255, 248, 252, 0.82);
+        backdrop-filter: blur(6px);
+      }
+      .nav-tabs a {
+        color: #6b0f5a;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        padding: 6px 12px;
+        border-radius: 8px;
+      }
+      .nav-tabs a:hover { background: rgba(255, 20, 147, 0.35); }
+      .nav-tabs a.active {
+        background: rgba(255, 105, 180, 0.45);
+        box-shadow: 0 0 16px rgba(255, 20, 147, 0.5);
+      }
+
+      .page-hero {
+        margin: 24px 0 28px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .page-hero-note {
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        padding: 14px 36px 16px;
+        border-radius: 16px;
+        box-shadow: 0 0 24px var(--card-glow), 0 4px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--card-border);
+        text-align: center;
+      }
+
+      .page-hero-title {
+        font-family: "Chewy", cursive;
+        font-size: clamp(2rem, 5.5vw, 3rem);
+        margin: 0;
+        color: var(--disco-green);
+        -webkit-text-stroke: 1px var(--disco-green-light);
+        paint-order: stroke fill;
+      }
+
+      .page-hero-subtitle {
+        margin: 8px 0 0;
+        font-size: 1.05rem;
+        color: var(--ink-muted);
+      }
+
+      .content-section { margin-bottom: 32px; }
+
+      .content-blob {
+        background: var(--card-bg);
+        backdrop-filter: blur(8px);
+        border-radius: 16px;
+        padding: 22px 28px 26px;
+        box-shadow: 0 0 20px var(--card-glow), 0 4px 24px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--card-border);
+        max-width: min(92%, 640px);
+        margin: 0 auto;
+      }
+
+      .section-title {
+        font-family: "Chewy", cursive;
+        font-size: clamp(1.75rem, 4.5vw, 2.35rem);
+        margin: 0 0 12px;
+        text-align: center;
+        color: var(--disco-green);
+      }
+
+      .section-copy {
+        margin: 0;
+        font-size: 1.15rem;
+        line-height: 1.55;
+        text-align: center;
+        color: var(--ink-light);
+      }
+
+      .section-copy--note {
+        margin-top: 10px;
+        font-size: 1rem;
+        color: var(--ink-muted);
+      }
+
+      .form-placeholder {
+        margin-top: 18px;
+        padding: 20px;
+        border: 2px dashed rgba(111, 168, 42, 0.45);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.45);
+        text-align: center;
+        color: var(--ink-muted);
+        font-size: 0.95rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav-tabs container" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html">The Venue</a>
+      <a href="timeline.html">Weekend Timeline</a>
+      <a href="attire.html">Weekend Attire</a>
+    </nav>
+
+    <main class="container">
+      <header class="page-hero">
+        <div class="page-hero-note">
+          <h1 class="page-hero-title">Meal Selection</h1>
+          <p class="page-hero-subtitle">Tell us what you’d like for dinner &mdash; and a few other things!</p>
+        </div>
+      </header>
+
+      <section class="content-section" aria-labelledby="meal-heading">
+        <div class="content-blob">
+          <h2 id="meal-heading" class="section-title">Dinner Choices</h2>
+          <p class="section-copy">Meal selection will open here soon. You’ll be able to choose your entree for Saturday dinner.</p>
+          <div class="form-placeholder" id="meal-form-placeholder">Meal selection form coming soon</div>
+        </div>
+      </section>
+
+      <section class="content-section" aria-labelledby="survey-heading">
+        <div class="content-blob">
+          <h2 id="survey-heading" class="section-title">Guest Survey</h2>
+          <p class="section-copy">We’ll also have a short survey here for a few extra details that help us plan the weekend.</p>
+          <div class="form-placeholder" id="survey-form-placeholder">Survey coming soon</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
