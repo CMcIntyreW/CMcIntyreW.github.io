@@ -8,6 +8,7 @@
       name="description"
       content="Choose your wedding meal and complete our guest survey."
     />
+    <meta name="rsvp-backend-url" content="https://rsvp-backend-production-ef40.up.railway.app" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,15 +17,19 @@
     />
     <style>
       :root {
-        --fuchsia-glow: #ff69b4;
-        --disco-green: #6fa82a;
-        --disco-green-deep: #4f7f18;
-        --disco-green-light: #d4f08a;
-        --ink-light: #3a1030;
-        --ink-muted: #6b2458;
-        --card-bg: rgba(255, 248, 252, 0.88);
-        --card-border: rgba(255, 105, 180, 0.55);
-        --card-glow: rgba(255, 20, 147, 0.35);
+        --meal-orange: #ff8000;
+        --meal-orange-deep: #e06800;
+        --meal-orange-light: #ffb366;
+        --meal-ink: #cc5500;
+        --meal-ink-muted: #e07000;
+        --meal-mustard: #e1ad01;
+        --card-bg: rgba(255, 252, 245, 0.72);
+        --field-bg: rgba(255, 255, 255, 0.62);
+        --card-border: rgba(255, 128, 0, 0.45);
+        --card-glow: rgba(255, 128, 0, 0.28);
+        --meal-pink: var(--meal-orange);
+        --meal-pink-deep: var(--meal-orange-deep);
+        --meal-pink-light: var(--meal-orange-light);
       }
 
       * { box-sizing: border-box; }
@@ -34,11 +39,11 @@
         min-height: 100vh;
         font-family: "Varela Round", sans-serif;
         font-weight: 500;
-        color: var(--ink-light);
-        background-color: #f4a7b8;
-        background-image: url("assets/attire_backdrop.png");
+        color: var(--meal-ink);
+        background-color: #ff8000;
+        background-image: url("assets/meal_flower_tile.png");
         background-repeat: repeat;
-        background-size: 520px auto;
+        background-size: 600px 400px;
         background-attachment: fixed;
       }
 
@@ -53,13 +58,14 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 6px 20px;
-        padding: 16px 0 8px;
-        border-bottom: 1px solid rgba(107, 15, 90, 0.2);
-        background: rgba(255, 248, 252, 0.82);
+        width: 100%;
+        padding: 16px 24px 8px;
+        border-bottom: 1px solid rgba(255, 128, 0, 0.25);
+        background: var(--card-bg);
         backdrop-filter: blur(6px);
       }
       .nav-tabs a {
-        color: #6b0f5a;
+        color: var(--meal-pink-deep);
         text-decoration: none;
         font-size: 0.95rem;
         font-weight: 600;
@@ -67,10 +73,10 @@
         padding: 6px 12px;
         border-radius: 8px;
       }
-      .nav-tabs a:hover { background: rgba(255, 20, 147, 0.35); }
+      .nav-tabs a:hover { background: rgba(255, 128, 0, 0.25); }
       .nav-tabs a.active {
-        background: rgba(255, 105, 180, 0.45);
-        box-shadow: 0 0 16px rgba(255, 20, 147, 0.5);
+        background: rgba(255, 128, 0, 0.35);
+        box-shadow: 0 0 16px rgba(255, 128, 0, 0.4);
       }
 
       .page-hero {
@@ -93,15 +99,15 @@
         font-family: "Chewy", cursive;
         font-size: clamp(2rem, 5.5vw, 3rem);
         margin: 0;
-        color: var(--disco-green);
-        -webkit-text-stroke: 1px var(--disco-green-light);
+        color: var(--meal-pink);
+        -webkit-text-stroke: 2px var(--meal-mustard);
         paint-order: stroke fill;
       }
 
       .page-hero-subtitle {
         margin: 8px 0 0;
         font-size: 1.05rem;
-        color: var(--ink-muted);
+        color: var(--meal-ink-muted);
       }
 
       .content-section { margin-bottom: 32px; }
@@ -122,66 +128,928 @@
         font-size: clamp(1.75rem, 4.5vw, 2.35rem);
         margin: 0 0 12px;
         text-align: center;
-        color: var(--disco-green);
+        color: var(--meal-pink);
+        -webkit-text-stroke: 2px var(--meal-mustard);
+        paint-order: stroke fill;
       }
 
       .section-copy {
-        margin: 0;
-        font-size: 1.15rem;
+        margin: 0 0 16px;
+        font-size: 1.05rem;
         line-height: 1.55;
         text-align: center;
-        color: var(--ink-light);
+        color: var(--meal-ink);
       }
 
-      .section-copy--note {
-        margin-top: 10px;
-        font-size: 1rem;
-        color: var(--ink-muted);
+      .field { margin-bottom: 16px; }
+
+      .field label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--meal-pink-deep);
       }
 
-      .form-placeholder {
-        margin-top: 18px;
-        padding: 20px;
-        border: 2px dashed rgba(111, 168, 42, 0.45);
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.45);
-        text-align: center;
-        color: var(--ink-muted);
+      .q-hint {
+        margin: 0 0 10px;
         font-size: 0.95rem;
+        color: var(--meal-ink-muted);
+        text-align: center;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .guest-rows { margin-top: 8px; }
+
+      .guest-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: center;
+      }
+
+      .guest-row input { flex: 1; min-width: 0; width: 100%; }
+
+      .btn.secondary {
+        background: rgba(255, 255, 255, 0.55);
+        color: var(--meal-pink-deep);
+        border: 1px solid rgba(255, 128, 0, 0.45);
+        margin-top: 6px;
+      }
+
+      .btn.secondary:hover { background: rgba(255, 255, 255, 0.75); }
+
+      @media (max-width: 560px) {
+        .two-col { grid-template-columns: 1fr; }
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(255, 128, 0, 0.45);
+        border-radius: 10px;
+        padding: 11px 12px;
+        font: inherit;
+        color: var(--meal-ink);
+        background: var(--field-bg);
+      }
+
+      textarea { min-height: 96px; resize: vertical; }
+
+      select {
+        width: 100%;
+        border: 1px solid rgba(255, 128, 0, 0.45);
+        border-radius: 10px;
+        padding: 11px 12px;
+        font: inherit;
+        color: var(--meal-ink);
+        background: var(--field-bg);
+      }
+
+      .meal-step { display: none; }
+      .meal-step.step-active { display: block; }
+
+      .guest-meal-rows { margin-top: 8px; }
+
+      .guest-meal-row {
+        display: grid;
+        grid-template-columns: 1fr minmax(200px, 260px);
+        gap: 12px;
+        align-items: start;
+        margin-bottom: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.42);
+        border: 1px solid rgba(255, 128, 0, 0.35);
+      }
+
+      .guest-meal-name {
+        font-weight: 700;
+        color: var(--meal-pink-deep);
+        padding-top: 10px;
+      }
+
+      .guest-meal-fields {
+        display: grid;
+        gap: 8px;
+      }
+
+      .guest-age-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--meal-ink-muted);
+      }
+
+      .guest-meal-row.no-dinner .guest-meal-select-wrap select {
+        display: none;
+      }
+
+      @media (max-width: 560px) {
+        .guest-meal-row { grid-template-columns: 1fr; }
+      }
+
+      .step-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      .btn {
+        border: none;
+        border-radius: 999px;
+        padding: 14px 28px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .btn.primary {
+        background: var(--meal-pink-deep);
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(255, 128, 0, 0.35);
+      }
+
+      .btn.primary:hover { background: var(--meal-pink); }
+
+      .meal-complete {
+        display: none;
+        margin-top: 20px;
+        padding: 18px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        color: var(--meal-pink-deep);
+        font-weight: 700;
+      }
+
+      .meal-complete.show { display: block; }
+
+      .form-error {
+        display: none;
+        margin-top: 12px;
+        text-align: center;
+        color: #a31818;
+        font-weight: 700;
+      }
+
+      .form-error.show { display: block; }
+
+      .check-group {
+        display: grid;
+        gap: 10px;
+        margin-top: 8px;
+      }
+
+      .check-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.42);
+        border: 1px solid rgba(255, 128, 0, 0.35);
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .check-item input {
+        width: auto;
+        margin: 3px 0 0;
+        accent-color: var(--meal-pink-deep);
+      }
+
+      .kids-menu-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(204, 85, 0, 0.5);
+        backdrop-filter: blur(4px);
+      }
+
+      .kids-menu-modal.show {
+        display: flex;
+      }
+
+      .kids-menu-dialog {
+        width: min(520px, 100%);
+        max-height: min(88vh, 720px);
+        overflow-y: auto;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 18px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+        padding: 22px 22px 18px;
+      }
+
+      .kids-menu-dialog-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+
+      .kids-menu-dialog-title {
+        margin: 0;
+        font-family: "Chewy", cursive;
+        font-size: 1.65rem;
+        color: var(--meal-pink);
+        -webkit-text-stroke: 2px var(--meal-mustard);
+        paint-order: stroke fill;
+      }
+
+      .kids-menu-dialog-subtitle {
+        margin: 0 0 14px;
+        font-size: 0.95rem;
+        color: var(--meal-ink-muted);
+      }
+
+      .kids-menu-close {
+        border: none;
+        background: rgba(255, 255, 255, 0.65);
+        color: var(--meal-pink-deep);
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        font-size: 1.4rem;
+        line-height: 1;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .kids-menu-options {
+        display: grid;
+        gap: 10px;
+      }
+
+      .kids-menu-option {
+        width: 100%;
+        text-align: left;
+        border: 1px solid rgba(255, 128, 0, 0.4);
+        border-radius: 12px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.55);
+        cursor: pointer;
+        font: inherit;
+        color: inherit;
+      }
+
+      .kids-menu-option:hover,
+      .kids-menu-option:focus-visible {
+        border-color: var(--meal-pink-deep);
+        box-shadow: 0 0 0 2px rgba(255, 128, 0, 0.2);
+        outline: none;
+      }
+
+      .kids-menu-option-name {
+        display: block;
+        font-weight: 700;
+        color: var(--meal-pink-deep);
+        margin-bottom: 4px;
+      }
+
+      .kids-menu-option-desc {
+        display: block;
+        font-size: 0.92rem;
+        line-height: 1.45;
+        color: var(--meal-ink);
       }
     </style>
   </head>
   <body>
-    <nav class="nav-tabs container" aria-label="Main">
+    <nav class="nav-tabs" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="venue.html">The Venue</a>
       <a href="timeline.html">Weekend Timeline</a>
       <a href="attire.html">Weekend Attire</a>
+      <a href="meal-selection.html" class="active">MEAL SELECTION!</a>
     </nav>
 
     <main class="container">
       <header class="page-hero">
         <div class="page-hero-note">
-          <h1 class="page-hero-title">Meal Selection</h1>
-          <p class="page-hero-subtitle">Tell us what you’d like for dinner &mdash; and a few other things!</p>
+          <h1 class="page-hero-title">Meal Selection &amp; Some Other Stuff</h1>
+          <p class="page-hero-subtitle">Tell us what you&rsquo;d like for dinner... and a few other things!</p>
         </div>
       </header>
 
-      <section class="content-section" aria-labelledby="meal-heading">
-        <div class="content-blob">
-          <h2 id="meal-heading" class="section-title">Dinner Choices</h2>
-          <p class="section-copy">Meal selection will open here soon. You’ll be able to choose your entree for Saturday dinner.</p>
-          <div class="form-placeholder" id="meal-form-placeholder">Meal selection form coming soon</div>
-        </div>
-      </section>
+      <form id="meal-form" action="/meal-submit" method="post" novalidate autocomplete="off">
+        <section class="content-section meal-step step-active" data-step="1" aria-labelledby="names-heading">
+          <div class="content-blob">
+            <h2 id="names-heading" class="section-title">Dinner Choices</h2>
 
-      <section class="content-section" aria-labelledby="survey-heading">
-        <div class="content-blob">
-          <h2 id="survey-heading" class="section-title">Guest Survey</h2>
-          <p class="section-copy">We’ll also have a short survey here for a few extra details that help us plan the weekend.</p>
-          <div class="form-placeholder" id="survey-form-placeholder">Survey coming soon</div>
+            <div class="field">
+              <label for="name">Who are you? Please also add anyone else in your party!</label>
+              <input type="text" id="name" name="name" placeholder="Full Name" autocomplete="name" />
+              <div class="guest-rows" id="guest-rows"></div>
+              <button type="button" class="btn secondary" id="add-guest">Add another guest</button>
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn primary" id="meal-next-btn">Continue</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section meal-step" data-step="2" aria-labelledby="meal-heading" hidden>
+          <div class="content-blob">
+            <h2 id="meal-heading" class="section-title">Saturday Dinner</h2>
+            <p class="q-hint">Choose an entr&eacute;e for each person in your party.</p>
+
+            <div class="guest-meal-rows" id="guest-meal-rows"></div>
+
+            <div class="field">
+              <label for="dietary_restrictions">Dietary restrictions or allergies</label>
+              <p class="q-hint">Please specify which person in your party each allergy or restriction applies to.</p>
+              <textarea id="dietary_restrictions" name="dietary_restrictions" placeholder="e.g. Jane — nut allergy; Sam — gluten free"></textarea>
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn secondary" id="meal-back-btn">Back</button>
+              <button type="button" class="btn primary" id="meal-continue-btn">Continue</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section meal-step" data-step="3" aria-labelledby="staying-heading" hidden>
+          <div class="content-blob">
+            <h2 id="staying-heading" class="section-title">Where Are You Staying?</h2>
+            <p class="q-hint">Let us know if you&rsquo;ll be on-site at Northridge or staying off-site.</p>
+
+            <div class="check-group">
+              <label class="check-item">
+                <input type="radio" name="staying_plan" value="on_site" />
+                On-site at Northridge
+              </label>
+              <label class="check-item">
+                <input type="radio" name="staying_plan" value="off_site" />
+                Off-site
+              </label>
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn secondary" id="staying-back-btn">Back</button>
+              <button type="button" class="btn primary" id="staying-next-btn">Continue</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section meal-step" data-step="4" aria-labelledby="address-heading" hidden>
+          <div class="content-blob">
+            <h2 id="address-heading" class="section-title">Your Off-Site Address</h2>
+            <p class="q-hint">Where will you be staying? This helps us with planning and logistics.</p>
+
+            <div class="field">
+              <label for="off_site_address">Address</label>
+              <textarea id="off_site_address" name="off_site_address" placeholder="Street address, Airbnb, hotel name, etc."></textarea>
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn secondary" id="address-back-btn">Back</button>
+              <button type="button" class="btn primary" id="address-next-btn">Continue</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section meal-step" data-step="5" aria-labelledby="taxi-heading" hidden>
+          <div class="content-blob">
+            <h2 id="taxi-heading" class="section-title">Ride Back After the Wedding</h2>
+            <p class="q-hint">We can help arrange taxis after the wedding. Would you like us to count you in?</p>
+
+            <div class="check-group">
+              <label class="check-item">
+                <input type="radio" name="taxi_service" value="yes" />
+                Yes, please count us in for the taxi service
+              </label>
+              <label class="check-item">
+                <input type="radio" name="taxi_service" value="no" />
+                No thanks, we&rsquo;ll arrange our own ride
+              </label>
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn secondary" id="taxi-back-btn">Back</button>
+              <button type="button" class="btn primary" id="taxi-next-btn">Continue</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-section meal-step" data-step="6" aria-labelledby="survey-heading" hidden>
+          <div class="content-blob">
+            <h2 id="survey-heading" class="section-title">A Few More Things</h2>
+            <p class="section-copy">Almost done &mdash; just a couple of fun extras!</p>
+
+            <div class="field">
+              <label for="song_request">Any songs you would love to hear on the dance floor?!</label>
+              <input type="text" id="song_request" name="song_request" placeholder="What should the DJ play?" />
+            </div>
+
+            <div class="field">
+              <label for="weekend_notes">Anything else we should know?</label>
+              <textarea id="weekend_notes" name="weekend_notes" placeholder="Accessibility needs, travel notes, surprises we should be ready for, etc."></textarea>
+            </div>
+
+            <div class="step-actions">
+              <button type="button" class="btn secondary" id="survey-back-btn">Back</button>
+              <button type="submit" class="btn primary" id="meal-submit-btn">Submit</button>
+            </div>
+          </div>
+        </section>
+
+        <p class="form-error" id="meal-form-error">Something went wrong. Please try again in a moment.</p>
+        <div class="meal-complete" id="meal-complete" aria-live="polite">
+          Thanks so much! Your responses have been saved.
         </div>
-      </section>
+      </form>
     </main>
+
+    <div class="kids-menu-modal" id="meal-menu-modal" hidden aria-hidden="true">
+      <div class="kids-menu-dialog" role="dialog" aria-modal="true" aria-labelledby="meal-menu-title">
+        <div class="kids-menu-dialog-header">
+          <h2 class="kids-menu-dialog-title" id="meal-menu-title">Menu</h2>
+          <button type="button" class="kids-menu-close" id="meal-menu-close" aria-label="Close menu">&times;</button>
+        </div>
+        <p class="kids-menu-dialog-subtitle" id="meal-menu-subtitle">Choose a meal</p>
+        <div class="kids-menu-options" id="meal-menu-options"></div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var form = document.getElementById("meal-form");
+        var completeEl = document.getElementById("meal-complete");
+        var errorEl = document.getElementById("meal-form-error");
+        var submitBtn = document.getElementById("meal-submit-btn");
+        var nextBtn = document.getElementById("meal-next-btn");
+        var continueBtn = document.getElementById("meal-continue-btn");
+        var backBtn = document.getElementById("meal-back-btn");
+        var stayingNextBtn = document.getElementById("staying-next-btn");
+        var stayingBackBtn = document.getElementById("staying-back-btn");
+        var addressNextBtn = document.getElementById("address-next-btn");
+        var addressBackBtn = document.getElementById("address-back-btn");
+        var taxiNextBtn = document.getElementById("taxi-next-btn");
+        var taxiBackBtn = document.getElementById("taxi-back-btn");
+        var surveyBackBtn = document.getElementById("survey-back-btn");
+        var steps = form.querySelectorAll(".meal-step");
+        var guestMealRows = document.getElementById("guest-meal-rows");
+        var mealMenuModal = document.getElementById("meal-menu-modal");
+        var mealMenuTitle = document.getElementById("meal-menu-title");
+        var mealMenuOptions = document.getElementById("meal-menu-options");
+        var mealMenuSubtitle = document.getElementById("meal-menu-subtitle");
+        var mealMenuClose = document.getElementById("meal-menu-close");
+        var activeMealSelect = null;
+        var currentStep = 1;
+        var backendMeta = document.querySelector('meta[name="rsvp-backend-url"]');
+
+        var adultMenuItems = [
+          {
+            value: "vegetarian_ravioli",
+            name: "Vegetarian Ravioli (V)",
+            desc: "Roasted butternut squash ravioli, browned sage and lemon butter, roasted red pepper relish and carrot crisps"
+          },
+          {
+            value: "poulet_du_nord",
+            name: "Poulet du Nord",
+            desc: "Smoked cheddar stuffed chicken breast wrapped in bacon, served with crushed new potatoes, charred brussel sprouts and tarragon velout\u00e9"
+          },
+          {
+            value: "braised_short_rib",
+            name: "Braised Short Rib (GF)",
+            desc: "Red wine braised short rib, onion agrodolce, parsnip puree, glazed heirloom root vegetables and salsa verde"
+          }
+        ];
+
+        var kidsMenuItems = [
+          {
+            value: "ham_cheddar_toasty",
+            name: "Grilled Ham & Cheddar Toasty",
+            desc: "Grilled cheese and ham sandwich with fries"
+          },
+          {
+            value: "chicken_strips",
+            name: "Chicken Strips",
+            desc: "Three pieces of crumbed chicken tenders served with plum sauce and fries"
+          },
+          {
+            value: "grilled_chicken_strips",
+            name: "Grilled Chicken Strips",
+            desc: "Seasoned chicken breast cut into strips and served with fries or salad"
+          },
+          {
+            value: "buddy_burger",
+            name: "Buddy Burger",
+            desc: "Beef patty on a toasted sesame seed bun with a side of fries or salad. Add cheddar cheese"
+          },
+          {
+            value: "fish_goujons_chips",
+            name: "Fish Goujons & Chips",
+            desc: "3 battered fish fingers with fries or salad and ranch dip"
+          },
+          {
+            value: "mac_n_cheese",
+            name: "Creamy Mac N'Cheese",
+            desc: "Topped with crispy bacon sprinkles"
+          }
+        ];
+
+        if (backendMeta && backendMeta.getAttribute("content")) {
+          var base = backendMeta.getAttribute("content").trim().replace(/\/$/, "");
+          form.action = base + "/meal-submit";
+        }
+
+        function showStep(stepNumber) {
+          currentStep = stepNumber;
+          steps.forEach(function (step) {
+            var isActive = step.getAttribute("data-step") === String(stepNumber);
+            step.classList.toggle("step-active", isActive);
+            step.hidden = !isActive;
+          });
+          errorEl.classList.remove("show");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function getStayingPlan() {
+          var selected = form.querySelector('input[name="staying_plan"]:checked');
+          return selected ? selected.value : "";
+        }
+
+        function validateBeforeSubmit() {
+          var primaryName = document.getElementById("name").value.trim();
+          if (!primaryName) {
+            errorEl.textContent = "Please enter your full name.";
+            errorEl.classList.add("show");
+            showStep(1);
+            return false;
+          }
+          if (!validateMeals()) {
+            errorEl.classList.add("show");
+            showStep(2);
+            return false;
+          }
+          var stayingPlan = getStayingPlan();
+          if (!stayingPlan) {
+            errorEl.textContent = "Please let us know where you are staying.";
+            errorEl.classList.add("show");
+            showStep(3);
+            return false;
+          }
+          if (stayingPlan === "off_site") {
+            var address = document.getElementById("off_site_address").value.trim();
+            if (!address) {
+              errorEl.textContent = "Please enter the address where you are staying.";
+              errorEl.classList.add("show");
+              showStep(4);
+              return false;
+            }
+            var taxiChoice = form.querySelector('input[name="taxi_service"]:checked');
+            if (!taxiChoice) {
+              errorEl.textContent = "Please let us know if you would like taxi service.";
+              errorEl.classList.add("show");
+              showStep(5);
+              return false;
+            }
+          }
+          return true;
+        }
+
+        function validateMeals() {
+          var missingMeal = false;
+          form.querySelectorAll(".guest-meal-row").forEach(function (row) {
+            var underThree = row.querySelector('input[name="guest_meal_under_three"]');
+            var select = row.querySelector('select[name="guest_meal_choice"]');
+            if (underThree && underThree.value === "yes") return;
+            if (select && !select.disabled && !select.value) missingMeal = true;
+          });
+          if (missingMeal) {
+            errorEl.textContent = "Please choose a meal for everyone in your party.";
+            return false;
+          }
+          return true;
+        }
+
+        function collectPartyNames() {
+          var names = [];
+          var primaryName = document.getElementById("name").value.trim();
+          if (primaryName) names.push(primaryName);
+          form.querySelectorAll(".guest-rows .guest-row").forEach(function (row) {
+            var nameInput = row.querySelector("input[data-guest-name]");
+            var guestName = nameInput ? nameInput.value.trim() : "";
+            if (guestName) names.push(guestName);
+          });
+          return names;
+        }
+
+        function mealOptionsHtml(items) {
+          var html = "<option value=\"\">Choose a meal</option>";
+          items.forEach(function (item) {
+            html += "<option value=\"" + item.value + "\">" + item.name + "</option>";
+          });
+          return html;
+        }
+
+        function setMealOptions(select, ageCategory) {
+          if (ageCategory === "aged_3_10") {
+            select.innerHTML = mealOptionsHtml(kidsMenuItems);
+          } else if (ageCategory === "adult") {
+            select.innerHTML = mealOptionsHtml(adultMenuItems);
+          }
+          select.value = "";
+        }
+
+        function closeMealMenuModal() {
+          mealMenuModal.classList.remove("show");
+          mealMenuModal.hidden = true;
+          mealMenuModal.setAttribute("aria-hidden", "true");
+          activeMealSelect = null;
+        }
+
+        function openMealMenuModal(title, guestName, mealSelect, items) {
+          activeMealSelect = mealSelect;
+          mealMenuTitle.textContent = title;
+          mealMenuSubtitle.textContent = "Choose a meal for " + guestName;
+          mealMenuOptions.innerHTML = "";
+          items.forEach(function (item) {
+            var button = document.createElement("button");
+            button.type = "button";
+            button.className = "kids-menu-option";
+            button.innerHTML =
+              "<span class=\"kids-menu-option-name\">" + item.name + "</span>" +
+              "<span class=\"kids-menu-option-desc\">" + item.desc + "</span>";
+            button.addEventListener("click", function () {
+              if (activeMealSelect) {
+                activeMealSelect.value = item.value;
+              }
+              closeMealMenuModal();
+            });
+            mealMenuOptions.appendChild(button);
+          });
+          mealMenuModal.hidden = false;
+          mealMenuModal.setAttribute("aria-hidden", "false");
+          mealMenuModal.classList.add("show");
+          mealMenuClose.focus();
+        }
+
+        mealMenuClose.addEventListener("click", closeMealMenuModal);
+        mealMenuModal.addEventListener("click", function (e) {
+          if (e.target === mealMenuModal) closeMealMenuModal();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && mealMenuModal.classList.contains("show")) closeMealMenuModal();
+        });
+
+        function openMenuForAgeCategory(ageCategory, guestName, mealSelect) {
+          if (ageCategory === "adult") {
+            openMealMenuModal("Saturday Dinner", guestName, mealSelect, adultMenuItems);
+          } else if (ageCategory === "aged_3_10") {
+            openMealMenuModal("Kids Menu", guestName, mealSelect, kidsMenuItems);
+          }
+        }
+
+        function applyAgeCategory(row, ageCategory, guestName) {
+          var underThreeInput = row.querySelector('input[name="guest_meal_under_three"]');
+          var childAgeInput = row.querySelector('input[name="guest_meal_child_age"]');
+          var mealSelect = row.querySelector('select[name="guest_meal_choice"]');
+
+          if (activeMealSelect === mealSelect) closeMealMenuModal();
+
+          underThreeInput.value = ageCategory === "below_3" ? "yes" : "no";
+          childAgeInput.value = ageCategory === "aged_3_10" ? "yes" : "no";
+          row.classList.toggle("no-dinner", ageCategory === "below_3");
+
+          if (ageCategory === "below_3") {
+            mealSelect.value = "";
+            return;
+          }
+
+          setMealOptions(mealSelect, ageCategory);
+          openMenuForAgeCategory(ageCategory, guestName, mealSelect);
+        }
+
+        function buildGuestMealRows(names) {
+          guestMealRows.innerHTML = "";
+          names.forEach(function (guestName) {
+            var row = document.createElement("div");
+            row.className = "guest-meal-row";
+            row.innerHTML =
+              "<span class=\"guest-meal-name\">" + guestName.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</span>" +
+              "<div class=\"guest-meal-fields\">" +
+              "<label class=\"guest-age-label\">Age category</label>" +
+              "<select class=\"guest-age-select\" aria-label=\"Age category for " + guestName.replace(/"/g, "&quot;") + "\">" +
+              "<option value=\"adult\">Adult</option>" +
+              "<option value=\"aged_3_10\">Aged 3&ndash;10</option>" +
+              "<option value=\"below_3\">Below 3</option>" +
+              "</select>" +
+              "<div class=\"guest-meal-select-wrap\">" +
+              "<select name=\"guest_meal_choice\" aria-label=\"Meal choice for " + guestName.replace(/"/g, "&quot;") + "\">" +
+              mealOptionsHtml(adultMenuItems) +
+              "</select>" +
+              "</div>" +
+              "<input type=\"hidden\" name=\"guest_meal_under_three\" value=\"no\" />" +
+              "<input type=\"hidden\" name=\"guest_meal_child_age\" value=\"no\" />" +
+              "<input type=\"hidden\" name=\"guest_meal_name\" value=\"" + guestName.replace(/"/g, "&quot;") + "\" />" +
+              "</div>";
+            var ageSelect = row.querySelector(".guest-age-select");
+            var mealSelect = row.querySelector('select[name="guest_meal_choice"]');
+            ageSelect.addEventListener("change", function () {
+              applyAgeCategory(row, ageSelect.value, guestName);
+            });
+            mealSelect.addEventListener("mousedown", function (e) {
+              var age = ageSelect.value;
+              if (age === "adult" || age === "aged_3_10") {
+                e.preventDefault();
+                openMenuForAgeCategory(age, guestName, mealSelect);
+              }
+            });
+            guestMealRows.appendChild(row);
+          });
+        }
+
+        function appendAdditionalGuests() {
+          form.querySelectorAll("input[name=additional_guests]").forEach(function (el) { el.remove(); });
+          form.querySelectorAll(".guest-rows .guest-row").forEach(function (row) {
+            var nameInput = row.querySelector("input[data-guest-name]");
+            var guestName = nameInput ? nameInput.value.trim() : "";
+            if (guestName) {
+              var hidden = document.createElement("input");
+              hidden.type = "hidden";
+              hidden.name = "additional_guests";
+              hidden.value = guestName;
+              form.appendChild(hidden);
+            }
+          });
+        }
+
+        var guestRowCount = 0;
+
+        function addGuestRow(focusInput) {
+          guestRowCount += 1;
+          var row = document.createElement("div");
+          row.className = "guest-row";
+
+          var input = document.createElement("input");
+          input.type = "text";
+          input.setAttribute("data-guest-name", "");
+          input.id = "guest-name-" + guestRowCount;
+          input.name = "guest_name_field_" + guestRowCount;
+          input.placeholder = "Full name";
+          input.autocomplete = "off";
+          input.value = "";
+          input.setAttribute("autocapitalize", "words");
+          input.setAttribute("spellcheck", "false");
+          input.readOnly = true;
+          input.addEventListener("focus", function enableGuestInput() {
+            input.readOnly = false;
+          }, { once: true });
+
+          row.appendChild(input);
+          document.getElementById("guest-rows").appendChild(row);
+
+          if (focusInput) {
+            input.focus();
+          }
+
+          return input;
+        }
+
+        document.getElementById("add-guest").addEventListener("click", function () {
+          addGuestRow(true);
+        });
+
+        nextBtn.addEventListener("click", function () {
+          errorEl.classList.remove("show");
+          var primaryName = document.getElementById("name").value.trim();
+          if (!primaryName) {
+            errorEl.textContent = "Please enter your full name.";
+            errorEl.classList.add("show");
+            return;
+          }
+          var names = collectPartyNames();
+          buildGuestMealRows(names);
+          showStep(2);
+        });
+
+        continueBtn.addEventListener("click", function () {
+          errorEl.classList.remove("show");
+          if (!validateMeals()) {
+            errorEl.classList.add("show");
+            return;
+          }
+          showStep(3);
+        });
+
+        backBtn.addEventListener("click", function () {
+          showStep(1);
+        });
+
+        stayingBackBtn.addEventListener("click", function () {
+          showStep(2);
+        });
+
+        stayingNextBtn.addEventListener("click", function () {
+          errorEl.classList.remove("show");
+          var stayingPlan = getStayingPlan();
+          if (!stayingPlan) {
+            errorEl.textContent = "Please let us know where you are staying.";
+            errorEl.classList.add("show");
+            return;
+          }
+          if (stayingPlan === "off_site") {
+            showStep(4);
+          } else {
+            showStep(6);
+          }
+        });
+
+        addressBackBtn.addEventListener("click", function () {
+          showStep(3);
+        });
+
+        addressNextBtn.addEventListener("click", function () {
+          errorEl.classList.remove("show");
+          var address = document.getElementById("off_site_address").value.trim();
+          if (!address) {
+            errorEl.textContent = "Please enter the address where you are staying.";
+            errorEl.classList.add("show");
+            return;
+          }
+          showStep(5);
+        });
+
+        taxiBackBtn.addEventListener("click", function () {
+          showStep(4);
+        });
+
+        taxiNextBtn.addEventListener("click", function () {
+          errorEl.classList.remove("show");
+          var taxiChoice = form.querySelector('input[name="taxi_service"]:checked');
+          if (!taxiChoice) {
+            errorEl.textContent = "Please let us know if you would like taxi service.";
+            errorEl.classList.add("show");
+            return;
+          }
+          showStep(6);
+        });
+
+        surveyBackBtn.addEventListener("click", function () {
+          if (getStayingPlan() === "off_site") {
+            showStep(5);
+          } else {
+            showStep(3);
+          }
+        });
+
+        function submitMealSelection() {
+          errorEl.classList.remove("show");
+
+          if (!validateBeforeSubmit()) {
+            errorEl.classList.add("show");
+            errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+
+          appendAdditionalGuests();
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting...";
+
+          steps.forEach(function (el) { el.style.display = "none"; });
+          completeEl.classList.add("show");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+          var action = form.action || "/meal-submit";
+          fetch(action, { method: "POST", body: new FormData(form) })
+            .then(function (res) {
+              if (!res.ok) throw new Error("submit failed");
+            })
+            .catch(function () {
+              completeEl.classList.remove("show");
+              steps.forEach(function (step) {
+                step.style.display = "";
+                step.hidden = step.getAttribute("data-step") !== "6";
+                step.classList.toggle("step-active", step.getAttribute("data-step") === "6");
+              });
+              errorEl.textContent = "Something went wrong. Please try again in a moment.";
+              errorEl.classList.add("show");
+              errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit";
+            });
+        }
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          submitMealSelection();
+        });
+      })();
+    </script>
   </body>
 </html>

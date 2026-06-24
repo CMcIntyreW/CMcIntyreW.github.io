@@ -20,10 +20,13 @@
   </head>
   <body>
     <div class="card">
-      <h1>RSVP Responses</h1>
-      <p>Download your wedding RSVP data:</p>
-      <a href="{{ url_for('download_csv') }}">Download CSV</a>
-      <a href="{{ url_for('download_excel') }}">Download Excel</a>
+      <h1>Wedding Responses</h1>
+      <p>Download your RSVP data:</p>
+      <a href="{{ url_for('download_csv') }}">RSVP CSV</a>
+      <a href="{{ url_for('download_excel') }}">RSVP Excel</a>
+      <p style="margin-top: 28px;">Download meal selection data:</p>
+      <a href="{{ url_for('download_meal_csv') }}">Meal CSV</a>
+      <a href="{{ url_for('download_meal_excel') }}">Meal Excel</a>
     </div>
   </body>
 </html>
