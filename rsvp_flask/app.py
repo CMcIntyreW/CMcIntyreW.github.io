@@ -94,12 +94,12 @@ def _parse_guest_meals(form):
         if not name:
             continue
         if under_three == "yes":
-            parts.append(f"{name}: no dinner (below 3)")
+            parts.append(f"{name}: no dinner (<3 years)")
             continue
         if choice:
             entry = f"{name}: {labels.get(choice, choice)}"
             if child_age == "yes":
-                entry += " (aged 3-10)"
+                entry += " (3-10 years)"
             parts.append(entry)
     return "; ".join(parts) if parts else ""
 

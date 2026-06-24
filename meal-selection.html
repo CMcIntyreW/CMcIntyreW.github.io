@@ -469,8 +469,7 @@
             <div class="guest-meal-rows" id="guest-meal-rows"></div>
 
             <div class="field">
-              <label for="dietary_restrictions">Dietary restrictions or allergies</label>
-              <p class="q-hint">Please specify which person in your party each allergy or restriction applies to.</p>
+              <label for="dietary_restrictions">Dietary restrictions or allergies (please specify which person in your party each allergy or restriction applies to!)</label>
               <textarea id="dietary_restrictions" name="dietary_restrictions" placeholder="e.g. Jane — nut allergy; Sam — gluten free"></textarea>
             </div>
 
@@ -845,9 +844,9 @@
               "<div class=\"guest-meal-fields\">" +
               "<label class=\"guest-age-label\">Age category</label>" +
               "<select class=\"guest-age-select\" aria-label=\"Age category for " + guestName.replace(/"/g, "&quot;") + "\">" +
-              "<option value=\"adult\">Adult</option>" +
-              "<option value=\"aged_3_10\">Aged 3&ndash;10</option>" +
-              "<option value=\"below_3\">Below 3</option>" +
+              "<option value=\"below_3\">&lt;3 years</option>" +
+              "<option value=\"aged_3_10\">3&ndash;10 years</option>" +
+              "<option value=\"adult\" selected>11+ years old</option>" +
               "</select>" +
               "<div class=\"guest-meal-select-wrap\">" +
               "<select name=\"guest_meal_choice\" aria-label=\"Meal choice for " + guestName.replace(/"/g, "&quot;") + "\">" +
