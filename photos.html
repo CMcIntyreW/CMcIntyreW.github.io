@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pics or it didn't happen! | Ryan & Carly Get Hitched</title>
+    <meta name="description" content="Share and browse photos from Ryan and Carly's wedding weekend." />
+    <meta name="rsvp-backend-url" content="https://rsvp-backend-production-ef40.up.railway.app" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Paytone+One&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #ff9ec0;
+        --bg-deep: #ff7aa8;
+        --ink: #c91845;
+        --ink-deep: #9b1234;
+        --highlight: #fff48a;
+        --cream: #fff8f4;
+        --panel: rgba(255, 248, 244, 0.92);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        font-family: "Outfit", system-ui, sans-serif;
+        color: var(--ink-deep);
+        background:
+          radial-gradient(1200px 600px at 10% -10%, rgba(255, 244, 138, 0.28), transparent 55%),
+          radial-gradient(900px 500px at 100% 0%, rgba(255, 255, 255, 0.22), transparent 50%),
+          linear-gradient(165deg, var(--bg) 0%, var(--bg-deep) 100%);
+        overflow-x: hidden;
+        position: relative;
+      }
+
+      /* Film grain */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 3;
+        opacity: 0.14;
+        mix-blend-mode: multiply;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      }
+
+      .deco {
+        position: fixed;
+        z-index: 0;
+        pointer-events: none;
+        color: var(--ink);
+        background: none;
+      }
+      .deco-tr {
+        top: clamp(56px, 8vh, 90px);
+        right: clamp(8px, 4vw, 48px);
+        width: min(34vw, 220px);
+        transform: rotate(-2deg);
+      }
+      .deco-bl {
+        bottom: clamp(20px, 5vh, 60px);
+        left: clamp(8px, 4vw, 48px);
+        width: min(34vw, 220px);
+        transform: rotate(2deg);
+      }
+      .deco svg { width: 100%; height: auto; display: block; }
+      .sparkle {
+        fill: var(--highlight);
+        filter: drop-shadow(0 0 0.5px rgba(155, 18, 52, 0.35));
+        animation: twinkle 2.8s ease-in-out infinite;
+      }
+      .sparkle.delay { animation-delay: 1.2s; }
+
+      @keyframes floaty {
+        0%, 100% { transform: translateY(0) rotate(-2deg); }
+        50% { transform: translateY(-10px) rotate(2deg); }
+      }
+      @keyframes twinkle {
+        0%, 100% { opacity: 0.85; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.12); }
+      }
+
+      .nav-tabs {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 14px;
+        padding: 16px 16px 10px;
+      }
+      .nav-tabs a {
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 6px 10px;
+        border-radius: 999px;
+        opacity: 0.9;
+      }
+      .nav-tabs a:hover { background: rgba(255, 248, 244, 0.35); }
+      .nav-tabs a.active {
+        background: var(--ink);
+        color: var(--highlight);
+        opacity: 1;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        width: min(920px, 92%);
+        margin: 0 auto;
+        padding: 8px 0 72px;
+      }
+
+      .hero {
+        text-align: center;
+        padding: clamp(28px, 7vh, 72px) 0 clamp(40px, 8vh, 72px);
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        font-family: "Archivo Black", sans-serif;
+        font-size: clamp(0.95rem, 2.4vw, 1.2rem);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+
+      h1 {
+        margin: 0 auto 36px;
+        max-width: 12ch;
+        font-family: "Paytone One", sans-serif;
+        font-size: clamp(2.8rem, 11vw, 5.4rem);
+        line-height: 0.92;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        text-wrap: balance;
+        text-shadow:
+          2px 2px 0 rgba(255, 244, 138, 0.55),
+          0 10px 0 rgba(155, 18, 52, 0.08);
+        animation: rise-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+
+      .lead {
+        margin: 0 auto;
+        max-width: 34ch;
+        font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+        line-height: 1.45;
+        font-weight: 600;
+        color: var(--ink-deep);
+        animation: rise-in 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.08s both;
+      }
+
+      @keyframes rise-in {
+        from { opacity: 0; transform: translateY(18px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      .panel-wrap {
+        position: relative;
+        margin-bottom: 34px;
+      }
+
+      .panel {
+        position: relative;
+        z-index: 1;
+        background: var(--panel);
+        border: 3px solid var(--ink);
+        border-radius: 28px;
+        padding: clamp(18px, 3vw, 28px);
+        box-shadow: 6px 6px 0 rgba(155, 18, 52, 0.18);
+        animation: rise-in 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) 0.14s both;
+      }
+
+      .float-cam {
+        position: absolute;
+        z-index: 2;
+        width: clamp(42px, 9vw, 68px);
+        height: auto;
+        pointer-events: none;
+        filter: drop-shadow(3px 3px 0 rgba(155, 18, 52, 0.18));
+        animation: cam-bob 4.5s ease-in-out infinite;
+      }
+      .float-cam svg { width: 100%; height: auto; display: block; }
+      .float-cam.cam-a {
+        top: -18px; right: -10px;
+        transform: rotate(12deg);
+        animation-delay: 0s;
+      }
+      .float-cam.cam-b {
+        bottom: -16px; left: -12px;
+        width: clamp(36px, 8vw, 56px);
+        transform: rotate(-14deg);
+        animation-delay: 0.8s;
+        animation-direction: reverse;
+      }
+      .float-cam.cam-c {
+        top: 40%; right: -18px;
+        width: clamp(34px, 7vw, 50px);
+        transform: rotate(8deg);
+        animation-delay: 1.4s;
+      }
+      .float-cam.cam-d {
+        top: -14px; left: 8%;
+        width: clamp(38px, 8vw, 58px);
+        transform: rotate(-8deg);
+        animation-delay: 0.4s;
+      }
+
+      @keyframes cam-bob {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -10px; }
+      }
+
+      .panel h2 {
+        margin: 0 0 6px;
+        font-family: "Archivo Black", sans-serif;
+        font-size: clamp(1.2rem, 3vw, 1.55rem);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+
+      .hint {
+        margin: 0 0 16px;
+        font-size: 0.98rem;
+        line-height: 1.45;
+        color: rgba(155, 18, 52, 0.82);
+      }
+
+      .field { margin-bottom: 14px; }
+      .field label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--ink);
+      }
+
+      input[type="text"] {
+        width: 100%;
+        border: 2.5px solid var(--ink);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font: inherit;
+        font-weight: 600;
+        color: var(--ink-deep);
+        background: rgba(255, 255, 255, 0.75);
+      }
+      input[type="text"]:focus {
+        outline: 3px solid var(--highlight);
+        outline-offset: 1px;
+      }
+
+      .file-drop {
+        position: relative;
+        border: 3px dashed var(--ink);
+        border-radius: 18px;
+        padding: 26px 16px;
+        text-align: center;
+        background: rgba(255, 158, 192, 0.28);
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      .file-drop:hover,
+      .file-drop.dragover {
+        background: rgba(255, 244, 138, 0.45);
+        transform: rotate(-0.4deg) scale(1.01);
+      }
+      .file-drop strong {
+        display: block;
+        margin-bottom: 4px;
+        font-family: "Archivo Black", sans-serif;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+      .file-drop span { font-size: 0.92rem; color: rgba(155, 18, 52, 0.75); }
+      .file-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+      .preview-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+      .preview-list img {
+        width: 72px; height: 72px; object-fit: cover;
+        border-radius: 12px; border: 2.5px solid var(--ink);
+      }
+
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; align-items: center; }
+
+      .btn {
+        appearance: none;
+        border: 3px solid var(--ink);
+        border-radius: 999px;
+        padding: 12px 22px;
+        font: inherit;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: var(--ink);
+        color: var(--highlight);
+        box-shadow: 4px 4px 0 rgba(155, 18, 52, 0.2);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .btn:hover {
+        transform: translate(-1px, -1px);
+        box-shadow: 5px 5px 0 rgba(155, 18, 52, 0.22);
+      }
+      .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+      .btn.secondary {
+        background: var(--cream);
+        color: var(--ink);
+      }
+
+      .status { margin-top: 12px; font-size: 0.95rem; font-weight: 700; min-height: 1.4em; }
+      .status.error { color: #8a1028; }
+      .status.ok { color: #1f6b3a; }
+
+      .album-head {
+        display: flex; flex-wrap: wrap; justify-content: space-between;
+        align-items: baseline; gap: 8px; margin-bottom: 14px;
+      }
+      .album-head h2 { margin: 0; }
+      .album-count {
+        font-family: "Archivo Black", sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--ink);
+        background: var(--highlight);
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        padding: 4px 10px;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+      }
+      .gallery button {
+        appearance: none;
+        border: 3px solid var(--ink);
+        padding: 0;
+        margin: 0;
+        background: var(--cream);
+        cursor: pointer;
+        border-radius: 18px;
+        overflow: hidden;
+        aspect-ratio: 1;
+        box-shadow: 4px 4px 0 rgba(155, 18, 52, 0.14);
+        transition: transform 0.18s ease;
+      }
+      .gallery button:hover { transform: rotate(-1deg) scale(1.02); }
+      .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      .empty-album {
+        text-align: center;
+        padding: 28px 12px;
+        font-weight: 600;
+        color: rgba(155, 18, 52, 0.75);
+      }
+
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        background: rgba(120, 16, 42, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        z-index: 50;
+      }
+      .lightbox.open { display: flex; }
+      .lightbox img {
+        max-width: min(96vw, 1100px);
+        max-height: 82vh;
+        border-radius: 16px;
+        border: 4px solid var(--highlight);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      }
+      .lightbox-meta {
+        position: absolute;
+        left: 0; right: 0; bottom: 18px;
+        text-align: center;
+        color: var(--cream);
+        font-weight: 600;
+        padding: 0 16px;
+      }
+      .lightbox-close {
+        position: absolute;
+        top: 14px; right: 14px;
+        border: 3px solid var(--highlight);
+        background: var(--ink);
+        color: var(--highlight);
+        font-size: 1.4rem;
+        width: 48px; height: 48px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 560px) {
+        .gallery { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .deco-tr, .deco-bl { width: 28vw; opacity: 0.9; }
+        .float-cam.cam-a { right: 4px; }
+        .float-cam.cam-b { left: 4px; }
+        .float-cam.cam-c { display: none; }
+        .panel-wrap { margin-bottom: 40px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deco deco-tr" aria-hidden="true">
+      <svg viewBox="0 0 220 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 40c28 0 28 28 56 28s28-28 56-28 28 28 56 28" stroke="currentColor" stroke-width="18" stroke-linecap="round" />
+        <path d="M36 88c24 0 24 24 48 24s24-24 48-24 24 24 48 24" stroke="currentColor" stroke-width="14" stroke-linecap="round" opacity="0.9" />
+        <path class="sparkle" d="M178 18 L184 34 L200 40 L184 46 L178 62 L172 46 L156 40 L172 34 Z" />
+      </svg>
+    </div>
+    <div class="deco deco-bl" aria-hidden="true">
+      <svg viewBox="0 0 220 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 50c28 0 28 28 56 28s28-28 56-28 28 28 56 28" stroke="currentColor" stroke-width="18" stroke-linecap="round" />
+        <path d="M36 98c24 0 24 24 48 24s24-24 48-24 24 24 48 24" stroke="currentColor" stroke-width="14" stroke-linecap="round" opacity="0.9" />
+        <path class="sparkle delay" d="M42 18 L48 34 L64 40 L48 46 L42 62 L36 46 L20 40 L36 34 Z" />
+      </svg>
+    </div>
+
+    <nav class="nav-tabs" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html">The Venue</a>
+      <a href="timeline.html">Weekend Timeline</a>
+      <a href="attire.html">Weekend Attire</a>
+      <a href="photos.html" class="active">Photos</a>
+    </nav>
+
+    <main class="container">
+      <header class="hero">
+        <p class="eyebrow">Ryan &amp; Carly</p>
+        <h1>Pics or it didn't happen!</h1>
+        <p class="lead">
+          Please help us document this special occasion by adding your photos throughout the weekend!
+        </p>
+      </header>
+
+      <div class="panel-wrap">
+        <div class="float-cam cam-a" aria-hidden="true">
+          <svg viewBox="0 0 64 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="14" width="56" height="34" rx="10" fill="#fff8f4" stroke="#c91845" stroke-width="3.5"/>
+            <path d="M20 14l4-8h16l4 8" fill="#fff48a" stroke="#c91845" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="34" cy="31" r="10" fill="#ff9ec0" stroke="#c91845" stroke-width="3.5"/>
+            <circle cx="34" cy="31" r="4.5" fill="#c91845"/>
+            <circle cx="14" cy="24" r="2.5" fill="#c91845"/>
+          </svg>
+        </div>
+        <div class="float-cam cam-b" aria-hidden="true">
+          <svg viewBox="0 0 64 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="14" width="56" height="34" rx="10" fill="#fff48a" stroke="#c91845" stroke-width="3.5"/>
+            <path d="M20 14l4-8h16l4 8" fill="#fff8f4" stroke="#c91845" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="34" cy="31" r="10" fill="#fff8f4" stroke="#c91845" stroke-width="3.5"/>
+            <circle cx="34" cy="31" r="4.5" fill="#c91845"/>
+            <rect x="46" y="22" width="8" height="5" rx="2" fill="#c91845"/>
+          </svg>
+        </div>
+        <section class="panel" aria-labelledby="upload-title">
+          <h2 id="upload-title">Drop your pics</h2>
+          <p class="hint">Let the good times roll (12 at a time).</p>
+          <form id="upload-form" novalidate>
+            <div class="field">
+              <label for="uploader-name">Your name</label>
+              <input id="uploader-name" name="name" type="text" maxlength="80" autocomplete="name" required placeholder="So we know who shared it" />
+            </div>
+            <div class="file-drop" id="file-drop">
+              <strong>Tap to choose photos</strong>
+              <span>JPG, PNG, HEIC, or WebP</span>
+              <input id="photo-input" name="photos" type="file" accept="image/*,.heic,.heif" multiple />
+            </div>
+            <div class="preview-list" id="preview-list" hidden></div>
+            <div class="actions">
+              <button type="submit" class="btn" id="upload-btn" disabled>Upload photos</button>
+              <button type="button" class="btn secondary" id="clear-btn" hidden>Clear</button>
+            </div>
+            <p class="status" id="upload-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </div>
+
+      <div class="panel-wrap">
+        <div class="float-cam cam-d" aria-hidden="true">
+          <svg viewBox="0 0 64 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="14" width="56" height="34" rx="10" fill="#fff8f4" stroke="#c91845" stroke-width="3.5"/>
+            <path d="M20 14l4-8h16l4 8" fill="#ff9ec0" stroke="#c91845" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="34" cy="31" r="10" fill="#fff48a" stroke="#c91845" stroke-width="3.5"/>
+            <circle cx="34" cy="31" r="4.5" fill="#c91845"/>
+            <circle cx="14" cy="24" r="2.5" fill="#c91845"/>
+          </svg>
+        </div>
+        <div class="float-cam cam-c" aria-hidden="true">
+          <svg viewBox="0 0 64 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="14" width="56" height="34" rx="10" fill="#ff9ec0" stroke="#c91845" stroke-width="3.5"/>
+            <path d="M20 14l4-8h16l4 8" fill="#fff48a" stroke="#c91845" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="34" cy="31" r="10" fill="#fff8f4" stroke="#c91845" stroke-width="3.5"/>
+            <circle cx="34" cy="31" r="4.5" fill="#c91845"/>
+          </svg>
+        </div>
+        <section class="panel" aria-labelledby="album-title">
+          <div class="album-head">
+            <h2 id="album-title">The album</h2>
+            <span class="album-count" id="album-count">Loading…</span>
+          </div>
+          <div class="gallery" id="gallery"></div>
+          <p class="empty-album" id="empty-album" hidden>No photos yet — be the first!</p>
+        </section>
+      </div>
+    </main>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo preview">
+      <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+      <img id="lightbox-img" alt="" />
+      <p class="lightbox-meta" id="lightbox-meta"></p>
+    </div>
+
+    <script>
+      (function () {
+        var backendMeta = document.querySelector('meta[name="rsvp-backend-url"]');
+        var backendBase = ((backendMeta && backendMeta.getAttribute("content")) || "").trim().replace(/\/$/, "");
+        var form = document.getElementById("upload-form");
+        var nameInput = document.getElementById("uploader-name");
+        var fileInput = document.getElementById("photo-input");
+        var fileDrop = document.getElementById("file-drop");
+        var previewList = document.getElementById("preview-list");
+        var uploadBtn = document.getElementById("upload-btn");
+        var clearBtn = document.getElementById("clear-btn");
+        var uploadStatus = document.getElementById("upload-status");
+        var gallery = document.getElementById("gallery");
+        var albumCount = document.getElementById("album-count");
+        var emptyAlbum = document.getElementById("empty-album");
+        var lightbox = document.getElementById("lightbox");
+        var lightboxImg = document.getElementById("lightbox-img");
+        var lightboxMeta = document.getElementById("lightbox-meta");
+        var lightboxClose = document.getElementById("lightbox-close");
+        var previewUrls = [];
+
+        function setStatus(msg, kind) {
+          uploadStatus.textContent = msg || "";
+          uploadStatus.className = "status" + (kind ? " " + kind : "");
+        }
+
+        function clearPreviews() {
+          previewUrls.forEach(function (u) { URL.revokeObjectURL(u); });
+          previewUrls = [];
+          previewList.innerHTML = "";
+          previewList.hidden = true;
+          clearBtn.hidden = true;
+          uploadBtn.disabled = true;
+          fileInput.value = "";
+        }
+
+        function refreshPreviews() {
+          previewUrls.forEach(function (u) { URL.revokeObjectURL(u); });
+          previewUrls = [];
+          previewList.innerHTML = "";
+          var files = fileInput.files;
+          if (!files || !files.length) {
+            previewList.hidden = true;
+            clearBtn.hidden = true;
+            uploadBtn.disabled = true;
+            return;
+          }
+          var max = Math.min(files.length, 12);
+          for (var i = 0; i < max; i++) {
+            var url = URL.createObjectURL(files[i]);
+            previewUrls.push(url);
+            var img = document.createElement("img");
+            img.src = url;
+            img.alt = files[i].name || "Selected photo";
+            previewList.appendChild(img);
+          }
+          previewList.hidden = false;
+          clearBtn.hidden = false;
+          uploadBtn.disabled = false;
+          setStatus(
+            files.length > 12
+              ? "Only the first 12 photos will upload this round."
+              : files.length + " photo" + (files.length === 1 ? "" : "s") + " ready.",
+            ""
+          );
+        }
+
+        fileInput.addEventListener("change", refreshPreviews);
+        clearBtn.addEventListener("click", function () {
+          clearPreviews();
+          setStatus("");
+        });
+
+        ["dragenter", "dragover"].forEach(function (evt) {
+          fileDrop.addEventListener(evt, function (e) {
+            e.preventDefault();
+            fileDrop.classList.add("dragover");
+          });
+        });
+        ["dragleave", "drop"].forEach(function (evt) {
+          fileDrop.addEventListener(evt, function (e) {
+            e.preventDefault();
+            fileDrop.classList.remove("dragover");
+          });
+        });
+        fileDrop.addEventListener("drop", function (e) {
+          if (e.dataTransfer && e.dataTransfer.files) {
+            fileInput.files = e.dataTransfer.files;
+            refreshPreviews();
+          }
+        });
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!backendBase) {
+            setStatus("Upload backend is not configured.", "error");
+            return;
+          }
+          var name = nameInput.value.trim();
+          if (!name) {
+            setStatus("Please add your name first.", "error");
+            nameInput.focus();
+            return;
+          }
+          var files = fileInput.files;
+          if (!files || !files.length) {
+            setStatus("Choose at least one photo first.", "error");
+            return;
+          }
+          var data = new FormData();
+          data.append("name", name);
+          var count = Math.min(files.length, 12);
+          for (var i = 0; i < count; i++) data.append("photos", files[i]);
+          uploadBtn.disabled = true;
+          setStatus("Uploading…", "");
+          fetch(backendBase + "/photos/upload", { method: "POST", body: data })
+            .then(function (res) {
+              return res.json().then(function (body) {
+                return { ok: res.ok, body: body };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok || !result.body.ok) {
+                throw new Error((result.body && result.body.error) || "Upload failed");
+              }
+              var n = (result.body.saved || []).length;
+              setStatus("Uploaded " + n + " photo" + (n === 1 ? "" : "s") + ". Thank you!", "ok");
+              clearPreviews();
+              loadAlbum();
+            })
+            .catch(function (err) {
+              setStatus(err.message || "Upload failed. Try again?", "error");
+              uploadBtn.disabled = !(fileInput.files && fileInput.files.length);
+            });
+        });
+
+        function openLightbox(photo) {
+          lightboxImg.src = photo.url;
+          lightboxImg.alt = photo.uploader ? ("Photo from " + photo.uploader) : "Wedding photo";
+          lightboxMeta.textContent = photo.uploader ? ("Shared by " + photo.uploader) : "";
+          lightbox.classList.add("open");
+        }
+        function closeLightbox() {
+          lightbox.classList.remove("open");
+          lightboxImg.src = "";
+        }
+        lightboxClose.addEventListener("click", closeLightbox);
+        lightbox.addEventListener("click", function (e) {
+          if (e.target === lightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeLightbox();
+        });
+
+        function loadAlbum() {
+          if (!backendBase) {
+            albumCount.textContent = "";
+            emptyAlbum.hidden = false;
+            emptyAlbum.textContent = "Album backend is not configured.";
+            return;
+          }
+          fetch(backendBase + "/photos/list")
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              var photos = (data && data.photos) || [];
+              gallery.innerHTML = "";
+              albumCount.textContent = photos.length
+                ? photos.length + " photo" + (photos.length === 1 ? "" : "s")
+                : "0 photos";
+              emptyAlbum.hidden = photos.length > 0;
+              photos.forEach(function (photo) {
+                var btn = document.createElement("button");
+                btn.type = "button";
+                btn.setAttribute("aria-label", photo.uploader ? ("Photo from " + photo.uploader) : "Wedding photo");
+                var img = document.createElement("img");
+                img.src = photo.thumb_url;
+                img.alt = "";
+                img.loading = "lazy";
+                btn.appendChild(img);
+                btn.addEventListener("click", function () { openLightbox(photo); });
+                gallery.appendChild(btn);
+              });
+            })
+            .catch(function () {
+              albumCount.textContent = "";
+              emptyAlbum.hidden = false;
+              emptyAlbum.textContent = "Couldn’t load the album right now. Refresh to try again.";
+            });
+        }
+
+        loadAlbum();
+        setInterval(loadAlbum, 45000);
+      })();
+    </script>
+  </body>
+</html>

@@ -35,7 +35,7 @@ Follow these steps to get your Flask RSVP app live with persistent storage for r
 
 ## 3. Add a volume (so responses are saved permanently)
 
-Without a volume, `responses.csv` is lost every time the app restarts or redeploys.
+Without a volume, `responses.csv` and guest photo uploads are lost every time the app restarts or redeploys. Photos are stored under `/data/photos` when `RSVP_RESPONSES_DIR=/data`.
 
 1. In your service, open the **Variables** tab.
 2. Click **"+ New Variable"** or **"Add Variable"**.

@@ -1,22 +1,41 @@
 import csv
 import io
+import json
 import os
+import uuid
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, render_template, request, send_file
+from flask import Flask, jsonify, render_template, request, send_file
 from openpyxl import Workbook
+from PIL import Image, ImageOps, UnidentifiedImageError
+
+try:
+    from pillow_heif import register_heif_opener
+    register_heif_opener()
+except Exception:
+    pass
 
 app = Flask(__name__)
-
+app.config["MAX_CONTENT_LENGTH"] = 40 * 1024 * 1024  # 40 MB per request
 RESPONSES_DIR = Path(os.environ.get("RSVP_RESPONSES_DIR", "."))
 RESPONSES_FILE = RESPONSES_DIR / "responses.csv"
 MEAL_RESPONSES_FILE = RESPONSES_DIR / "meal-responses.csv"
+PHOTOS_DIR = RESPONSES_DIR / "photos"
+THUMBS_DIR = PHOTOS_DIR / "thumbs"
+PHOTOS_META_FILE = RESPONSES_DIR / "photos.json"
 SITE_BASE_URL = os.environ.get("WEDDING_SITE_URL", "https://www.ryanandcarlygethitched.com")
 
 RSVP_NOTIFY_EMAIL = os.environ.get("RSVP_NOTIFY_EMAIL", "").strip()
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
 RSVP_FROM_EMAIL = os.environ.get("RSVP_FROM_EMAIL", "onboarding@resend.dev").strip()
+
+PHOTO_MAX_EDGE = 1920
+THUMB_MAX_EDGE = 480
+PHOTO_JPEG_QUALITY = 85
+THUMB_JPEG_QUALITY = 80
+MAX_PHOTOS_PER_UPLOAD = 12
+ALLOWED_PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".gif"}
 
 
 def ensure_responses_file():
@@ -47,6 +66,85 @@ def ensure_meal_responses_file():
                 "taxi_service", "song_request", "weekend_notes",
             ])
     return path
+
+
+def ensure_photos_dirs():
+    RESPONSES_DIR.mkdir(parents=True, exist_ok=True)
+    PHOTOS_DIR.mkdir(parents=True, exist_ok=True)
+    THUMBS_DIR.mkdir(parents=True, exist_ok=True)
+    if not PHOTOS_META_FILE.exists():
+        PHOTOS_META_FILE.write_text("[]", encoding="utf-8")
+    return PHOTOS_DIR
+
+
+def _load_photo_meta():
+    ensure_photos_dirs()
+    try:
+        data = json.loads(PHOTOS_META_FILE.read_text(encoding="utf-8"))
+        return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def _save_photo_meta(entries):
+    ensure_photos_dirs()
+    PHOTOS_META_FILE.write_text(json.dumps(entries, indent=2), encoding="utf-8")
+
+
+def _photo_urls(photo_id):
+    base = request.host_url.rstrip("/")
+    return {
+        "id": photo_id,
+        "url": f"{base}/photos/file/{photo_id}.jpg",
+        "thumb_url": f"{base}/photos/thumb/{photo_id}.jpg",
+    }
+
+
+def _process_and_save_image(file_storage, uploader_name):
+    filename = (file_storage.filename or "").strip()
+    ext = Path(filename).suffix.lower()
+    if ext and ext not in ALLOWED_PHOTO_EXTS:
+        raise ValueError(f"Unsupported file type: {ext}")
+
+    raw = file_storage.read()
+    if not raw:
+        raise ValueError("Empty file")
+
+    try:
+        img = Image.open(io.BytesIO(raw))
+    except UnidentifiedImageError as exc:
+        raise ValueError("Could not read image") from exc
+
+    img = ImageOps.exif_transpose(img)
+    if img.mode in ("RGBA", "LA", "P"):
+        background = Image.new("RGB", img.size, (255, 255, 255))
+        if img.mode == "P":
+            img = img.convert("RGBA")
+        alpha = img.split()[-1] if img.mode in ("RGBA", "LA") else None
+        background.paste(img, mask=alpha)
+        img = background
+    else:
+        img = img.convert("RGB")
+
+    photo_id = uuid.uuid4().hex
+    full_path = PHOTOS_DIR / f"{photo_id}.jpg"
+    thumb_path = THUMBS_DIR / f"{photo_id}.jpg"
+
+    full = img.copy()
+    full.thumbnail((PHOTO_MAX_EDGE, PHOTO_MAX_EDGE), Image.Resampling.LANCZOS)
+    full.save(full_path, format="JPEG", quality=PHOTO_JPEG_QUALITY, optimize=True)
+
+    thumb = img.copy()
+    thumb.thumbnail((THUMB_MAX_EDGE, THUMB_MAX_EDGE), Image.Resampling.LANCZOS)
+    thumb.save(thumb_path, format="JPEG", quality=THUMB_JPEG_QUALITY, optimize=True)
+
+    entry = {
+        "id": photo_id,
+        "uploader": uploader_name,
+        "original_name": filename,
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+    }
+    return entry
 
 
 def _parse_meal_choices(form):
@@ -168,9 +266,15 @@ View all meal responses: {data_url}/data
 
 @app.after_request
 def add_cors_headers(response):
-    if request.path in ("/submit", "/meal-submit"):
+    photo_paths = (
+        request.path == "/photos/upload"
+        or request.path == "/photos/list"
+        or request.path.startswith("/photos/file/")
+        or request.path.startswith("/photos/thumb/")
+    )
+    if request.path in ("/submit", "/meal-submit") or photo_paths:
         response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
 
@@ -201,6 +305,8 @@ def data_page():
 
 @app.route("/submit", methods=["OPTIONS"])
 @app.route("/meal-submit", methods=["OPTIONS"])
+@app.route("/photos/upload", methods=["OPTIONS"])
+@app.route("/photos/list", methods=["OPTIONS"])
 def cors_preflight():
     return "", 204
 
@@ -271,6 +377,93 @@ def meal_submit():
         staying_plan, off_site_address, taxi_service, song_request, weekend_notes,
     )
     return {"ok": True}, 200
+
+
+@app.route("/photos/upload", methods=["POST"])
+def photos_upload():
+    ensure_photos_dirs()
+    uploader = (request.form.get("name") or "").strip()[:80]
+    if not uploader:
+        return jsonify({"ok": False, "error": "Name is required"}), 400
+    files = request.files.getlist("photos")
+    if not files:
+        # Also accept a single "photo" field
+        one = request.files.get("photo")
+        files = [one] if one else []
+    files = [f for f in files if f and f.filename]
+    if not files:
+        return jsonify({"ok": False, "error": "No photos selected"}), 400
+    if len(files) > MAX_PHOTOS_PER_UPLOAD:
+        return jsonify({
+            "ok": False,
+            "error": f"Please upload at most {MAX_PHOTOS_PER_UPLOAD} photos at a time",
+        }), 400
+
+    meta = _load_photo_meta()
+    saved = []
+    errors = []
+    for f in files:
+        try:
+            entry = _process_and_save_image(f, uploader)
+            meta.append(entry)
+            saved.append({**entry, **_photo_urls(entry["id"])})
+        except Exception as exc:
+            app.logger.warning("Photo upload failed for %s: %s", f.filename, exc)
+            errors.append({"file": f.filename, "error": str(exc)})
+
+    if not saved:
+        return jsonify({"ok": False, "error": "No photos could be saved", "errors": errors}), 400
+
+    _save_photo_meta(meta)
+    return jsonify({"ok": True, "saved": saved, "errors": errors}), 200
+
+
+@app.route("/photos/list", methods=["GET"])
+def photos_list():
+    ensure_photos_dirs()
+    meta = _load_photo_meta()
+    # Newest first
+    ordered = sorted(meta, key=lambda e: e.get("timestamp", ""), reverse=True)
+    photos = []
+    for entry in ordered:
+        photo_id = entry.get("id")
+        if not photo_id:
+            continue
+        full = PHOTOS_DIR / f"{photo_id}.jpg"
+        if not full.exists():
+            continue
+        photos.append({
+            "id": photo_id,
+            "uploader": entry.get("uploader") or "",
+            "timestamp": entry.get("timestamp") or "",
+            **_photo_urls(photo_id),
+        })
+    return jsonify({"ok": True, "count": len(photos), "photos": photos})
+
+
+@app.route("/photos/file/<photo_id>.jpg")
+def photos_file(photo_id):
+    ensure_photos_dirs()
+    if not all(c in "0123456789abcdef" for c in photo_id.lower()) or len(photo_id) > 64:
+        return "Not found", 404
+    path = PHOTOS_DIR / f"{photo_id}.jpg"
+    if not path.exists():
+        return "Not found", 404
+    return send_file(path, mimetype="image/jpeg", max_age=86400)
+
+
+@app.route("/photos/thumb/<photo_id>.jpg")
+def photos_thumb(photo_id):
+    ensure_photos_dirs()
+    if not all(c in "0123456789abcdef" for c in photo_id.lower()) or len(photo_id) > 64:
+        return "Not found", 404
+    path = THUMBS_DIR / f"{photo_id}.jpg"
+    if not path.exists():
+        # Fall back to full image if thumb missing
+        path = PHOTOS_DIR / f"{photo_id}.jpg"
+    if not path.exists():
+        return "Not found", 404
+    return send_file(path, mimetype="image/jpeg", max_age=86400)
 
 
 @app.route("/download-csv")

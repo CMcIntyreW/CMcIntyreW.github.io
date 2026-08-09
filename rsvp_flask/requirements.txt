@@ -1,4 +1,6 @@
 flask>=3.0
 gunicorn>=21.0
 openpyxl>=3.1
+Pillow>=10.0
+pillow-heif>=0.16
 resend>=2.0
