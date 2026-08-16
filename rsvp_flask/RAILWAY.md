@@ -54,7 +54,8 @@ In **Variables**, you can add:
 
 | Variable            | Example value                              | Purpose |
 |---------------------|--------------------------------------------|--------|
-| `WEDDING_SITE_URL`  | `https://www.ryanandcarlygethitched.com`   | Used in thank-you / redirect links if needed. |
+| `WEDDING_SITE_URL`  | `https://www.ryanandcarlygethitched.com`   | Album link in photo-upload emails; thank-you / redirect links if needed. |
+| `PHOTO_ADMIN_PASSWORD` | *(a strong secret)*                     | Password required to delete photos from the album (`POST /photos/delete`). Only you and your partner should know this. |
 
 ### Email notifications (optional)
 

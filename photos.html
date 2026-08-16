@@ -207,13 +207,6 @@
         transform: rotate(8deg);
         animation-delay: 1.4s;
       }
-      .float-cam.cam-d {
-        top: -14px; left: 8%;
-        width: clamp(38px, 8vw, 58px);
-        transform: rotate(-8deg);
-        animation-delay: 0.4s;
-      }
-
       @keyframes cam-bob {
         0%, 100% { translate: 0 0; }
         50% { translate: 0 -10px; }
@@ -343,11 +336,15 @@
         grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
         gap: 12px;
       }
-      .gallery button {
+      .gallery-item {
+        position: relative;
+      }
+      .gallery-item .gallery-open {
         appearance: none;
         border: 3px solid var(--ink);
         padding: 0;
         margin: 0;
+        width: 100%;
         background: var(--cream);
         cursor: pointer;
         border-radius: 18px;
@@ -356,8 +353,48 @@
         box-shadow: 4px 4px 0 rgba(155, 18, 52, 0.14);
         transition: transform 0.18s ease;
       }
-      .gallery button:hover { transform: rotate(-1deg) scale(1.02); }
+      .gallery-item .gallery-open:hover { transform: rotate(-1deg) scale(1.02); }
       .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .photo-delete {
+        appearance: none;
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        z-index: 2;
+        width: 28px;
+        height: 28px;
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        background: var(--cream);
+        color: var(--ink);
+        font-size: 1.05rem;
+        line-height: 1;
+        padding: 0;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 rgba(155, 18, 52, 0.16);
+        opacity: 0.72;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+      }
+      .gallery-item:hover .photo-delete,
+      .photo-delete:focus-visible {
+        opacity: 1;
+      }
+      .photo-delete:hover {
+        transform: scale(1.06);
+        background: var(--highlight);
+      }
+      .lightbox .photo-delete {
+        top: 14px;
+        right: 72px;
+        width: 48px;
+        height: 48px;
+        border-width: 3px;
+        border-color: var(--highlight);
+        background: var(--ink);
+        color: var(--highlight);
+        opacity: 1;
+        font-size: 1.4rem;
+      }
 
       .empty-album {
         text-align: center;
@@ -435,6 +472,7 @@
       <a href="venue.html">The Venue</a>
       <a href="timeline.html">Weekend Timeline</a>
       <a href="attire.html">Weekend Attire</a>
+      <a href="packing-list.html">Packing List</a>
       <a href="photos.html" class="active">Photos</a>
     </nav>
 
@@ -468,7 +506,7 @@
         </div>
         <section class="panel" aria-labelledby="upload-title">
           <h2 id="upload-title">Drop your pics</h2>
-          <p class="hint">Let the good times roll (12 at a time).</p>
+          <p class="hint">Let the good times roll... 12 at a time</p>
           <form id="upload-form" novalidate>
             <div class="field">
               <label for="uploader-name">Your name</label>
@@ -490,15 +528,6 @@
       </div>
 
       <div class="panel-wrap">
-        <div class="float-cam cam-d" aria-hidden="true">
-          <svg viewBox="0 0 64 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="4" y="14" width="56" height="34" rx="10" fill="#fff8f4" stroke="#c91845" stroke-width="3.5"/>
-            <path d="M20 14l4-8h16l4 8" fill="#ff9ec0" stroke="#c91845" stroke-width="3.5" stroke-linejoin="round"/>
-            <circle cx="34" cy="31" r="10" fill="#fff48a" stroke="#c91845" stroke-width="3.5"/>
-            <circle cx="34" cy="31" r="4.5" fill="#c91845"/>
-            <circle cx="14" cy="24" r="2.5" fill="#c91845"/>
-          </svg>
-        </div>
         <div class="float-cam cam-c" aria-hidden="true">
           <svg viewBox="0 0 64 52" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="4" y="14" width="56" height="34" rx="10" fill="#ff9ec0" stroke="#c91845" stroke-width="3.5"/>
@@ -520,6 +549,7 @@
 
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo preview">
       <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+      <button type="button" class="photo-delete" id="lightbox-delete" aria-label="Delete photo" hidden>&times;</button>
       <img id="lightbox-img" alt="" />
       <p class="lightbox-meta" id="lightbox-meta"></p>
     </div>
@@ -543,11 +573,70 @@
         var lightboxImg = document.getElementById("lightbox-img");
         var lightboxMeta = document.getElementById("lightbox-meta");
         var lightboxClose = document.getElementById("lightbox-close");
+        var lightboxDelete = document.getElementById("lightbox-delete");
         var previewUrls = [];
+        var currentLightboxPhoto = null;
+        var ADMIN_PASS_KEY = "photoAdminPassword";
 
         function setStatus(msg, kind) {
           uploadStatus.textContent = msg || "";
           uploadStatus.className = "status" + (kind ? " " + kind : "");
+        }
+
+        function getAdminPassword(forcePrompt) {
+          var stored = "";
+          try { stored = sessionStorage.getItem(ADMIN_PASS_KEY) || ""; } catch (e) {}
+          if (stored && !forcePrompt) return stored;
+          var entered = window.prompt("Admin password to delete photos:");
+          if (entered == null) return null;
+          entered = String(entered);
+          try { sessionStorage.setItem(ADMIN_PASS_KEY, entered); } catch (e) {}
+          return entered;
+        }
+
+        function clearAdminPassword() {
+          try { sessionStorage.removeItem(ADMIN_PASS_KEY); } catch (e) {}
+        }
+
+        function deletePhoto(photo, triggerEl) {
+          if (!backendBase || !photo || !photo.id) return;
+          if (!window.confirm("Delete this photo permanently?")) return;
+          var password = getAdminPassword(false);
+          if (password == null) return;
+          if (triggerEl) triggerEl.disabled = true;
+
+          function requestDelete(pass, retried) {
+            return fetch(backendBase + "/photos/delete", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id: photo.id, password: pass }),
+            }).then(function (res) {
+              return res.json().then(function (body) {
+                return { ok: res.ok, status: res.status, body: body };
+              });
+            }).then(function (result) {
+              if (result.status === 403 && !retried) {
+                clearAdminPassword();
+                var again = getAdminPassword(true);
+                if (again == null) throw new Error("Delete cancelled");
+                return requestDelete(again, true);
+              }
+              if (!result.ok || !result.body.ok) {
+                if (result.status === 403) clearAdminPassword();
+                throw new Error((result.body && result.body.error) || "Delete failed");
+              }
+              if (currentLightboxPhoto && currentLightboxPhoto.id === photo.id) closeLightbox();
+              loadAlbum();
+            });
+          }
+
+          requestDelete(password, false)
+            .catch(function (err) {
+              window.alert(err.message || "Could not delete photo.");
+            })
+            .finally(function () {
+              if (triggerEl) triggerEl.disabled = false;
+            });
         }
 
         function clearPreviews() {
@@ -661,16 +750,24 @@
         });
 
         function openLightbox(photo) {
+          currentLightboxPhoto = photo;
           lightboxImg.src = photo.url;
           lightboxImg.alt = photo.uploader ? ("Photo from " + photo.uploader) : "Wedding photo";
           lightboxMeta.textContent = photo.uploader ? ("Shared by " + photo.uploader) : "";
+          lightboxDelete.hidden = false;
           lightbox.classList.add("open");
         }
         function closeLightbox() {
           lightbox.classList.remove("open");
           lightboxImg.src = "";
+          currentLightboxPhoto = null;
+          lightboxDelete.hidden = true;
         }
         lightboxClose.addEventListener("click", closeLightbox);
+        lightboxDelete.addEventListener("click", function (e) {
+          e.stopPropagation();
+          if (currentLightboxPhoto) deletePhoto(currentLightboxPhoto, lightboxDelete);
+        });
         lightbox.addEventListener("click", function (e) {
           if (e.target === lightbox) closeLightbox();
         });
@@ -695,8 +792,11 @@
                 : "0 photos";
               emptyAlbum.hidden = photos.length > 0;
               photos.forEach(function (photo) {
+                var item = document.createElement("div");
+                item.className = "gallery-item";
                 var btn = document.createElement("button");
                 btn.type = "button";
+                btn.className = "gallery-open";
                 btn.setAttribute("aria-label", photo.uploader ? ("Photo from " + photo.uploader) : "Wedding photo");
                 var img = document.createElement("img");
                 img.src = photo.thumb_url;
@@ -704,7 +804,18 @@
                 img.loading = "lazy";
                 btn.appendChild(img);
                 btn.addEventListener("click", function () { openLightbox(photo); });
-                gallery.appendChild(btn);
+                var del = document.createElement("button");
+                del.type = "button";
+                del.className = "photo-delete";
+                del.setAttribute("aria-label", "Delete photo");
+                del.innerHTML = "&times;";
+                del.addEventListener("click", function (e) {
+                  e.stopPropagation();
+                  deletePhoto(photo, del);
+                });
+                item.appendChild(btn);
+                item.appendChild(del);
+                gallery.appendChild(item);
               });
             })
             .catch(function () {

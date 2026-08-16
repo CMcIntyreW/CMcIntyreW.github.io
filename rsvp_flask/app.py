@@ -29,6 +29,7 @@ SITE_BASE_URL = os.environ.get("WEDDING_SITE_URL", "https://www.ryanandcarlygeth
 RSVP_NOTIFY_EMAIL = os.environ.get("RSVP_NOTIFY_EMAIL", "").strip()
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
 RSVP_FROM_EMAIL = os.environ.get("RSVP_FROM_EMAIL", "onboarding@resend.dev").strip()
+PHOTO_ADMIN_PASSWORD = os.environ.get("PHOTO_ADMIN_PASSWORD", "").strip()
 
 PHOTO_MAX_EDGE = 1920
 THUMB_MAX_EDGE = 480
@@ -264,11 +265,29 @@ View all meal responses: {data_url}/data
     _send_email(subject, body)
 
 
+def _send_photo_upload_notification(uploader, count):
+    album_url = f"{SITE_BASE_URL.rstrip('/')}/photos.html"
+    subject = f"New photo upload: {uploader} ({count})"
+    body = f"""Someone just uploaded photos to the wedding album!
+
+Uploader: {uploader}
+Photos: {count}
+
+View the album: {album_url}
+"""
+    _send_email(subject, body)
+
+
+def _valid_photo_id(photo_id):
+    return bool(photo_id) and all(c in "0123456789abcdef" for c in photo_id.lower()) and len(photo_id) <= 64
+
+
 @app.after_request
 def add_cors_headers(response):
     photo_paths = (
         request.path == "/photos/upload"
         or request.path == "/photos/list"
+        or request.path == "/photos/delete"
         or request.path.startswith("/photos/file/")
         or request.path.startswith("/photos/thumb/")
     )
@@ -307,6 +326,7 @@ def data_page():
 @app.route("/meal-submit", methods=["OPTIONS"])
 @app.route("/photos/upload", methods=["OPTIONS"])
 @app.route("/photos/list", methods=["OPTIONS"])
+@app.route("/photos/delete", methods=["OPTIONS"])
 def cors_preflight():
     return "", 204
 
@@ -415,7 +435,42 @@ def photos_upload():
         return jsonify({"ok": False, "error": "No photos could be saved", "errors": errors}), 400
 
     _save_photo_meta(meta)
+    _send_photo_upload_notification(uploader, len(saved))
     return jsonify({"ok": True, "saved": saved, "errors": errors}), 200
+
+
+@app.route("/photos/delete", methods=["POST"])
+def photos_delete():
+    ensure_photos_dirs()
+    if not PHOTO_ADMIN_PASSWORD:
+        return jsonify({"ok": False, "error": "Photo delete is not configured"}), 503
+
+    payload = request.get_json(silent=True) or {}
+    photo_id = (payload.get("id") or request.form.get("id") or "").strip()
+    password = payload.get("password") or request.form.get("password") or ""
+    if not _valid_photo_id(photo_id):
+        return jsonify({"ok": False, "error": "Invalid photo id"}), 400
+    if password != PHOTO_ADMIN_PASSWORD:
+        return jsonify({"ok": False, "error": "Incorrect password"}), 403
+
+    meta = _load_photo_meta()
+    new_meta = [entry for entry in meta if entry.get("id") != photo_id]
+    if len(new_meta) == len(meta):
+        return jsonify({"ok": False, "error": "Photo not found"}), 404
+
+    full_path = PHOTOS_DIR / f"{photo_id}.jpg"
+    thumb_path = THUMBS_DIR / f"{photo_id}.jpg"
+    try:
+        if full_path.exists():
+            full_path.unlink()
+        if thumb_path.exists():
+            thumb_path.unlink()
+    except OSError as exc:
+        app.logger.error("Failed to delete photo files for %s: %s", photo_id, exc)
+        return jsonify({"ok": False, "error": "Could not delete photo files"}), 500
+
+    _save_photo_meta(new_meta)
+    return jsonify({"ok": True, "id": photo_id}), 200
 
 
 @app.route("/photos/list", methods=["GET"])
@@ -444,7 +499,7 @@ def photos_list():
 @app.route("/photos/file/<photo_id>.jpg")
 def photos_file(photo_id):
     ensure_photos_dirs()
-    if not all(c in "0123456789abcdef" for c in photo_id.lower()) or len(photo_id) > 64:
+    if not _valid_photo_id(photo_id):
         return "Not found", 404
     path = PHOTOS_DIR / f"{photo_id}.jpg"
     if not path.exists():
@@ -455,7 +510,7 @@ def photos_file(photo_id):
 @app.route("/photos/thumb/<photo_id>.jpg")
 def photos_thumb(photo_id):
     ensure_photos_dirs()
-    if not all(c in "0123456789abcdef" for c in photo_id.lower()) or len(photo_id) > 64:
+    if not _valid_photo_id(photo_id):
         return "Not found", 404
     path = THUMBS_DIR / f"{photo_id}.jpg"
     if not path.exists():
