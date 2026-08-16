@@ -11,23 +11,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Montserrat:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Paytone+One&family=Outfit:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <style>
       :root {
         --periwinkle: #b8c5e0;
-        --soft-yellow: #f0e8a8;
+        --soft-yellow: #ffe0a8;
         --muted-teal: #a8d4d4;
         --peachy: #f0c9b8;
         --bubblegum: #f0c8d4;
-        --note-white: #fefefe;
-        --note-shadow: rgba(92, 74, 61, 0.12);
+        --note-white: #fff8f4;
+        --note-shadow: rgba(120, 40, 20, 0.14);
         --text-dark: #2a2a2a;
         --text-muted: #555;
-        --lime-box: rgba(182, 218, 118, 0.88);
-        --lime-border: rgba(145, 195, 85, 0.6);
+        --flame: #e85a3c;
+        --ember: #f07828;
+        --coral-box: rgba(255, 196, 160, 0.78);
+        --coral-border: rgba(232, 90, 60, 0.45);
       }
 
       * {
@@ -42,12 +44,12 @@
       body {
         margin: 0;
         min-height: 100vh;
-        font-family: "Caveat", cursive;
+        font-family: "Outfit", system-ui, sans-serif;
         font-weight: 500;
         color: var(--text-dark);
-        background: #d4e8a0;
+        background: #ffc48a;
         background-image:
-          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cpath fill='%239bc85c' opacity='0.95' d='M0,120 Q150,80 350,140 T700,100 L800,120 L800,600 Q600,540 400,580 T0,600 Z'/%3E%3Cpath fill='%23c8e08a' opacity='0.9' d='M0,250 Q250,180 500,260 T800,220 L800,600 Q550,550 300,600 T0,520 Z'/%3E%3Cpath fill='%239bc85c' opacity='0.9' d='M0,380 Q350,320 700,360 L800,340 L800,600 Q500,560 200,600 T0,480 Z'/%3E%3Cpath fill='%23c8e08a' opacity='0.95' d='M0,480 Q200,420 450,460 T800,440 L800,600 L0,600 Z'/%3E%3Cpath fill='%23a8d85c' opacity='0.85' d='M0,0 Q400,60 800,20 L800,200 Q450,160 0,200 Z'/%3E%3Cpath fill='%23d4e8a0' opacity='0.9' d='M0,50 Q300,10 600,80 T800,40 L800,150 Q500,120 0,140 Z'/%3E%3C/svg%3E");
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 600'%3E%3Cpath fill='%23f07828' opacity='0.9' d='M0,120 Q150,80 350,140 T700,100 L800,120 L800,600 Q600,540 400,580 T0,600 Z'/%3E%3Cpath fill='%23ffb070' opacity='0.92' d='M0,250 Q250,180 500,260 T800,220 L800,600 Q550,550 300,600 T0,520 Z'/%3E%3Cpath fill='%23e85a3c' opacity='0.78' d='M0,380 Q350,320 700,360 L800,340 L800,600 Q500,560 200,600 T0,480 Z'/%3E%3Cpath fill='%23ff9a5c' opacity='0.9' d='M0,480 Q200,420 450,460 T800,440 L800,600 L0,600 Z'/%3E%3Cpath fill='%23ff6b4a' opacity='0.72' d='M0,0 Q400,60 800,20 L800,200 Q450,160 0,200 Z'/%3E%3Cpath fill='%23ffd2a0' opacity='0.95' d='M0,50 Q300,10 600,80 T800,40 L800,150 Q500,120 0,140 Z'/%3E%3C/svg%3E");
         background-size: cover;
         background-attachment: fixed;
         background-position: center;
@@ -70,7 +72,7 @@
       .nav-tabs a {
         color: var(--text-dark);
         text-decoration: none;
-        font-family: "Caveat", cursive;
+        font-family: "Outfit", system-ui, sans-serif;
         font-size: 0.9rem;
         font-weight: 600;
         letter-spacing: 0.04em;
@@ -100,25 +102,26 @@
 
       .timeline-hero-note {
         position: relative;
-        background: rgba(180, 218, 115, 0.7);
+        background: var(--coral-box);
         color: #000;
         padding: 10px 36px 12px;
         border-radius: 12px;
-        box-shadow: 0 4px 24px rgba(92, 74, 61, 0.12), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
-        border: 1px solid rgba(155, 205, 100, 0.6);
+        box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+        border: 1px solid var(--coral-border);
         display: inline-block;
         width: fit-content;
         max-width: 90%;
       }
 
       .timeline-hero-title {
-        font-family: "Caveat", cursive;
-        font-weight: 700;
+        font-family: "Paytone One", sans-serif;
+        font-weight: 400;
         font-size: clamp(2rem, 5vw, 2.75rem);
         margin: 0;
         text-align: center;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        text-transform: none;
+        color: var(--ember);
       }
       .timeline-hero-note-sub,
       .timeline-hero-subtitle {
@@ -127,7 +130,7 @@
         font-size: 0.8rem;
         font-weight: 400;
         font-style: italic;
-        color: #000;
+        color: #4a4a4a;
         letter-spacing: 0.02em;
         text-align: center;
       }
@@ -136,32 +139,33 @@
       }
 
       .day-section {
-        margin-bottom: 40px;
+        margin-bottom: 12px;
         position: relative;
+        width: 100%;
       }
 
       .day-blob {
         position: relative;
-        background: rgba(180, 218, 115, 0.7);
+        background: var(--coral-box);
         border-radius: 12px;
         padding: 16px 28px 20px;
-        box-shadow: 0 4px 24px rgba(92, 74, 61, 0.12), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
-        border: 1px solid rgba(155, 205, 100, 0.6);
+        box-shadow: 0 4px 24px var(--note-shadow), 0 1px 0 rgba(255, 255, 255, 0.45) inset;
+        border: 1px solid var(--coral-border);
         text-align: center;
-        width: fit-content;
-        max-width: min(92%, 520px);
+        width: 100%;
+        max-width: min(96%, 620px);
         margin-left: auto;
         margin-right: auto;
       }
 
       .day-title {
-        font-family: "Caveat", cursive;
-        font-weight: 700;
-        font-size: clamp(1.75rem, 5vw, 2.5rem);
-        color: #000;
-        margin: 0 0 12px;
+        font-family: "Archivo Black", sans-serif;
+        font-weight: 400;
+        font-size: clamp(1.65rem, 4.8vw, 2.25rem);
+        color: var(--ember);
+        margin: 0 0 20px;
         text-align: center;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
@@ -169,35 +173,62 @@
         list-style: none;
         margin: 0 auto;
         padding: 0;
-        display: inline-block;
+        display: block;
         text-align: center;
       }
 
       .timeline-list li {
-        margin-bottom: 18px;
-        font-size: 1.35rem;
+        margin: 0 0 12px;
+        font-size: 1.28rem;
         line-height: 1.5;
-        color: #000;
         text-align: center;
+        font-family: "Outfit", system-ui, sans-serif;
+      }
+      .timeline-list li:last-child {
+        margin-bottom: 0;
       }
 
       .timeline-time {
-        display: block;
+        display: inline;
         font-weight: 700;
-        color: #000;
-        margin-bottom: 6px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid rgba(42, 42, 42, 0.2);
+        color: var(--flame);
+        margin: 0;
+        padding: 0;
+        border-bottom: none;
+        font-family: "Outfit", system-ui, sans-serif;
       }
       .timeline-time::after {
-        content: none;
+        content: ":";
       }
 
       .timeline-event {
-        display: block;
-        font-weight: 350;
-        color: var(--text-dark);
+        display: inline;
+        font-weight: 500;
+        color: #4a4a4a;
+        margin-left: 0.35em;
+      }
+
+      .timeline-footnote {
+        margin: 8px auto 28px;
+        max-width: 42ch;
         text-align: center;
+        font-family: "Outfit", system-ui, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        line-height: 1.4;
+        color: var(--text-dark);
+      }
+
+      .day-note {
+        margin: 16px auto 0;
+        max-width: 36ch;
+        text-align: center;
+        font-family: "Outfit", system-ui, sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        font-style: italic;
+        line-height: 1.45;
+        color: #4a4a4a;
       }
 
       .timeline-music-toggle {
@@ -225,8 +256,8 @@
         box-shadow: 0 4px 16px var(--note-shadow);
       }
       .timeline-music-toggle.playing {
-        background: var(--muted-teal);
-        color: var(--text-dark);
+        background: var(--ember);
+        color: #fff8f4;
         border-color: rgba(42, 42, 42, 0.2);
       }
 
@@ -254,16 +285,17 @@
         position: relative;
         box-sizing: border-box;
       }
-      .polaroid-left { transform: rotate(-5.8deg) translateX(-20px) translateY(-75px); }
-      .timeline-row:nth-child(2) .polaroid-left { transform: rotate(5deg) translateX(-50px) translateY(-360px); }
-      .timeline-row:nth-child(3) .polaroid-left { transform: rotate(-5deg) translateX(-20px) translateY(-550px); }
-      .timeline-row:nth-child(4) .polaroid-left { transform: rotate(4.5deg) translateX(-50px) translateY(-510px); }
-      .timeline-row:nth-child(5) .polaroid-left { transform: rotate(-5.5deg) translateX(5px) translateY(-460px); }
-      .polaroid-right { transform: rotate(5.5deg) translateX(20px) translateY(-75px); }
-      .timeline-row:nth-child(2) .polaroid-right { transform: rotate(-5deg) translateX(40px) translateY(-360px); }
-      .timeline-row:nth-child(3) .polaroid-right { transform: rotate(5deg) translateX(20px) translateY(-550px); }
-      .timeline-row:nth-child(4) .polaroid-right { transform: rotate(-2deg) translateX(210px) translateY(-510px); }
-      .timeline-row:nth-child(5) .polaroid-right { transform: rotate(6deg) translateX(155px) translateY(-475px); }
+      /* Base rotation only; desktop stacks photos with a fixed 1.5cm gap. */
+      .polaroid-left { transform: rotate(-5.8deg); }
+      .timeline-row:nth-child(2) .polaroid-left { transform: rotate(5deg); }
+      .timeline-row:nth-child(3) .polaroid-left { transform: rotate(-5deg); }
+      .timeline-row:nth-child(4) .polaroid-left { transform: rotate(4.5deg); }
+      .timeline-row:nth-child(5) .polaroid-left { transform: rotate(-5.5deg); }
+      .polaroid-right { transform: rotate(5.5deg); }
+      .timeline-row:nth-child(2) .polaroid-right { transform: rotate(-5deg); }
+      .timeline-row:nth-child(3) .polaroid-right { transform: rotate(5deg); }
+      .timeline-row:nth-child(4) .polaroid-right { transform: rotate(-2deg); }
+      .timeline-row:nth-child(5) .polaroid-right { transform: rotate(6deg); }
       .polaroid-photo {
         width: 100%;
         height: 155px;
@@ -295,6 +327,11 @@
         color: #f5f0e8;
         letter-spacing: 0.02em;
         text-transform: lowercase;
+      }
+
+      @media (max-width: 560px) {
+        .timeline-list li { font-size: 1.12rem; }
+        .day-blob { padding: 16px 18px 18px; }
       }
 
       /* Mobile: reset transforms so photos stack cleanly in vertical layout */
@@ -348,19 +385,56 @@
         .timeline-rows {
           display: flex;
           flex-direction: column;
-          gap: 6px;
-          max-width: 1100px;
-          margin: 0 auto;
+          gap: 0;
+          position: relative;
+          /* Break out of the 880px .container so the day boxes can breathe */
+          width: min(1240px, 96vw);
+          margin-left: 50%;
+          transform: translateX(-50%);
           padding: 0 1rem;
+          /* Room for the 5-photo stack: 5×220px + 4×1.5cm gaps */
+          min-height: calc((220px * 5) + (1.5cm * 4));
         }
         .timeline-row {
           display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          gap: 0.25rem;
+          grid-template-columns: minmax(0, 1fr) clamp(320px, 48vw, 620px) minmax(0, 1fr);
+          align-items: start;
+          gap: 0;
+          position: static;
+        }
+        .timeline-row .day-section {
+          width: 100%;
+          grid-column: 2;
+        }
+        .timeline-row-spacer {
+          display: none;
+        }
+        .timeline-row-photos-only {
+          height: 0;
+          margin: 0;
+          padding: 0;
+          overflow: visible;
+          pointer-events: none;
+        }
+        .timeline-row-photos-only .polaroid {
+          pointer-events: auto;
         }
         .timeline-row .polaroid {
-          flex-shrink: 0;
+          position: absolute;
+          z-index: 2;
+          margin: 0;
+        }
+        /* Fixed vertical rhythm: ~1.5cm between polaroids */
+        .timeline-row:nth-child(1) .polaroid { top: 0; }
+        .timeline-row:nth-child(2) .polaroid { top: calc(220px + 1.5cm); }
+        .timeline-row:nth-child(3) .polaroid { top: calc((220px + 1.5cm) * 2); }
+        .timeline-row:nth-child(4) .polaroid { top: calc((220px + 1.5cm) * 3); }
+        .timeline-row:nth-child(5) .polaroid { top: calc((220px + 1.5cm) * 4); }
+        .timeline-row .polaroid-left {
+          left: calc(50% - clamp(160px, 24vw, 310px) - 175px - 2.2cm);
+        }
+        .timeline-row .polaroid-right {
+          left: calc(50% + clamp(160px, 24vw, 310px) + 2.2cm);
         }
       }
 
@@ -450,7 +524,7 @@
       <header class="timeline-hero">
         <div class="timeline-hero-note">
           <h1 class="timeline-hero-title">Weekend Timeline</h1>
-          <p class="timeline-hero-subtitle">Times are subject to slight changes &mdash; but here's a ballpark!</p>
+          <p class="timeline-hero-subtitle">The official schedule has dropped!</p>
         </div>
       </header>
 
@@ -469,10 +543,17 @@
             <div class="day-blob">
               <h2 id="friday-heading" class="day-title">Friday</h2>
               <ul class="timeline-list">
-                <li><span class="timeline-time">~4:00PM</span><span class="timeline-event">Check-in</span></li>
-                <li><span class="timeline-time">~6:30PM</span><span class="timeline-event">Welcome BBQ</span></li>
-                <li><span class="timeline-time">~8:00PM</span><span class="timeline-event">Bon Fire / Star Gazing / Campfire Jams</span></li>
+                <li><span class="timeline-time">3:00 PM</span><span class="timeline-event">Rehearsal</span></li>
+                <li><span class="timeline-time">4:00 PM</span><span class="timeline-event">Check-In Begins</span></li>
+                <li><span class="timeline-time">4:00 PM – 5:45 PM</span><span class="timeline-event">Pool Party</span></li>
+                <li><span class="timeline-time">6:30 PM – 8:30 PM</span><span class="timeline-event">Welcome BBQ</span></li>
+                <li><span class="timeline-time">8:30 PM</span><span class="timeline-event">Bonfire &amp; Jam</span></li>
+                <li><span class="timeline-time">9:00 PM</span><span class="timeline-event">Lounge Bar Closes*</span></li>
+                <li><span class="timeline-time">11:30 PM</span><span class="timeline-event">Bonfire Ends</span></li>
               </ul>
+              <p class="day-note">
+                *When lounge is closed you are free to drink your own alcohol on site
+              </p>
             </div>
           </section>
           <figure class="polaroid polaroid-right polaroid-show-photo" aria-hidden="true">
@@ -490,12 +571,22 @@
             <div class="day-blob">
               <h2 id="saturday-heading" class="day-title">Saturday</h2>
               <ul class="timeline-list">
-                <li><span class="timeline-time">~10:00AM – 3:30PM</span><span class="timeline-event">You do you! Off- or on-site, come hang out and enjoy the lake and pool!</span></li>
-                <li><span class="timeline-time">~4:00PM</span><span class="timeline-event">I dos!</span></li>
-                <li><span class="timeline-time">~4:30PM – 5:30PM</span><span class="timeline-event">Cocktail Hour</span></li>
-                <li><span class="timeline-time">~6:00PM – 8:00PM</span><span class="timeline-event">Dinner</span></li>
-                <li><span class="timeline-time">~8:30PM – on</span><span class="timeline-event">Disco Hour(s) / Late Night Snacks / Fires + DJs</span></li>
+                <li><span class="timeline-time">9:30 AM</span><span class="timeline-event">Morning Movement and Meditation with Roxy <em>(show up on the dock if you want to join!)</em></span></li>
+                <li><span class="timeline-time">Until 4:00 PM</span><span class="timeline-event">Free morning/afternoon — lake, pool, games, naps, books… whatever feels good</span></li>
+                <li><span class="timeline-time">4:00 PM</span><span class="timeline-event">Gather for Ceremony</span></li>
+                <li><span class="timeline-time">4:30 PM</span><span class="timeline-event">Ceremony</span></li>
+                <li><span class="timeline-time">5:00 PM – 6:00 PM</span><span class="timeline-event">Cocktail Hour</span></li>
+                <li><span class="timeline-time">6:30 PM – 8:30 PM</span><span class="timeline-event">Dinner</span></li>
+                <li><span class="timeline-time">9:00 PM – 12:00 AM</span><span class="timeline-event">DJ Roxy Foxy</span></li>
+                <li><span class="timeline-time">10:30 PM</span><span class="timeline-event">Bonfire Lit</span></li>
+                <li><span class="timeline-time">12:00 AM</span><span class="timeline-event">Lounge Bar Closes*</span></li>
+                <li><span class="timeline-time">12:00 AM</span><span class="timeline-event">Late Night Eats</span></li>
+                <li><span class="timeline-time">12:00 AM – 1:00 AM</span><span class="timeline-event">DJ @ Your Leisure</span></li>
+                <li><span class="timeline-time">1:00 AM</span><span class="timeline-event">Afterparty in Chalet 22 + 23 (and hanging out around the fire)</span></li>
               </ul>
+              <p class="day-note">
+                *When lounge is closed you are free to drink your own alcohol on site
+              </p>
             </div>
           </section>
           <figure class="polaroid polaroid-right polaroid-show-photo" aria-hidden="true">
@@ -513,8 +604,12 @@
             <div class="day-blob">
               <h2 id="sunday-heading" class="day-title">Sunday</h2>
               <ul class="timeline-list">
-                <li><span class="timeline-time">~10:00 AM</span><span class="timeline-event">Continental Farewell Breakfast</span></li>
+                <li><span class="timeline-time">10:00 AM</span><span class="timeline-event">Continental Farewell Breakfast</span></li>
+                <li><span class="timeline-time">10:00 AM</span><span class="timeline-event">Check Out</span></li>
               </ul>
+              <p class="day-note">
+                Stuff needs to be out of the rooms by check-out, but you are free to stick around, lounge by the pool, and relax! The restaurant will also be open for lunch and dinner if you decide to stay — and some of us are sticking around another night as well.
+              </p>
             </div>
           </section>
           <figure class="polaroid polaroid-right polaroid-show-photo" aria-hidden="true">
@@ -596,14 +691,14 @@
               angle: 60,
               spread: 55,
               origin: { x: 0.3, y: 0.6 },
-              colors: ["#e74c3c", "#f39c12", "#3498db", "#e91e63", "#9b59b6", "#00bcd4", "#4caf50", "#ffeb3b"],
+              colors: ["#e85a3c", "#f07828", "#ff6b4a", "#ff9a5c", "#c91845", "#ffd2a0", "#ffeb3b"],
             });
             confetti({
               particleCount: 4,
               angle: 120,
               spread: 55,
               origin: { x: 0.7, y: 0.6 },
-              colors: ["#e74c3c", "#f39c12", "#3498db", "#e91e63", "#9b59b6", "#00bcd4", "#4caf50", "#ffeb3b"],
+              colors: ["#e85a3c", "#f07828", "#ff6b4a", "#ff9a5c", "#c91845", "#ffd2a0", "#ffeb3b"],
             });
             if (Date.now() < end) requestAnimationFrame(frame);
           })();
