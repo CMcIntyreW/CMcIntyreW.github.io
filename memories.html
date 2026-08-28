@@ -528,6 +528,7 @@
         var feedCount = document.getElementById("feed-count");
         var emptyFeed = document.getElementById("empty-feed");
         var previewUrl = null;
+        var selectedFile = null;
         var ADMIN_PASS_KEY = "photoAdminPassword";
         var lightbox = document.getElementById("lightbox");
         var lightboxAuthor = document.getElementById("lightbox-author");
@@ -548,12 +549,21 @@
           previewBox.innerHTML = "";
           previewBox.hidden = true;
           clearBtn.hidden = true;
+          selectedFile = null;
           mediaInput.value = "";
         }
 
         function showPreview(file) {
-          clearPreview();
-          if (!file) return;
+          if (previewUrl) URL.revokeObjectURL(previewUrl);
+          previewUrl = null;
+          previewBox.innerHTML = "";
+          if (!file) {
+            previewBox.hidden = true;
+            clearBtn.hidden = true;
+            selectedFile = null;
+            return;
+          }
+          selectedFile = file;
           previewUrl = URL.createObjectURL(file);
           previewBox.hidden = false;
           clearBtn.hidden = false;
@@ -584,7 +594,7 @@
           }
           var name = (nameInput.value || "").trim();
           var message = (messageInput.value || "").trim();
-          var file = mediaInput.files && mediaInput.files[0];
+          var file = selectedFile;
           if (!name) {
             setStatus("Please add your name.", "error");
             return;
@@ -693,16 +703,17 @@
           lightboxMedia.hidden = true;
           if (memory.media_url) {
             lightboxMedia.hidden = false;
+            var mediaSrc = (memory.media_url || "").replace(/^http:\/\//i, "https://");
             if (memory.media_type === "video") {
               var video = document.createElement("video");
-              video.src = memory.media_url;
+              video.src = mediaSrc;
               video.controls = true;
               video.preload = "metadata";
               video.setAttribute("playsinline", "");
               lightboxMedia.appendChild(video);
             } else {
               var img = document.createElement("img");
-              img.src = memory.media_url;
+              img.src = mediaSrc;
               img.alt = "Memory from " + (memory.author || "guest");
               lightboxMedia.appendChild(img);
             }
@@ -751,16 +762,18 @@
           if (memory.media_url) {
             var mediaWrap = document.createElement("div");
             mediaWrap.className = "memory-media";
+            var mediaSrc = (memory.media_url || "").replace(/^http:\/\//i, "https://");
+            var thumbSrc = (memory.thumb_url || "").replace(/^http:\/\//i, "https://");
             if (memory.media_type === "video") {
               var video = document.createElement("video");
-              video.src = memory.media_url;
+              video.src = mediaSrc;
               video.controls = true;
               video.preload = "metadata";
               video.setAttribute("playsinline", "");
               mediaWrap.appendChild(video);
             } else {
               var img = document.createElement("img");
-              img.src = memory.thumb_url || memory.media_url;
+              img.src = thumbSrc || mediaSrc;
               img.alt = "Memory from " + (memory.author || "guest");
               img.loading = "lazy";
               mediaWrap.appendChild(img);

@@ -106,8 +106,15 @@ def _save_photo_meta(entries):
     PHOTOS_META_FILE.write_text(json.dumps(entries, indent=2), encoding="utf-8")
 
 
-def _photo_urls(photo_id):
+def _request_base_url():
     base = request.host_url.rstrip("/")
+    if request.headers.get("X-Forwarded-Proto") == "https" and base.startswith("http://"):
+        base = "https://" + base[7:]
+    return base
+
+
+def _photo_urls(photo_id):
+    base = _request_base_url()
     return {
         "id": photo_id,
         "url": f"{base}/photos/file/{photo_id}.jpg",
@@ -329,7 +336,7 @@ def _memory_media_path(entry):
 
 
 def _memory_urls(entry):
-    base = request.host_url.rstrip("/")
+    base = _request_base_url()
     memory_id = entry["id"]
     media_type = entry.get("media_type")
     payload = {
@@ -397,12 +404,24 @@ def _save_memory_video(file_storage, memory_id, ext):
     (MEMORIES_DIR / f"{memory_id}{ext}").write_bytes(raw)
 
 
-def _send_memory_notification(author):
+def _send_memory_notification(author, message, media_type):
     memories_url = f"{SITE_BASE_URL.rstrip('/')}/memories.html"
+    if media_type == "image":
+        attachment = "Photo attached"
+    elif media_type == "video":
+        attachment = "Video attached"
+    else:
+        attachment = "Message only"
+    message_preview = (message or "").strip()
+    if len(message_preview) > 500:
+        message_preview = message_preview[:500] + "…"
     subject = f"New memory from {author}"
     body = f"""Someone just shared a memory on your wedding site!
 
 From: {author}
+Type: {attachment}
+Message:
+{message_preview or "(no message)"}
 
 View memories: {memories_url}
 """
@@ -415,6 +434,26 @@ def _valid_photo_id(photo_id):
 
 def _valid_memory_id(memory_id):
     return _valid_photo_id(memory_id)
+
+
+def _guess_media_kind(file_storage):
+    filename = (file_storage.filename or "").strip()
+    ext = Path(filename).suffix.lower()
+    mimetype = (file_storage.mimetype or "").lower()
+
+    if ext in ALLOWED_PHOTO_EXTS:
+        return "image", ext
+    if ext in ALLOWED_MEMORY_VIDEO_EXTS:
+        return "video", ext
+    if mimetype.startswith("image/"):
+        return "image", ext or ".jpg"
+    if mimetype.startswith("video/"):
+        if "quicktime" in mimetype:
+            return "video", ".mov"
+        if "webm" in mimetype:
+            return "video", ".webm"
+        return "video", ext or ".mp4"
+    return None, ext
 
 
 @app.after_request
@@ -675,7 +714,7 @@ def memories_upload():
         return jsonify({"ok": False, "error": "Name is required"}), 400
 
     media = request.files.get("media")
-    has_media = bool(media and media.filename)
+    has_media = bool(media and (media.filename or (media.mimetype and media.mimetype != "application/octet-stream")))
     if not message and not has_media:
         return jsonify({"ok": False, "error": "Please add a message, photo, or video"}), 400
 
@@ -686,8 +725,8 @@ def memories_upload():
 
     if has_media:
         original_name = (media.filename or "").strip()
-        ext = Path(original_name).suffix.lower()
-        if ext in ALLOWED_PHOTO_EXTS:
+        kind, ext = _guess_media_kind(media)
+        if kind == "image":
             try:
                 _save_memory_image(media, memory_id)
                 media_type = "image"
@@ -695,11 +734,12 @@ def memories_upload():
             except Exception as exc:
                 app.logger.warning("Memory image upload failed: %s", exc)
                 return jsonify({"ok": False, "error": str(exc)}), 400
-        elif ext in ALLOWED_MEMORY_VIDEO_EXTS:
+        elif kind == "video":
+            video_ext = ext if ext in ALLOWED_MEMORY_VIDEO_EXTS else ".mp4"
             try:
-                _save_memory_video(media, memory_id, ext)
+                _save_memory_video(media, memory_id, video_ext)
                 media_type = "video"
-                media_ext = ext
+                media_ext = video_ext
             except Exception as exc:
                 app.logger.warning("Memory video upload failed: %s", exc)
                 return jsonify({"ok": False, "error": str(exc)}), 400
@@ -721,7 +761,7 @@ def memories_upload():
     meta = _load_memory_meta()
     meta.append(entry)
     _save_memory_meta(meta)
-    _send_memory_notification(author)
+    _send_memory_notification(author, message, media_type or None)
     return jsonify({"ok": True, "memory": {**entry, **_memory_urls(entry)}}), 200
 
 
