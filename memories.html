@@ -34,6 +34,49 @@
         overflow-x: hidden;
       }
 
+      .hearts-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .floating-heart {
+        position: absolute;
+        top: var(--top, auto);
+        left: var(--left, auto);
+        right: var(--right, auto);
+        bottom: var(--bottom, auto);
+        width: var(--size, 28px);
+        height: var(--size, 28px);
+        color: var(--ink);
+        opacity: var(--opacity, 0.28);
+        animation: heart-float var(--dur, 7s) ease-in-out infinite;
+        animation-delay: var(--delay, 0s);
+        filter: drop-shadow(1px 1px 0 rgba(255, 248, 244, 0.35));
+      }
+      .floating-heart.yellow { color: var(--highlight); }
+      .floating-heart.cream { color: var(--cream); opacity: 0.45; }
+      .floating-heart svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      @keyframes heart-float {
+        0%, 100% {
+          transform: translate3d(0, 0, 0) rotate(var(--rot, -10deg)) scale(1);
+        }
+        50% {
+          transform: translate3d(0, -22px, 0) rotate(calc(var(--rot, -10deg) + 8deg)) scale(1.08);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .floating-heart { animation: none; }
+      }
+
       .nav-tabs {
         position: relative;
         z-index: 2;
@@ -374,6 +417,33 @@
     </style>
   </head>
   <body>
+    <div class="hearts-layer" aria-hidden="true">
+      <div class="floating-heart yellow" style="--size:34px;--top:8%;--left:6%;--rot:-14deg;--dur:8s;--delay:0s;--opacity:0.32;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart" style="--size:22px;--top:14%;--right:8%;--rot:12deg;--dur:6.5s;--delay:1.2s;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart cream" style="--size:40px;--top:32%;--left:3%;--rot:-6deg;--dur:9s;--delay:0.6s;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart yellow" style="--size:26px;--top:48%;--right:4%;--rot:18deg;--dur:7.2s;--delay:2s;--opacity:0.26;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart" style="--size:30px;--bottom:28%;--left:10%;--rot:-20deg;--dur:8.4s;--delay:1.8s;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart cream" style="--size:18px;--bottom:18%;--right:12%;--rot:8deg;--dur:6s;--delay:0.3s;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart yellow" style="--size:36px;--bottom:8%;--left:18%;--rot:14deg;--dur:9.5s;--delay:2.4s;--opacity:0.3;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+      <div class="floating-heart" style="--size:24px;--top:22%;--left:42%;--rot:-4deg;--dur:7.8s;--delay:3s;--opacity:0.18;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </div>
+    </div>
+
     <nav class="nav-tabs" aria-label="Main">
       <a href="index.html">Home</a>
       <a href="venue.html">The Venue</a>
