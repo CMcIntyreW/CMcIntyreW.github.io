@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memories &amp; Messages | Ryan &amp; Carly Get Hitched</title>
+    <meta name="description" content="Share photos, videos, and messages from Ryan and Carly's wedding weekend." />
+    <meta name="rsvp-backend-url" content="https://rsvp-backend-production-ef40.up.railway.app" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Paytone+One&family=Outfit:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #ff9ec0;
+        --bg-deep: #ff7aa8;
+        --ink: #c91845;
+        --ink-deep: #9b1234;
+        --highlight: #fff48a;
+        --cream: #fff8f4;
+        --panel: rgba(255, 248, 244, 0.92);
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+
+      body {
+        min-height: 100vh;
+        font-family: "Outfit", system-ui, sans-serif;
+        color: var(--ink-deep);
+        background:
+          radial-gradient(1200px 600px at 10% -10%, rgba(255, 244, 138, 0.28), transparent 55%),
+          radial-gradient(900px 500px at 100% 0%, rgba(255, 255, 255, 0.22), transparent 50%),
+          linear-gradient(165deg, var(--bg) 0%, var(--bg-deep) 100%);
+        overflow-x: hidden;
+      }
+
+      .nav-tabs {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px 14px;
+        padding: 16px 16px 10px;
+      }
+      .nav-tabs a {
+        color: var(--ink);
+        text-decoration: none;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 6px 10px;
+        border-radius: 999px;
+        opacity: 0.9;
+      }
+      .nav-tabs a:hover { background: rgba(255, 248, 244, 0.35); }
+      .nav-tabs a.active {
+        background: var(--ink);
+        color: var(--highlight);
+        opacity: 1;
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        width: min(920px, 92%);
+        margin: 0 auto;
+        padding: 8px 0 72px;
+      }
+
+      .hero {
+        text-align: center;
+        padding: clamp(28px, 7vh, 72px) 0 clamp(32px, 6vh, 56px);
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        font-family: "Archivo Black", sans-serif;
+        font-size: clamp(0.95rem, 2.4vw, 1.2rem);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+
+      h1 {
+        margin: 0 auto 20px;
+        max-width: 14ch;
+        font-family: "Paytone One", sans-serif;
+        font-size: clamp(2.4rem, 10vw, 4.6rem);
+        line-height: 0.95;
+        color: var(--ink);
+        text-wrap: balance;
+      }
+
+      .lead {
+        margin: 0 auto;
+        max-width: 38ch;
+        font-size: clamp(1.05rem, 2.4vw, 1.2rem);
+        line-height: 1.45;
+        font-weight: 600;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 3px solid var(--ink);
+        border-radius: 28px;
+        padding: clamp(18px, 3vw, 28px);
+        box-shadow: 6px 6px 0 rgba(155, 18, 52, 0.18);
+        margin-bottom: 28px;
+      }
+
+      .panel h2 {
+        margin: 0 0 6px;
+        font-family: "Archivo Black", sans-serif;
+        font-size: clamp(1.2rem, 3vw, 1.55rem);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink);
+      }
+
+      .hint {
+        margin: 0 0 16px;
+        font-size: 0.98rem;
+        line-height: 1.45;
+        color: rgba(155, 18, 52, 0.82);
+      }
+
+      .field { margin-bottom: 14px; }
+      .field label {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: var(--ink);
+      }
+
+      input[type="text"], textarea {
+        width: 100%;
+        border: 2.5px solid var(--ink);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font: inherit;
+        font-weight: 600;
+        color: var(--ink-deep);
+        background: rgba(255, 255, 255, 0.75);
+      }
+      textarea {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.45;
+      }
+      input:focus, textarea:focus {
+        outline: 3px solid var(--highlight);
+        outline-offset: 1px;
+      }
+
+      .file-drop {
+        position: relative;
+        border: 3px dashed var(--ink);
+        border-radius: 18px;
+        padding: 22px 16px;
+        text-align: center;
+        background: rgba(255, 158, 192, 0.28);
+        cursor: pointer;
+      }
+      .file-drop strong { display: block; margin-bottom: 4px; color: var(--ink); }
+      .file-drop span { font-size: 0.92rem; color: rgba(155, 18, 52, 0.8); }
+      .file-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+      .preview-box {
+        margin-top: 12px;
+        border: 2px solid var(--ink);
+        border-radius: 16px;
+        overflow: hidden;
+        background: #000;
+      }
+      .preview-box img, .preview-box video {
+        display: block;
+        width: 100%;
+        max-height: 280px;
+        object-fit: contain;
+        margin: 0 auto;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .btn {
+        appearance: none;
+        border: 2.5px solid var(--ink);
+        border-radius: 999px;
+        padding: 12px 22px;
+        font: inherit;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: var(--highlight);
+        color: var(--ink);
+        box-shadow: 3px 3px 0 rgba(155, 18, 52, 0.2);
+      }
+      .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+      .btn.secondary {
+        background: var(--cream);
+      }
+
+      .status { margin: 12px 0 0; font-weight: 600; min-height: 1.4em; }
+      .status.ok { color: #1a6b2f; }
+      .status.error { color: #8b0000; }
+
+      .feed-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .feed-count {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: rgba(155, 18, 52, 0.75);
+      }
+
+      .memory-list {
+        display: grid;
+        gap: 18px;
+      }
+
+      .memory-card {
+        position: relative;
+        border: 2.5px solid var(--ink);
+        border-radius: 22px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.55);
+        box-shadow: 4px 4px 0 rgba(155, 18, 52, 0.12);
+      }
+
+      .memory-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+        font-size: 0.88rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .memory-message {
+        margin: 0 0 12px;
+        font-family: "Caveat", cursive;
+        font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+        line-height: 1.35;
+        color: var(--ink-deep);
+        white-space: pre-wrap;
+      }
+
+      .memory-media img,
+      .memory-media video {
+        width: 100%;
+        border-radius: 14px;
+        border: 2px solid var(--ink);
+        display: block;
+        background: #111;
+      }
+      .memory-media video { max-height: 420px; }
+
+      .memory-delete {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        background: var(--cream);
+        color: var(--ink);
+        font-size: 1.05rem;
+        line-height: 1;
+        cursor: pointer;
+        opacity: 0.75;
+      }
+      .memory-card:hover .memory-delete { opacity: 1; }
+
+      .empty-feed {
+        text-align: center;
+        font-weight: 600;
+        color: rgba(155, 18, 52, 0.8);
+        padding: 24px 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="nav-tabs" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="venue.html">The Venue</a>
+      <a href="timeline.html">Weekend Timeline</a>
+      <a href="attire.html">Weekend Attire</a>
+      <a href="packing-list.html">Packing List</a>
+      <a href="photos.html">Photos</a>
+      <a href="memories.html" class="active">Memories</a>
+    </nav>
+
+    <main class="container">
+      <header class="hero">
+        <p class="eyebrow">Ryan &amp; Carly</p>
+        <h1>Leave a little love</h1>
+        <p class="lead">
+          Share a message, memory, photo, or video from the weekend.
+        </p>
+      </header>
+
+      <section class="panel" aria-labelledby="share-title">
+        <h2 id="share-title">Share a memory</h2>
+        <p class="hint">Add a note, photo, or video — or all three. Videos up to 80 MB.</p>
+        <form id="memory-form" novalidate>
+          <div class="field">
+            <label for="author-name">Your name</label>
+            <input id="author-name" name="name" type="text" maxlength="80" autocomplete="name" required placeholder="Who's sharing this?" />
+          </div>
+          <div class="field">
+            <label for="memory-message">Your message or memory</label>
+            <textarea id="memory-message" name="message" maxlength="2000" placeholder="A toast, a funny moment, advice for the newlyweds…"></textarea>
+          </div>
+          <div class="field">
+            <label>Photo or video (optional)</label>
+            <div class="file-drop" id="file-drop">
+              <strong>Tap to choose a file</strong>
+              <span>JPG, PNG, HEIC, MP4, MOV, or WebM</span>
+              <input id="media-input" name="media" type="file" accept="image/*,video/*,.heic,.heif,.mp4,.mov,.webm,.m4v" />
+            </div>
+            <div class="preview-box" id="preview-box" hidden></div>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn" id="submit-btn">Share memory</button>
+            <button type="button" class="btn secondary" id="clear-btn" hidden>Clear</button>
+          </div>
+          <p class="status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="panel" aria-labelledby="feed-title">
+        <div class="feed-head">
+          <h2 id="feed-title">Guest book</h2>
+          <span class="feed-count" id="feed-count">Loading…</span>
+        </div>
+        <div class="memory-list" id="memory-list"></div>
+        <p class="empty-feed" id="empty-feed" hidden>No memories yet — be the first to share one!</p>
+      </section>
+    </main>
+
+    <script>
+      (function () {
+        var backendMeta = document.querySelector('meta[name="rsvp-backend-url"]');
+        var backendBase = ((backendMeta && backendMeta.getAttribute("content")) || "").trim().replace(/\/$/, "");
+        var form = document.getElementById("memory-form");
+        var nameInput = document.getElementById("author-name");
+        var messageInput = document.getElementById("memory-message");
+        var mediaInput = document.getElementById("media-input");
+        var previewBox = document.getElementById("preview-box");
+        var submitBtn = document.getElementById("submit-btn");
+        var clearBtn = document.getElementById("clear-btn");
+        var formStatus = document.getElementById("form-status");
+        var memoryList = document.getElementById("memory-list");
+        var feedCount = document.getElementById("feed-count");
+        var emptyFeed = document.getElementById("empty-feed");
+        var previewUrl = null;
+        var ADMIN_PASS_KEY = "photoAdminPassword";
+
+        function setStatus(msg, kind) {
+          formStatus.textContent = msg || "";
+          formStatus.className = "status" + (kind ? " " + kind : "");
+        }
+
+        function clearPreview() {
+          if (previewUrl) URL.revokeObjectURL(previewUrl);
+          previewUrl = null;
+          previewBox.innerHTML = "";
+          previewBox.hidden = true;
+          clearBtn.hidden = true;
+          mediaInput.value = "";
+        }
+
+        function showPreview(file) {
+          clearPreview();
+          if (!file) return;
+          previewUrl = URL.createObjectURL(file);
+          previewBox.hidden = false;
+          clearBtn.hidden = false;
+          if (file.type && file.type.indexOf("video/") === 0) {
+            var video = document.createElement("video");
+            video.src = previewUrl;
+            video.controls = true;
+            previewBox.appendChild(video);
+          } else {
+            var img = document.createElement("img");
+            img.src = previewUrl;
+            img.alt = "Preview";
+            previewBox.appendChild(img);
+          }
+        }
+
+        mediaInput.addEventListener("change", function () {
+          showPreview(mediaInput.files && mediaInput.files[0]);
+        });
+
+        clearBtn.addEventListener("click", clearPreview);
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          if (!backendBase) {
+            setStatus("Backend is not configured.", "error");
+            return;
+          }
+          var name = (nameInput.value || "").trim();
+          var message = (messageInput.value || "").trim();
+          var file = mediaInput.files && mediaInput.files[0];
+          if (!name) {
+            setStatus("Please add your name.", "error");
+            return;
+          }
+          if (!message && !file) {
+            setStatus("Please add a message, photo, or video.", "error");
+            return;
+          }
+
+          var data = new FormData();
+          data.append("name", name);
+          data.append("message", message);
+          if (file) data.append("media", file);
+
+          submitBtn.disabled = true;
+          setStatus("Sharing…", "");
+
+          fetch(backendBase + "/memories/upload", { method: "POST", body: data })
+            .then(function (res) {
+              return res.json().then(function (body) {
+                return { ok: res.ok, body: body };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok || !result.body.ok) {
+                throw new Error((result.body && result.body.error) || "Upload failed");
+              }
+              setStatus("Thank you — your memory was shared!", "ok");
+              messageInput.value = "";
+              clearPreview();
+              loadMemories();
+            })
+            .catch(function (err) {
+              setStatus(err.message || "Could not share memory.", "error");
+            })
+            .finally(function () {
+              submitBtn.disabled = false;
+            });
+        });
+
+        function getAdminPassword(forcePrompt) {
+          var stored = "";
+          try { stored = sessionStorage.getItem(ADMIN_PASS_KEY) || ""; } catch (e) {}
+          if (stored && !forcePrompt) return stored;
+          var entered = window.prompt("Admin password to delete:");
+          if (entered == null) return null;
+          try { sessionStorage.setItem(ADMIN_PASS_KEY, entered); } catch (e) {}
+          return entered;
+        }
+
+        function deleteMemory(memory, btn) {
+          if (!backendBase || !memory || !memory.id) return;
+          if (!window.confirm("Delete this memory permanently?")) return;
+          var password = getAdminPassword(false);
+          if (password == null) return;
+          btn.disabled = true;
+
+          fetch(backendBase + "/memories/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: memory.id, password: password }),
+          })
+            .then(function (res) {
+              return res.json().then(function (body) {
+                return { ok: res.ok, status: res.status, body: body };
+              });
+            })
+            .then(function (result) {
+              if (!result.ok || !result.body.ok) {
+                throw new Error((result.body && result.body.error) || "Delete failed");
+              }
+              loadMemories();
+            })
+            .catch(function (err) {
+              window.alert(err.message || "Could not delete memory.");
+            })
+            .finally(function () {
+              btn.disabled = false;
+            });
+        }
+
+        function renderMemory(memory) {
+          var card = document.createElement("article");
+          card.className = "memory-card";
+
+          var meta = document.createElement("div");
+          meta.className = "memory-meta";
+          meta.innerHTML = "<span>" + escapeHtml(memory.author || "Guest") + "</span>";
+          card.appendChild(meta);
+
+          if (memory.message) {
+            var msg = document.createElement("p");
+            msg.className = "memory-message";
+            msg.textContent = memory.message;
+            card.appendChild(msg);
+          }
+
+          if (memory.media_url) {
+            var mediaWrap = document.createElement("div");
+            mediaWrap.className = "memory-media";
+            if (memory.media_type === "video") {
+              var video = document.createElement("video");
+              video.src = memory.media_url;
+              video.controls = true;
+              video.preload = "metadata";
+              video.setAttribute("playsinline", "");
+              mediaWrap.appendChild(video);
+            } else {
+              var img = document.createElement("img");
+              img.src = memory.thumb_url || memory.media_url;
+              img.alt = "Memory from " + (memory.author || "guest");
+              img.loading = "lazy";
+              mediaWrap.appendChild(img);
+            }
+            card.appendChild(mediaWrap);
+          }
+
+          var del = document.createElement("button");
+          del.type = "button";
+          del.className = "memory-delete";
+          del.innerHTML = "&times;";
+          del.setAttribute("aria-label", "Delete memory");
+          del.addEventListener("click", function () { deleteMemory(memory, del); });
+          card.appendChild(del);
+
+          return card;
+        }
+
+        function escapeHtml(str) {
+          return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        function loadMemories() {
+          if (!backendBase) {
+            feedCount.textContent = "";
+            emptyFeed.hidden = false;
+            emptyFeed.textContent = "Memories backend is not configured.";
+            return;
+          }
+          fetch(backendBase + "/memories/list")
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+              var memories = (data && data.memories) || [];
+              memoryList.innerHTML = "";
+              feedCount.textContent = memories.length
+                ? memories.length + " memor" + (memories.length === 1 ? "y" : "ies")
+                : "0 memories";
+              emptyFeed.hidden = memories.length > 0;
+              memories.forEach(function (memory) {
+                memoryList.appendChild(renderMemory(memory));
+              });
+            })
+            .catch(function () {
+              feedCount.textContent = "";
+              emptyFeed.hidden = false;
+              emptyFeed.textContent = "Couldn't load memories right now. Refresh to try again.";
+            });
+        }
+
+        loadMemories();
+        setInterval(loadMemories, 45000);
+      })();
+    </script>
+  </body>
+</html>

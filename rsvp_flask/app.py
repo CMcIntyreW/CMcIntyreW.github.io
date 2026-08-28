@@ -17,13 +17,16 @@ except Exception:
     pass
 
 app = Flask(__name__)
-app.config["MAX_CONTENT_LENGTH"] = 40 * 1024 * 1024  # 40 MB per request
+app.config["MAX_CONTENT_LENGTH"] = 100 * 1024 * 1024  # 100 MB per request (videos)
 RESPONSES_DIR = Path(os.environ.get("RSVP_RESPONSES_DIR", "."))
 RESPONSES_FILE = RESPONSES_DIR / "responses.csv"
 MEAL_RESPONSES_FILE = RESPONSES_DIR / "meal-responses.csv"
 PHOTOS_DIR = RESPONSES_DIR / "photos"
 THUMBS_DIR = PHOTOS_DIR / "thumbs"
 PHOTOS_META_FILE = RESPONSES_DIR / "photos.json"
+MEMORIES_DIR = RESPONSES_DIR / "memories"
+MEMORIES_THUMBS_DIR = MEMORIES_DIR / "thumbs"
+MEMORIES_META_FILE = RESPONSES_DIR / "memories.json"
 SITE_BASE_URL = os.environ.get("WEDDING_SITE_URL", "https://www.ryanandcarlygethitched.com")
 
 RSVP_NOTIFY_EMAIL = os.environ.get("RSVP_NOTIFY_EMAIL", "").strip()
@@ -37,6 +40,17 @@ PHOTO_JPEG_QUALITY = 85
 THUMB_JPEG_QUALITY = 80
 MAX_PHOTOS_PER_UPLOAD = 12
 ALLOWED_PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".gif"}
+MAX_MEMORY_MESSAGE = 2000
+MAX_VIDEO_BYTES = 80 * 1024 * 1024
+ALLOWED_MEMORY_VIDEO_EXTS = {".mp4", ".mov", ".webm", ".m4v", ".mpeg", ".mpg"}
+VIDEO_MIMETYPES = {
+    ".mp4": "video/mp4",
+    ".mov": "video/quicktime",
+    ".webm": "video/webm",
+    ".m4v": "video/mp4",
+    ".mpeg": "video/mpeg",
+    ".mpg": "video/mpeg",
+}
 
 
 def ensure_responses_file():
@@ -278,8 +292,129 @@ View the album: {album_url}
     _send_email(subject, body)
 
 
+def ensure_memories_dirs():
+    RESPONSES_DIR.mkdir(parents=True, exist_ok=True)
+    MEMORIES_DIR.mkdir(parents=True, exist_ok=True)
+    MEMORIES_THUMBS_DIR.mkdir(parents=True, exist_ok=True)
+    if not MEMORIES_META_FILE.exists():
+        MEMORIES_META_FILE.write_text("[]", encoding="utf-8")
+    return MEMORIES_DIR
+
+
+def _load_memory_meta():
+    ensure_memories_dirs()
+    try:
+        data = json.loads(MEMORIES_META_FILE.read_text(encoding="utf-8"))
+        return data if isinstance(data, list) else []
+    except (json.JSONDecodeError, OSError):
+        return []
+
+
+def _save_memory_meta(entries):
+    ensure_memories_dirs()
+    MEMORIES_META_FILE.write_text(json.dumps(entries, indent=2), encoding="utf-8")
+
+
+def _memory_media_path(entry):
+    memory_id = entry.get("id")
+    media_type = entry.get("media_type")
+    if not memory_id or not media_type:
+        return None
+    if media_type == "image":
+        return MEMORIES_DIR / f"{memory_id}.jpg"
+    if media_type == "video":
+        ext = entry.get("media_ext") or ".mp4"
+        return MEMORIES_DIR / f"{memory_id}{ext}"
+    return None
+
+
+def _memory_urls(entry):
+    base = request.host_url.rstrip("/")
+    memory_id = entry["id"]
+    media_type = entry.get("media_type")
+    payload = {
+        "id": memory_id,
+        "author": entry.get("author") or "",
+        "message": entry.get("message") or "",
+        "media_type": media_type or "",
+        "timestamp": entry.get("timestamp") or "",
+        "media_url": "",
+        "thumb_url": "",
+    }
+    if media_type == "image":
+        payload["media_url"] = f"{base}/memories/file/{memory_id}.jpg"
+        payload["thumb_url"] = f"{base}/memories/thumb/{memory_id}.jpg"
+    elif media_type == "video":
+        ext = entry.get("media_ext") or ".mp4"
+        payload["media_url"] = f"{base}/memories/file/{memory_id}{ext}"
+    return payload
+
+
+def _save_memory_image(file_storage, memory_id):
+    filename = (file_storage.filename or "").strip()
+    ext = Path(filename).suffix.lower()
+    if ext and ext not in ALLOWED_PHOTO_EXTS:
+        raise ValueError(f"Unsupported image type: {ext}")
+
+    raw = file_storage.read()
+    if not raw:
+        raise ValueError("Empty file")
+
+    try:
+        img = Image.open(io.BytesIO(raw))
+    except UnidentifiedImageError as exc:
+        raise ValueError("Could not read image") from exc
+
+    img = ImageOps.exif_transpose(img)
+    if img.mode in ("RGBA", "LA", "P"):
+        background = Image.new("RGB", img.size, (255, 255, 255))
+        if img.mode == "P":
+            img = img.convert("RGBA")
+        alpha = img.split()[-1] if img.mode in ("RGBA", "LA") else None
+        background.paste(img, mask=alpha)
+        img = background
+    else:
+        img = img.convert("RGB")
+
+    full_path = MEMORIES_DIR / f"{memory_id}.jpg"
+    thumb_path = MEMORIES_THUMBS_DIR / f"{memory_id}.jpg"
+
+    full = img.copy()
+    full.thumbnail((PHOTO_MAX_EDGE, PHOTO_MAX_EDGE), Image.Resampling.LANCZOS)
+    full.save(full_path, format="JPEG", quality=PHOTO_JPEG_QUALITY, optimize=True)
+
+    thumb = img.copy()
+    thumb.thumbnail((THUMB_MAX_EDGE, THUMB_MAX_EDGE), Image.Resampling.LANCZOS)
+    thumb.save(thumb_path, format="JPEG", quality=THUMB_JPEG_QUALITY, optimize=True)
+
+
+def _save_memory_video(file_storage, memory_id, ext):
+    raw = file_storage.read()
+    if not raw:
+        raise ValueError("Empty video file")
+    if len(raw) > MAX_VIDEO_BYTES:
+        raise ValueError("Video is too large (max 80 MB)")
+    (MEMORIES_DIR / f"{memory_id}{ext}").write_bytes(raw)
+
+
+def _send_memory_notification(author):
+    memories_url = f"{SITE_BASE_URL.rstrip('/')}/memories.html"
+    subject = f"New memory from {author}"
+    body = f"""Someone just shared a memory on your wedding site!
+
+From: {author}
+
+View memories: {memories_url}
+"""
+    _send_email(subject, body)
+
+
 def _valid_photo_id(photo_id):
     return bool(photo_id) and all(c in "0123456789abcdef" for c in photo_id.lower()) and len(photo_id) <= 64
+
+
+def _valid_memory_id(memory_id):
+    return _valid_photo_id(memory_id)
 
 
 @app.after_request
@@ -291,7 +426,14 @@ def add_cors_headers(response):
         or request.path.startswith("/photos/file/")
         or request.path.startswith("/photos/thumb/")
     )
-    if request.path in ("/submit", "/meal-submit") or photo_paths:
+    memory_paths = (
+        request.path == "/memories/upload"
+        or request.path == "/memories/list"
+        or request.path == "/memories/delete"
+        or request.path.startswith("/memories/file/")
+        or request.path.startswith("/memories/thumb/")
+    )
+    if request.path in ("/submit", "/meal-submit") or photo_paths or memory_paths:
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
@@ -327,6 +469,9 @@ def data_page():
 @app.route("/photos/upload", methods=["OPTIONS"])
 @app.route("/photos/list", methods=["OPTIONS"])
 @app.route("/photos/delete", methods=["OPTIONS"])
+@app.route("/memories/upload", methods=["OPTIONS"])
+@app.route("/memories/list", methods=["OPTIONS"])
+@app.route("/memories/delete", methods=["OPTIONS"])
 def cors_preflight():
     return "", 204
 
@@ -516,6 +661,150 @@ def photos_thumb(photo_id):
     if not path.exists():
         # Fall back to full image if thumb missing
         path = PHOTOS_DIR / f"{photo_id}.jpg"
+    if not path.exists():
+        return "Not found", 404
+    return send_file(path, mimetype="image/jpeg", max_age=86400)
+
+
+@app.route("/memories/upload", methods=["POST"])
+def memories_upload():
+    ensure_memories_dirs()
+    author = (request.form.get("name") or "").strip()[:80]
+    message = (request.form.get("message") or "").strip()[:MAX_MEMORY_MESSAGE]
+    if not author:
+        return jsonify({"ok": False, "error": "Name is required"}), 400
+
+    media = request.files.get("media")
+    has_media = bool(media and media.filename)
+    if not message and not has_media:
+        return jsonify({"ok": False, "error": "Please add a message, photo, or video"}), 400
+
+    memory_id = uuid.uuid4().hex
+    media_type = ""
+    media_ext = ""
+    original_name = ""
+
+    if has_media:
+        original_name = (media.filename or "").strip()
+        ext = Path(original_name).suffix.lower()
+        if ext in ALLOWED_PHOTO_EXTS:
+            try:
+                _save_memory_image(media, memory_id)
+                media_type = "image"
+                media_ext = ".jpg"
+            except Exception as exc:
+                app.logger.warning("Memory image upload failed: %s", exc)
+                return jsonify({"ok": False, "error": str(exc)}), 400
+        elif ext in ALLOWED_MEMORY_VIDEO_EXTS:
+            try:
+                _save_memory_video(media, memory_id, ext)
+                media_type = "video"
+                media_ext = ext
+            except Exception as exc:
+                app.logger.warning("Memory video upload failed: %s", exc)
+                return jsonify({"ok": False, "error": str(exc)}), 400
+        else:
+            return jsonify({
+                "ok": False,
+                "error": "Unsupported file type. Use JPG, PNG, HEIC, MP4, MOV, or WebM.",
+            }), 400
+
+    entry = {
+        "id": memory_id,
+        "author": author,
+        "message": message,
+        "media_type": media_type or None,
+        "media_ext": media_ext,
+        "original_name": original_name,
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+    }
+    meta = _load_memory_meta()
+    meta.append(entry)
+    _save_memory_meta(meta)
+    _send_memory_notification(author)
+    return jsonify({"ok": True, "memory": {**entry, **_memory_urls(entry)}}), 200
+
+
+@app.route("/memories/delete", methods=["POST"])
+def memories_delete():
+    ensure_memories_dirs()
+    if not PHOTO_ADMIN_PASSWORD:
+        return jsonify({"ok": False, "error": "Delete is not configured"}), 503
+
+    payload = request.get_json(silent=True) or {}
+    memory_id = (payload.get("id") or request.form.get("id") or "").strip()
+    password = payload.get("password") or request.form.get("password") or ""
+    if not _valid_memory_id(memory_id):
+        return jsonify({"ok": False, "error": "Invalid memory id"}), 400
+    if password != PHOTO_ADMIN_PASSWORD:
+        return jsonify({"ok": False, "error": "Incorrect password"}), 403
+
+    meta = _load_memory_meta()
+    target = next((entry for entry in meta if entry.get("id") == memory_id), None)
+    if not target:
+        return jsonify({"ok": False, "error": "Memory not found"}), 404
+
+    media_path = _memory_media_path(target)
+    thumb_path = MEMORIES_THUMBS_DIR / f"{memory_id}.jpg"
+    try:
+        if media_path and media_path.exists():
+            media_path.unlink()
+        if thumb_path.exists():
+            thumb_path.unlink()
+    except OSError as exc:
+        app.logger.error("Failed to delete memory files for %s: %s", memory_id, exc)
+        return jsonify({"ok": False, "error": "Could not delete memory files"}), 500
+
+    _save_memory_meta([entry for entry in meta if entry.get("id") != memory_id])
+    return jsonify({"ok": True, "id": memory_id}), 200
+
+
+@app.route("/memories/list", methods=["GET"])
+def memories_list():
+    ensure_memories_dirs()
+    meta = _load_memory_meta()
+    ordered = sorted(meta, key=lambda e: e.get("timestamp", ""), reverse=True)
+    memories = []
+    for entry in ordered:
+        memory_id = entry.get("id")
+        if not memory_id:
+            continue
+        media_type = entry.get("media_type")
+        if media_type:
+            media_path = _memory_media_path(entry)
+            if not media_path or not media_path.exists():
+                continue
+        memories.append(_memory_urls(entry))
+    return jsonify({"ok": True, "count": len(memories), "memories": memories})
+
+
+@app.route("/memories/file/<memory_id>.<ext>")
+def memories_file(memory_id, ext):
+    ensure_memories_dirs()
+    if not _valid_memory_id(memory_id):
+        return "Not found", 404
+    ext = f".{ext.lower()}"
+    if ext in ALLOWED_PHOTO_EXTS or ext == ".jpg":
+        path = MEMORIES_DIR / f"{memory_id}.jpg"
+        if not path.exists():
+            return "Not found", 404
+        return send_file(path, mimetype="image/jpeg", max_age=86400)
+    if ext in ALLOWED_MEMORY_VIDEO_EXTS:
+        path = MEMORIES_DIR / f"{memory_id}{ext}"
+        if not path.exists():
+            return "Not found", 404
+        return send_file(path, mimetype=VIDEO_MIMETYPES.get(ext, "video/mp4"), max_age=86400)
+    return "Not found", 404
+
+
+@app.route("/memories/thumb/<memory_id>.jpg")
+def memories_thumb(memory_id):
+    ensure_memories_dirs()
+    if not _valid_memory_id(memory_id):
+        return "Not found", 404
+    path = MEMORIES_THUMBS_DIR / f"{memory_id}.jpg"
+    if not path.exists():
+        path = MEMORIES_DIR / f"{memory_id}.jpg"
     if not path.exists():
         return "Not found", 404
     return send_file(path, mimetype="image/jpeg", max_age=86400)
