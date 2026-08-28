@@ -198,31 +198,14 @@
         outline-offset: 1px;
       }
 
-      .file-drop {
-        position: relative;
-        border: 3px dashed var(--ink);
-        border-radius: 18px;
-        padding: 22px 16px;
+      .media-picker {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .media-picker .btn {
+        flex: 1 1 140px;
         text-align: center;
-        background: rgba(255, 158, 192, 0.28);
-        cursor: pointer;
-      }
-      .file-drop strong { display: block; margin-bottom: 4px; color: var(--ink); }
-      .file-drop span { font-size: 0.92rem; color: rgba(155, 18, 52, 0.8); }
-      .file-drop input {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-        z-index: 2;
-      }
-      .attachment-note {
-        margin: 10px 0 0;
-        font-size: 0.92rem;
-        font-weight: 700;
-        color: var(--ink);
       }
 
       .preview-box {
@@ -232,12 +215,20 @@
         overflow: hidden;
         background: #000;
       }
-      .preview-box img, .preview-box video {
+      .preview-box img,
+      .preview-box video {
         display: block;
         width: 100%;
         max-height: 280px;
         object-fit: contain;
         margin: 0 auto;
+      }
+
+      .attachment-note {
+        margin: 10px 0 0;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--ink);
       }
 
       .actions {
@@ -479,7 +470,7 @@
 
       <section class="panel" aria-labelledby="share-title">
         <h2 id="share-title">Share a memory</h2>
-        <p class="hint">Add a note, photo, or video — or all three. Videos up to 80 MB.</p>
+        <p class="hint">On iPhone, tap <strong>Add photo</strong> or <strong>Add video</strong>, then wait for the preview before sharing. Videos up to 80 MB.</p>
         <form id="memory-form" novalidate>
           <div class="field">
             <label for="author-name">Your name</label>
@@ -491,11 +482,12 @@
           </div>
           <div class="field">
             <label>Photo or video (optional)</label>
-            <div class="file-drop" id="file-drop">
-              <strong>Tap to choose a file</strong>
-              <span>JPG, PNG, HEIC, MP4, MOV, or WebM</span>
-              <input id="media-input" name="media" type="file" accept="image/*,video/*,.heic,.heif,.mp4,.mov,.webm,.m4v" />
+            <div class="media-picker">
+              <button type="button" class="btn secondary" id="pick-photo-btn">Add photo</button>
+              <button type="button" class="btn secondary" id="pick-video-btn">Add video</button>
             </div>
+            <input id="photo-input" type="file" accept="image/*,.heic,.heif" hidden />
+            <input id="video-input" type="file" accept="video/*,.mp4,.mov,.m4v" hidden />
             <div class="preview-box" id="preview-box" hidden></div>
             <p class="attachment-note" id="attachment-note" hidden></p>
           </div>
@@ -534,7 +526,10 @@
         var form = document.getElementById("memory-form");
         var nameInput = document.getElementById("author-name");
         var messageInput = document.getElementById("memory-message");
-        var mediaInput = document.getElementById("media-input");
+        var photoInput = document.getElementById("photo-input");
+        var videoInput = document.getElementById("video-input");
+        var pickPhotoBtn = document.getElementById("pick-photo-btn");
+        var pickVideoBtn = document.getElementById("pick-video-btn");
         var previewBox = document.getElementById("preview-box");
         var attachmentNote = document.getElementById("attachment-note");
         var submitBtn = document.getElementById("submit-btn");
@@ -575,7 +570,8 @@
           previewBox.hidden = true;
           clearBtn.hidden = true;
           selectedFile = null;
-          mediaInput.value = "";
+          photoInput.value = "";
+          videoInput.value = "";
           attachmentNote.textContent = "";
           attachmentNote.hidden = true;
         }
@@ -610,8 +606,21 @@
           }
         }
 
-        mediaInput.addEventListener("change", function () {
-          showPreview(mediaInput.files && mediaInput.files[0]);
+        pickPhotoBtn.addEventListener("click", function () { photoInput.click(); });
+        pickVideoBtn.addEventListener("click", function () { videoInput.click(); });
+
+        photoInput.addEventListener("change", function () {
+          var file = photoInput.files && photoInput.files[0];
+          if (!file) return;
+          videoInput.value = "";
+          showPreview(file);
+        });
+
+        videoInput.addEventListener("change", function () {
+          var file = videoInput.files && videoInput.files[0];
+          if (!file) return;
+          photoInput.value = "";
+          showPreview(file);
         });
 
         clearBtn.addEventListener("click", clearPreview);
