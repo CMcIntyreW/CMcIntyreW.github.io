@@ -272,18 +272,97 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        width: 28px;
-        height: 28px;
+        z-index: 2;
         border: 2px solid var(--ink);
         border-radius: 999px;
         background: var(--cream);
         color: var(--ink);
-        font-size: 1.05rem;
-        line-height: 1;
+        font: inherit;
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 6px 10px;
         cursor: pointer;
-        opacity: 0.75;
+        box-shadow: 2px 2px 0 rgba(155, 18, 52, 0.16);
+        opacity: 0.92;
       }
-      .memory-card:hover .memory-delete { opacity: 1; }
+      .memory-delete:hover {
+        background: var(--highlight);
+        transform: scale(1.03);
+      }
+
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(47, 10, 24, 0.82);
+      }
+      .lightbox.open { display: flex; }
+      .lightbox-panel {
+        position: relative;
+        width: min(720px, 100%);
+        max-height: 90vh;
+        overflow: auto;
+        background: var(--cream);
+        border: 3px solid var(--ink);
+        border-radius: 24px;
+        padding: 20px;
+        box-shadow: 8px 8px 0 rgba(155, 18, 52, 0.25);
+      }
+      .lightbox-close,
+      .lightbox-delete {
+        position: absolute;
+        top: 12px;
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        background: var(--cream);
+        color: var(--ink);
+        font-size: 1.2rem;
+        line-height: 1;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+      }
+      .lightbox-close { right: 12px; }
+      .lightbox-delete {
+        right: 60px;
+        width: auto;
+        padding: 0 14px;
+        font: inherit;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .lightbox-delete:hover,
+      .lightbox-close:hover { background: var(--highlight); }
+      .lightbox-author {
+        margin: 0 100px 8px 0;
+        font-weight: 800;
+        color: var(--ink);
+      }
+      .lightbox-message {
+        margin: 0 0 14px;
+        font-family: "Caveat", cursive;
+        font-size: 1.6rem;
+        line-height: 1.35;
+        white-space: pre-wrap;
+        color: var(--ink-deep);
+      }
+      .lightbox-media img,
+      .lightbox-media video {
+        width: 100%;
+        border-radius: 14px;
+        border: 2px solid var(--ink);
+        display: block;
+        background: #111;
+      }
+      .lightbox-media video { max-height: 55vh; }
 
       .empty-feed {
         text-align: center;
@@ -352,6 +431,16 @@
       </section>
     </main>
 
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Memory preview">
+      <div class="lightbox-panel">
+        <button type="button" class="lightbox-delete" id="lightbox-delete">Delete</button>
+        <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+        <p class="lightbox-author" id="lightbox-author"></p>
+        <p class="lightbox-message" id="lightbox-message" hidden></p>
+        <div class="lightbox-media" id="lightbox-media" hidden></div>
+      </div>
+    </div>
+
     <script>
       (function () {
         var backendMeta = document.querySelector('meta[name="rsvp-backend-url"]');
@@ -369,6 +458,13 @@
         var emptyFeed = document.getElementById("empty-feed");
         var previewUrl = null;
         var ADMIN_PASS_KEY = "photoAdminPassword";
+        var lightbox = document.getElementById("lightbox");
+        var lightboxAuthor = document.getElementById("lightbox-author");
+        var lightboxMessage = document.getElementById("lightbox-message");
+        var lightboxMedia = document.getElementById("lightbox-media");
+        var lightboxClose = document.getElementById("lightbox-close");
+        var lightboxDelete = document.getElementById("lightbox-delete");
+        var currentMemory = null;
 
         function setStatus(msg, kind) {
           formStatus.textContent = msg || "";
@@ -468,12 +564,16 @@
           return entered;
         }
 
-        function deleteMemory(memory, btn) {
+        function clearAdminPassword() {
+          try { sessionStorage.removeItem(ADMIN_PASS_KEY); } catch (e) {}
+        }
+
+        function deleteMemory(memory, triggerEl, retried) {
           if (!backendBase || !memory || !memory.id) return;
           if (!window.confirm("Delete this memory permanently?")) return;
           var password = getAdminPassword(false);
           if (password == null) return;
-          btn.disabled = true;
+          if (triggerEl) triggerEl.disabled = true;
 
           fetch(backendBase + "/memories/delete", {
             method: "POST",
@@ -486,22 +586,84 @@
               });
             })
             .then(function (result) {
+              if (result.status === 403 && !retried) {
+                clearAdminPassword();
+                var again = getAdminPassword(true);
+                if (again == null) throw new Error("Delete cancelled");
+                if (triggerEl) triggerEl.disabled = false;
+                return deleteMemory(memory, triggerEl, true);
+              }
               if (!result.ok || !result.body.ok) {
+                if (result.status === 403) clearAdminPassword();
                 throw new Error((result.body && result.body.error) || "Delete failed");
               }
+              if (currentMemory && currentMemory.id === memory.id) closeLightbox();
               loadMemories();
             })
             .catch(function (err) {
               window.alert(err.message || "Could not delete memory.");
             })
             .finally(function () {
-              btn.disabled = false;
+              if (triggerEl) triggerEl.disabled = false;
             });
         }
+
+        function openLightbox(memory) {
+          currentMemory = memory;
+          lightboxAuthor.textContent = memory.author || "Guest";
+          if (memory.message) {
+            lightboxMessage.textContent = memory.message;
+            lightboxMessage.hidden = false;
+          } else {
+            lightboxMessage.textContent = "";
+            lightboxMessage.hidden = true;
+          }
+          lightboxMedia.innerHTML = "";
+          lightboxMedia.hidden = true;
+          if (memory.media_url) {
+            lightboxMedia.hidden = false;
+            if (memory.media_type === "video") {
+              var video = document.createElement("video");
+              video.src = memory.media_url;
+              video.controls = true;
+              video.preload = "metadata";
+              video.setAttribute("playsinline", "");
+              lightboxMedia.appendChild(video);
+            } else {
+              var img = document.createElement("img");
+              img.src = memory.media_url;
+              img.alt = "Memory from " + (memory.author || "guest");
+              lightboxMedia.appendChild(img);
+            }
+          }
+          lightbox.classList.add("open");
+        }
+
+        function closeLightbox() {
+          lightbox.classList.remove("open");
+          lightboxMedia.innerHTML = "";
+          currentMemory = null;
+        }
+
+        lightboxClose.addEventListener("click", closeLightbox);
+        lightboxDelete.addEventListener("click", function () {
+          if (currentMemory) deleteMemory(currentMemory, lightboxDelete, false);
+        });
+        lightbox.addEventListener("click", function (e) {
+          if (e.target === lightbox) closeLightbox();
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") closeLightbox();
+        });
 
         function renderMemory(memory) {
           var card = document.createElement("article");
           card.className = "memory-card";
+          card.style.cursor = "pointer";
+          card.addEventListener("click", function (e) {
+            if (e.target.closest(".memory-delete")) return;
+            openLightbox(memory);
+          });
 
           var meta = document.createElement("div");
           meta.className = "memory-meta";
@@ -538,9 +700,12 @@
           var del = document.createElement("button");
           del.type = "button";
           del.className = "memory-delete";
-          del.innerHTML = "&times;";
+          del.textContent = "Delete";
           del.setAttribute("aria-label", "Delete memory");
-          del.addEventListener("click", function () { deleteMemory(memory, del); });
+          del.addEventListener("click", function (e) {
+            e.stopPropagation();
+            deleteMemory(memory, del, false);
+          });
           card.appendChild(del);
 
           return card;
