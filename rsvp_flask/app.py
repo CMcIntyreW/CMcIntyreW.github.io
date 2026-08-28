@@ -436,6 +436,42 @@ def _valid_memory_id(memory_id):
     return _valid_photo_id(memory_id)
 
 
+def _uploaded_file_has_content(file_storage):
+    if not file_storage:
+        return False
+    try:
+        stream = file_storage.stream
+        stream.seek(0, os.SEEK_END)
+        size = stream.tell()
+        stream.seek(0)
+        return size > 0
+    except Exception:
+        return bool((file_storage.filename or "").strip())
+
+
+def _sniff_media_kind(file_storage):
+    try:
+        stream = file_storage.stream
+        pos = stream.tell()
+        header = stream.read(16)
+        stream.seek(pos)
+    except Exception:
+        return None, ""
+
+    if header.startswith(b"\xff\xd8\xff"):
+        return "image", ".jpg"
+    if len(header) >= 12 and header[4:8] == b"ftyp":
+        brand = header[8:12]
+        if brand in (b"heic", b"heix", b"mif1", b"hevc"):
+            return "image", ".heic"
+        if brand in (b"qt  ", b"moov"):
+            return "video", ".mov"
+        return "video", ".mp4"
+    if header.startswith(b"RIFF") and len(header) >= 12 and header[8:12] == b"WEBP":
+        return "image", ".webp"
+    return None, ""
+
+
 def _guess_media_kind(file_storage):
     filename = (file_storage.filename or "").strip()
     ext = Path(filename).suffix.lower()
@@ -453,6 +489,10 @@ def _guess_media_kind(file_storage):
         if "webm" in mimetype:
             return "video", ".webm"
         return "video", ext or ".mp4"
+
+    sniffed_kind, sniffed_ext = _sniff_media_kind(file_storage)
+    if sniffed_kind:
+        return sniffed_kind, sniffed_ext
     return None, ext
 
 
@@ -714,7 +754,7 @@ def memories_upload():
         return jsonify({"ok": False, "error": "Name is required"}), 400
 
     media = request.files.get("media")
-    has_media = bool(media and (media.filename or (media.mimetype and media.mimetype != "application/octet-stream")))
+    has_media = _uploaded_file_has_content(media)
     if not message and not has_media:
         return jsonify({"ok": False, "error": "Please add a message, photo, or video"}), 400
 
@@ -813,6 +853,10 @@ def memories_list():
         if media_type:
             media_path = _memory_media_path(entry)
             if not media_path or not media_path.exists():
+                entry = dict(entry)
+                entry["media_type"] = None
+                entry["media_ext"] = ""
+                memories.append(_memory_urls(entry))
                 continue
         memories.append(_memory_urls(entry))
     return jsonify({"ok": True, "count": len(memories), "memories": memories})

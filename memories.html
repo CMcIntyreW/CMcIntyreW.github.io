@@ -209,7 +209,21 @@
       }
       .file-drop strong { display: block; margin-bottom: 4px; color: var(--ink); }
       .file-drop span { font-size: 0.92rem; color: rgba(155, 18, 52, 0.8); }
-      .file-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+      .file-drop input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        z-index: 2;
+      }
+      .attachment-note {
+        margin: 10px 0 0;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
 
       .preview-box {
         margin-top: 12px;
@@ -483,6 +497,7 @@
               <input id="media-input" name="media" type="file" accept="image/*,video/*,.heic,.heif,.mp4,.mov,.webm,.m4v" />
             </div>
             <div class="preview-box" id="preview-box" hidden></div>
+            <p class="attachment-note" id="attachment-note" hidden></p>
           </div>
           <div class="actions">
             <button type="submit" class="btn" id="submit-btn">Share memory</button>
@@ -521,6 +536,7 @@
         var messageInput = document.getElementById("memory-message");
         var mediaInput = document.getElementById("media-input");
         var previewBox = document.getElementById("preview-box");
+        var attachmentNote = document.getElementById("attachment-note");
         var submitBtn = document.getElementById("submit-btn");
         var clearBtn = document.getElementById("clear-btn");
         var formStatus = document.getElementById("form-status");
@@ -543,6 +559,15 @@
           formStatus.className = "status" + (kind ? " " + kind : "");
         }
 
+        function mediaUploadName(file) {
+          if (file.name) return file.name;
+          if (file.type && file.type.indexOf("video/") === 0) {
+            return file.type.indexOf("quicktime") >= 0 ? "video.mov" : "video.mp4";
+          }
+          if (file.type === "image/heic" || file.type === "image/heif") return "photo.heic";
+          return "photo.jpg";
+        }
+
         function clearPreview() {
           if (previewUrl) URL.revokeObjectURL(previewUrl);
           previewUrl = null;
@@ -551,6 +576,8 @@
           clearBtn.hidden = true;
           selectedFile = null;
           mediaInput.value = "";
+          attachmentNote.textContent = "";
+          attachmentNote.hidden = true;
         }
 
         function showPreview(file) {
@@ -561,9 +588,12 @@
             previewBox.hidden = true;
             clearBtn.hidden = true;
             selectedFile = null;
+            attachmentNote.hidden = true;
             return;
           }
           selectedFile = file;
+          attachmentNote.textContent = "Attached: " + mediaUploadName(file);
+          attachmentNote.hidden = false;
           previewUrl = URL.createObjectURL(file);
           previewBox.hidden = false;
           clearBtn.hidden = false;
@@ -607,7 +637,7 @@
           var data = new FormData();
           data.append("name", name);
           data.append("message", message);
-          if (file) data.append("media", file);
+          if (file) data.append("media", file, mediaUploadName(file));
 
           submitBtn.disabled = true;
           setStatus("Sharing…", "");
